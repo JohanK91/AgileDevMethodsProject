@@ -1,4 +1,4 @@
 # AgileDevMethodsProject
 Project for Agile Development Methods(DA116A) course at Högskolan Kristianstad(HKR).
 
-## A project about helping food remains get to the homeless.
+## What you think is junk could be somebody else's treasure, delivery to charities. 
