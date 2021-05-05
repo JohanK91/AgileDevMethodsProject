@@ -9,12 +9,12 @@ public class DbBridge {
 
 
     public DbBridge() {
-        connect("root", "root");
+        connect();
     }
 
-    private void connect(String name, String pass) {
+    private void connect() {
         try {
-            connection = DriverManager.getConnection(mysqlUrl, name, pass);
+            connection = DriverManager.getConnection(mysqlUrl, "root", "root");
             System.out.println("Connected");
         } catch (SQLException er) {
             System.out.println("Connection failed");
