@@ -43,6 +43,11 @@ public class loginController {
             }
         }
     }
+    @FXML
+    private void handleRegisterPressed(ActionEvent event) throws IOException {
+        switchView("../Views/newAccount.fxml", event);
+
+    }
 
     private void switchView(String view, ActionEvent event) throws IOException {
         Parent p = FXMLLoader.load(getClass().getResource(view));

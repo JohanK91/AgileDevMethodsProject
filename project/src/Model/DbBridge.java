@@ -35,25 +35,8 @@ public class DbBridge {
         }
     }
 
-    public void createUser(String address, String city, String postcode,int x, int y,
-                           String userName, String name, int type, String phone, String pass){
+    public void createUser(String address,String userName, String name, int type, String phone, String pass){
         try {
-            // address
-            statement = connection.prepareStatement("INSERT INTO Adress(adress, city, postcode, x, y) +" +
-                    "Values(?,?,?,?,?)");
-            statement.setString(1, address);
-            statement.setString(2, city);
-            statement.setString(3, postcode);
-            statement.setInt(4, x);
-            statement.setInt(5, y);
-            statement.executeUpdate();
-        }
-            catch (SQLException e) {
-                e.printStackTrace();
-        }
-
-        try {
-            // user
             statement = connection.prepareStatement("INSERT INTO USER(userName, name, type, phone, pass," +
                     " Adress_adress) Values(?,?,?,?,?,?)");
             statement.setString(1, userName);
@@ -66,6 +49,21 @@ public class DbBridge {
         }
         catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+    public void createAddress(String address, String city, String postcode,int x, int y){
+        try {
+            statement = connection.prepareStatement("INSERT INTO Adress(adress, city, postcode, x, y)" +
+                    "Values(?,?,?,?,?)");
+            statement.setString(1, address);
+            statement.setString(2, city);
+            statement.setString(3, postcode);
+            statement.setInt(4, x);
+            statement.setInt(5, y);
+            statement.executeUpdate();
+        }
+            catch (SQLException e) {
+                e.printStackTrace();
         }
 
     }
@@ -105,6 +103,38 @@ public class DbBridge {
             throwables.printStackTrace();
         }
         return -1;
+    }
+
+    public boolean lookForUserName(String username){
+        try {
+            statement = connection.prepareStatement("SELECT userName FROM USER");
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                if (username.equals(resultSet.getString(1))){
+                    return true;
+                }
+            }
+
+        }
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
+    }
+    public boolean lookForAddress(String street){
+        try {
+            statement = connection.prepareStatement("SELECT Adress FROM adress");
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                if (street.equals(resultSet.getString(1))){
+                    return true;
+                }
+            }
+        }
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
     }
     public ResultSet getAllTask() {
         return resultSet;
