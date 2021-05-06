@@ -1,4 +1,5 @@
 package Model;
+
 //singleton
 public class AppManager {
     private static AppManager instance = null;
@@ -17,6 +18,20 @@ public class AppManager {
     }
     public void setUser(String name){
         this.user = name;
+    }
+
+    private void DestroyInstance()
+    {
+        db.disconnect();
+        db = null;
+    }
+
+    public static void Destroy()
+    {
+        if (instance != null)
+            instance.DestroyInstance();
+
+        instance = null;
     }
 
     public static AppManager getInstance()

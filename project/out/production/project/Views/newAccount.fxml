@@ -55,13 +55,7 @@
             <TextField fx:id="postcodeField" GridPane.columnIndex="2" GridPane.rowIndex="8" />
             <TextField GridPane.columnIndex="2" GridPane.rowIndex="9" fx:id="xField" />
             <TextField fx:id="yField" GridPane.columnIndex="2" GridPane.rowIndex="10" />
-            <SplitMenuButton fx:id="typeMenu" mnemonicParsing="false" prefHeight="25.0" prefWidth="214.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
-              <items>
-                <MenuItem fx:id="donor" mnemonicParsing="false" onAction="#donorType" text="Donor" />
-                  <MenuItem fx:id="driver" mnemonicParsing="false" onAction="#driverType" text="Driver" />
-                <MenuItem fx:id="charity" mnemonicParsing="false" onAction="#charityType" text="Charity" />
-              </items>
-            </SplitMenuButton>
+            <SplitMenuButton fx:id="typeMenu" mnemonicParsing="false" prefHeight="25.0" prefWidth="214.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER"/>
             <PasswordField fx:id="password" GridPane.columnIndex="2" GridPane.rowIndex="2" />
             <Text fx:id="text" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.rowSpan="2147483647" GridPane.valignment="CENTER" />
             <Button fx:id="login" mnemonicParsing="false" onAction="#handleLoginPressed" prefHeight="55.0" prefWidth="60.0" text="Log in" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="11" GridPane.valignment="CENTER" />

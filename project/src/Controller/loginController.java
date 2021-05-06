@@ -2,6 +2,7 @@ package Controller;
 
 import Model.AppManager;
 import Model.DbBridge;
+import Model.UserType;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -30,16 +31,11 @@ public class loginController {
         DbBridge db = AppManager.getInstance().getDb();
         if(db.validateLogIn(user,pass)){
             AppManager.getInstance().setUser(user);
-            switch (db.getUserType(user)) {
-                case 0:
-                    switchView("../Views/donor.fxml", event);
-                    break;
-                case 1:
-                    switchView("../Views/driver.fxml", event);
-                    break;
-                case 2:
-                   switchView("../Views/charity.fxml", event);
-                    break;
+            switch (UserType.values()[db.getUserType(user)])
+            {
+                case Donor -> switchView("../Views/donor.fxml", event);
+                case Driver -> switchView("../Views/driver.fxml", event);
+                case Charity -> switchView("../Views/charity.fxml", event);
             }
         }
     }
