@@ -2,10 +2,12 @@ package Controller;
 
 import Model.AppManager;
 import Model.DbBridge;
+import Model.UserType;
 import com.mysql.cj.util.StringUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -15,10 +17,13 @@ import javafx.stage.Stage;
 
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 import static java.lang.Integer.parseInt;
 
-public class newAccountController {
+public class newAccountController implements Initializable
+{
     Boolean okInput = true;
     int type = 4;
     @FXML
@@ -54,6 +59,22 @@ public class newAccountController {
     @FXML
     Text text;
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle)
+    {
+        for (UserType userType : UserType.values())
+        {
+            MenuItem userTypeItem = new MenuItem(userType.toString());
+            typeMenu.getItems().add(userTypeItem);
+            userTypeItem.setOnAction((e)->{
+                type = userType.ordinal();
+                typeMenu.setText(userType.toString());
+            });
+        }
+
+        typeMenu.setText(UserType.values()[0].toString());
+        type = 0;
+    }
 
     @FXML
     private void handleRegisterPressed(ActionEvent event) throws IOException {
@@ -112,25 +133,16 @@ public class newAccountController {
     private void handleLoginPressed(ActionEvent event) throws IOException {
         Parent p = FXMLLoader.load(getClass().getResource("../Views/login.fxml"));
         Scene newScene= new Scene(p);
-        Stage stage= (Stage)((Node)event.getSource()).getScene().getWindow();
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene(newScene);
+
+
+
         stage.show();
     }
     public void invalid(String input){
         okInput = false;
         text.setText(text.getText()+"Invalid "+ input+ "\n");
 
-    }
-    public void donorType(ActionEvent actionEvent) {
-        typeMenu.setText("Donor");
-        type = 0;
-    }
-    public void driverType(ActionEvent actionEvent) {
-        typeMenu.setText("Driver");
-        type = 1;
-    }
-    public void charityType(ActionEvent actionEvent) {
-        typeMenu.setText("Charity");
-        type = 2;
     }
 }
