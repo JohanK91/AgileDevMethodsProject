@@ -12,7 +12,7 @@ public class DbBridge {
         connect();
     }
 
-    private void connect() {
+    public void connect() {
         try {
             connection = DriverManager.getConnection(mysqlUrl, "root", "root");
             System.out.println("Connected");
@@ -24,11 +24,22 @@ public class DbBridge {
 
     public void disconnect() {
         try {
-            if (connection != null) {
+            if (!connection.isClosed()) {
                 connection.close();
                 System.out.println("Connection closed");
             }
-        } catch (SQLException er) {
+
+            if (statement != null) {
+                statement.close();
+                System.out.println("Statement closed");
+            }
+            if (resultSet != null) {
+                resultSet.close();
+                System.out.println("ResultSet closed");
+            }
+
+        }
+        catch (SQLException er) {
             System.out.println("Failed to disconnect!");
             er.printStackTrace();
 
@@ -89,20 +100,14 @@ public class DbBridge {
         }
         return false;
     }
+    public int getUserType(String username) throws SQLException {
 
-
-    public int getUserType(String username) {
-        try {
             statement = connection.prepareStatement("SELECT type FROM USER WHERE userName = ?");
             statement.setString(1, username);
             resultSet = statement.executeQuery();
             resultSet.next();
             return resultSet.getInt(1);
-        }
-        catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return -1;
+
     }
 
     public boolean lookForUserName(String username){
@@ -148,4 +153,32 @@ public class DbBridge {
         return resultSet;
     }
 
+    public Connection getConnection()  {
+        return connection;
+    }
+    public ResultSet getResultSet()  {
+        return resultSet;
+    }
+    public Statement getStatement()  {
+        return statement;
+    }
+    public void removeUserAddress(String user, String address){
+        try {
+            statement = connection.prepareStatement(" DELETE FROM USER " +
+                    "WHERE Username = ?");
+            statement.setString(1, user);
+            statement.executeUpdate();
+
+            statement = connection.prepareStatement(" DELETE FROM Adress " +
+                    "WHERE Adress = ?");
+            statement.setString(1, address);
+            statement.executeUpdate();
+
+
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+    }
 }

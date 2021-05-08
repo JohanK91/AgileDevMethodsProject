@@ -14,6 +14,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class loginController {
     @FXML
@@ -25,7 +26,7 @@ public class loginController {
     @FXML
     Button register;
     @FXML
-    private void handleLoginPressed(ActionEvent event) throws IOException {
+    private void handleLoginPressed(ActionEvent event) throws IOException, SQLException {
         String user = userName.getText();
         String pass = password.getText();
         DbBridge db = AppManager.getInstance().getDb();
