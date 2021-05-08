@@ -24,8 +24,8 @@ import static java.lang.Integer.parseInt;
 
 public class newAccountController implements Initializable
 {
+    int type;
     Boolean okInput = true;
-    int type = 4;
     @FXML
     TextField userName;
     @FXML
@@ -98,9 +98,7 @@ public class newAccountController implements Initializable
         if (phone.isEmpty() || !StringUtils.isStrictlyNumeric(phone)){
             invalid("Phone");
         }
-        if (type == 4){
-            invalid("Type");
-        }
+
         String street= streetField.getText();
         if (street.isEmpty()){
             invalid("Street");
