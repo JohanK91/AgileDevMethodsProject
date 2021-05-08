@@ -1,4 +1,4 @@
-package Model;
+package code.Model;
 
 import org.junit.jupiter.api.*;
 
