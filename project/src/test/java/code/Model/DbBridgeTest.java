@@ -1,9 +1,6 @@
 package code.Model;
-
 import org.junit.jupiter.api.*;
-
 import java.sql.SQLException;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class DbBridgeTest
