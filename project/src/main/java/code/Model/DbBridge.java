@@ -146,6 +146,15 @@ public class DbBridge {
     }
 
     public ResultSet getDriversTask(String driverUserName) {
+        try {
+            statement = connection.prepareStatement("SELECT pickupAdress FROM task ORDER BY end_date");
+            resultSet = statement.executeQuery();
+            return resultSet;
+        }
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
         return resultSet;
     }
 
