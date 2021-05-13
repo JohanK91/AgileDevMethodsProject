@@ -115,8 +115,24 @@ public class DbBridge {
     public ResultSet getAllTask() {
         return resultSet;
     }
-    public ResultSet getDriversTask(String driverUserName) {
-        return resultSet;
+
+    public ArrayList<Task> getDriversTasks(int aDriverId) {
+        ArrayList<Task> tasks = new ArrayList<>();
+        try {
+            statement = connection.prepareStatement("SELECT ID FROM task WHERE Driver_User_ID = ?");
+            statement.setInt(1, aDriverId);
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next())
+            {
+                tasks.add(new Task(resultSet.getInt(1)));
+            }
+        }
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return tasks;
     }
     public ResultSet getCharityTask(String charityUserName) {
         return resultSet;
@@ -187,5 +203,26 @@ public class DbBridge {
             throwables.printStackTrace();
         }
 
+    }
+
+    //Task
+    public String getTaskAddress(int anId)
+    {
+        try
+        {
+            statement = connection.prepareStatement("SELECT address.address FROM address LEFT JOIN task ON task.pickupAddress_ID = address.ID WHERE task.ID = ?");
+            statement.setInt(1, anId);
+            resultSet = statement.executeQuery();
+            if (resultSet.next())
+            {
+                return resultSet.getString(1);
+            }
+        }
+        catch (SQLException throwables)
+        {
+            throwables.printStackTrace();
+        }
+
+        return null;
     }
 }
