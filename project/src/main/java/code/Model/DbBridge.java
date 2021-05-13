@@ -49,10 +49,17 @@ public class DbBridge {
         }
     }
 
-    public void createUser(ArrayList<Object> values)  {
+    public void createUser(ArrayList<Object> values) throws SQLException {
         // creates user based on input
         execute("INSERT INTO USER(userName, name, type, phone, pass, Address_ID) Values(?,?,?,?,?,?)"
                 ,values);
+        if((Integer) values.get(2)==1){
+            execute("INSERT INTO Driver(USER_ID)Values("+getUID((String) values.get(0))+")");
+        }
+        if((Integer) values.get(2)==2){
+            execute("INSERT INTO Charity(USER_ID)Values("+getUID((String) values.get(0))+")");
+
+        }
 
     }
     public void createAddress(ArrayList<Object> values) {
