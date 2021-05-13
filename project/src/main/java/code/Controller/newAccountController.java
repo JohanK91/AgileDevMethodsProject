@@ -18,6 +18,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import static java.lang.Integer.parseInt;
@@ -77,12 +79,12 @@ public class newAccountController implements Initializable
     }
 
     @FXML
-    private void handleRegisterPressed(ActionEvent event) throws IOException {
+    private void handleRegisterPressed(ActionEvent event) throws IOException, SQLException {
         // This is so dirty... please help
         text.setText("");
         DbBridge db = AppManager.getInstance().getDb();
         String user = userName.getText();
-        if (db.lookForUserName(user) || user.isEmpty()) {
+        if (db.getUID(user) > 0 || user.isEmpty()) {
             invalid("Username");
         }
         String pass = password.getText();
@@ -121,10 +123,23 @@ public class newAccountController implements Initializable
 
         }
         if(okInput) {
-            if (!db.lookForAddress(street)) {
-                db.createAddress(street, city, postcode, parseInt(x), parseInt(y));
+            ArrayList<Object> values = new ArrayList<>();
+            if (db.getAddressID(street) == -1) {
+                values.add(street);
+                values.add(city);
+                values.add(postcode);
+                values.add(parseInt(x));
+                values.add(parseInt(y));
+                db.createAddress(values);
             }
-            db.createUser(street, user, name, type, phone, pass);
+            values = new ArrayList<>();
+            values.add(user);
+            values.add(name);
+            values.add(type);
+            values.add(phone);
+            values.add(pass);
+            values.add(db.getAddressID(street));
+            db.createUser(values);
         }
     }
     @FXML
@@ -133,9 +148,6 @@ public class newAccountController implements Initializable
         Scene newScene= new Scene(p);
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene(newScene);
-
-
-
         stage.show();
     }
     public void invalid(String input){

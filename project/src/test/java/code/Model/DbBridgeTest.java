@@ -1,9 +1,7 @@
 package code.Model;
-
 import org.junit.jupiter.api.*;
-
 import java.sql.SQLException;
-
+import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DbBridgeTest
@@ -47,15 +45,28 @@ class DbBridgeTest
     @Test
     @DisplayName("Test createUser")
     public void TestReadWriteUser() throws SQLException {
-        assertFalse(myDBBridge.lookForAddress("address"));
-        myDBBridge.createAddress("address",  "city",
-                "postcode",22, 22);
-        assertTrue(myDBBridge.lookForAddress("address"));
+        assertFalse(myDBBridge.getAddressID("address") > 0);
+        ArrayList<Object> values = new ArrayList<Object>();
+        values.add("address");
+        values.add("city");
+        values.add("postcode");
+        values.add(1);
+        values.add(2);
+        myDBBridge.createAddress(values);
+        assertTrue(myDBBridge.getAddressID("address") > 0);
 
-        assertFalse(myDBBridge.lookForUserName("test"));
-        myDBBridge.createUser( "address", "test",
-                "name",  0,  "phone",  "pass");
-        assertTrue(myDBBridge.lookForUserName("test"));
+        assertFalse(myDBBridge.getUID("test") > 0);
+
+        values = new ArrayList<Object>();
+        values.add("test");
+        values.add("name");
+        values.add(0);
+        values.add("phone");
+        values.add("pass");
+        values.add(myDBBridge.getAddressID("address"));
+        myDBBridge.createUser(values);
+
+        assertTrue(myDBBridge.getUID("test") > 0);
 
         assertEquals(myDBBridge.getUserType("test"),0);
     }
