@@ -1,8 +1,10 @@
 package code.Model;
 import java.sql.*;
+import java.util.ArrayList;
+
 public class DbBridge {
 
-    private String mysqlUrl = "jdbc:mysql://localhost:3306/mydb2?";
+    final String mysqlUrl = "jdbc:mysql://localhost:3306/mydb2?";
     private Connection connection;
     private PreparedStatement  statement;
     private ResultSet resultSet;
@@ -11,8 +13,8 @@ public class DbBridge {
     public DbBridge() {
         connect();
     }
-
     public void connect() {
+        // will connect to database with url = mysqlUrl
         try {
             connection = DriverManager.getConnection(mysqlUrl, "root", "root");
             System.out.println("Connected");
@@ -21,8 +23,9 @@ public class DbBridge {
             er.printStackTrace();
         }
     }
-
     public void disconnect() {
+        // will disconnect from the database
+
         try {
             if (!connection.isClosed()) {
                 connection.close();
@@ -46,48 +49,32 @@ public class DbBridge {
         }
     }
 
-    public void createUser(String address,String userName, String name, int type, String phone, String pass){
-        try {
-            statement = connection.prepareStatement("INSERT INTO USER(userName, name, type, phone, pass," +
-                    " Adress_adress) Values(?,?,?,?,?,?)");
-            statement.setString(1, userName);
-            statement.setString(2, name);
-            statement.setInt(3, type);
-            statement.setString(4, phone);
-            statement.setString(5, pass);
-            statement.setString(6, address);
-            statement.executeUpdate();
+    public void createUser(ArrayList<Object> values) throws SQLException {
+        // creates user based on input
+        execute("INSERT INTO USER(userName, name, type, phone, pass, Address_ID) Values(?,?,?,?,?,?)"
+                ,values);
+        if((Integer) values.get(2)==1){
+            execute("INSERT INTO Driver(USER_ID)Values("+getUID((String) values.get(0))+")");
         }
-        catch (SQLException e) {
-            e.printStackTrace();
+        if((Integer) values.get(2)==2){
+            execute("INSERT INTO Charity(USER_ID)Values("+getUID((String) values.get(0))+")");
+
         }
+
     }
-    public void createAddress(String address, String city, String postcode,int x, int y){
-        try {
-            statement = connection.prepareStatement("INSERT INTO Adress(adress, city, postcode, x, y)" +
-                    "Values(?,?,?,?,?)");
-            statement.setString(1, address);
-            statement.setString(2, city);
-            statement.setString(3, postcode);
-            statement.setInt(4, x);
-            statement.setInt(5, y);
-            statement.executeUpdate();
-        }
-            catch (SQLException e) {
-                e.printStackTrace();
-        }
+    public void createAddress(ArrayList<Object> values) {
+        // create address based on input
+        execute("INSERT INTO ADDRESS(address, city, postcode, x, y) Values(?,?,?,?,?)",values);
 
     }
 
     public boolean validateLogIn(String username, String password) {
+        // will try to log in
         try {
-            statement = connection.prepareStatement("SELECT userName FROM USER");
-            resultSet = statement.executeQuery();
+            execute("SELECT userName FROM USER");
             while (resultSet.next()) {
                 if(username.equals(resultSet.getString(1))){
-                    statement = connection.prepareStatement("SELECT pass FROM USER WHERE userName = ?");
-                    statement.setString(1, username);
-                    resultSet = statement.executeQuery();
+                    execute("SELECT pass FROM USER WHERE userName ='"+username+"'");
                     resultSet.next();
                     if (password.equals(resultSet.getString(1))){
                         return true;
@@ -100,59 +87,56 @@ public class DbBridge {
         }
         return false;
     }
+
     public int getUserType(String username) throws SQLException {
-
-            statement = connection.prepareStatement("SELECT type FROM USER WHERE userName = ?");
-            statement.setString(1, username);
-            resultSet = statement.executeQuery();
-            resultSet.next();
-            return resultSet.getInt(1);
+        execute("SELECT type FROM USER WHERE username ='"+username+"'");
+        resultSet.next();
+        return resultSet.getInt(1);
 
     }
-
-    public boolean lookForUserName(String username){
-        try {
-            statement = connection.prepareStatement("SELECT userName FROM USER");
-            resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                if (username.equals(resultSet.getString(1))){
-                    return true;
-                }
-            }
-
+    public int getUID(String username) throws SQLException {
+        //returns id for user if found else return -1
+        execute("SELECT ID,USERNAME FROM USER");
+        while (resultSet.next()) {
+            if (resultSet.getString("USERNAME").equals(username))
+                return resultSet.getInt("ID");
         }
-        catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return false;
+        return -1;
     }
-    public boolean lookForAddress(String street){
-        try {
-            statement = connection.prepareStatement("SELECT Adress FROM adress");
-            resultSet = statement.executeQuery();
+    public int getAddressID(String street) throws SQLException {
+        //returns id for address if found else return -1
+        execute("SELECT ID,ADDRESS FROM address");
             while (resultSet.next()) {
-                if (street.equals(resultSet.getString(1))){
-                    return true;
-                }
+                if(resultSet.getString("ADDRESS").equals(street))
+                    return resultSet.getInt("ID");
             }
-        }
-        catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return false;
+        return -1;
     }
     public ResultSet getAllTask() {
         return resultSet;
     }
 
-    public ResultSet getDriversTask(String driverUserName) {
-        return resultSet;
-    }
+    public ArrayList<Task> getDriversTasks(int aDriverId) {
+        ArrayList<Task> tasks = new ArrayList<>();
+        try {
+            statement = connection.prepareStatement("SELECT ID FROM task WHERE Driver_User_ID = ?");
+            statement.setInt(1, aDriverId);
+            resultSet = statement.executeQuery();
 
+            while (resultSet.next())
+            {
+                tasks.add(new Task(resultSet.getInt(1)));
+            }
+        }
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return tasks;
+    }
     public ResultSet getCharityTask(String charityUserName) {
         return resultSet;
     }
-
     public Connection getConnection()  {
         return connection;
     }
@@ -162,23 +146,83 @@ public class DbBridge {
     public Statement getStatement()  {
         return statement;
     }
-    public void removeUserAddress(String user, String address){
+    public void execute(String command){
         try {
-            statement = connection.prepareStatement(" DELETE FROM USER " +
-                    "WHERE Username = ?");
-            statement.setString(1, user);
-            statement.executeUpdate();
+            statement = connection.prepareStatement(command);
+            if (command.contains("SELECT")) {
+                resultSet = statement.executeQuery();
+            }
+            else {
+                statement.executeUpdate();
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
-            statement = connection.prepareStatement(" DELETE FROM Adress " +
-                    "WHERE Adress = ?");
-            statement.setString(1, address);
-            statement.executeUpdate();
+    public void execute(String command, ArrayList<Object> values){
+        try {
+            statement = connection.prepareStatement(command);
+            for(int i = 0; i < values.size(); i++){
+                if(values.get(i) instanceof String){
+                    statement.setString(i+1, (String) values.get(i));
+                }
+                else{
+                    statement.setInt(i+1, (Integer) values.get(i));
+                }
+            }
+            if(command.contains("SELECT")){
+                resultSet = statement.executeQuery();
+            }
+            else {
+                statement.executeUpdate();
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
-
-
+    public void removeUserAddress(String user, String street){
+        // removes all instances of user with user as username and all addresses with street as address
+        try {
+            while(getUID(user) > 0) {
+                statement = connection.prepareStatement(" DELETE FROM USER " +
+                        "WHERE Username = ?");
+                statement.setString(1, user);
+                statement.executeUpdate();
+            }
+            while(getAddressID(street) > 0) {
+                statement = connection.prepareStatement(" DELETE FROM Address " +
+                        "WHERE Address = ?");
+                statement.setString(1, street);
+                statement.executeUpdate();
+            }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
 
+    }
+
+    //Task
+    public String getTaskAddress(int anId)
+    {
+        try
+        {
+            statement = connection.prepareStatement("SELECT address.address FROM address LEFT JOIN task ON task.pickupAddress_ID = address.ID WHERE task.ID = ?");
+            statement.setInt(1, anId);
+            resultSet = statement.executeQuery();
+            if (resultSet.next())
+            {
+                return resultSet.getString(1);
+            }
+        }
+        catch (SQLException throwables)
+        {
+            throwables.printStackTrace();
+        }
+
+        return null;
     }
 }

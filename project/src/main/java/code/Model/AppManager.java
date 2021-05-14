@@ -26,12 +26,13 @@ public class AppManager {
         db = null;
     }
 
-    public static void Destroy()
+    public static AppManager Destroy()
     {
         if (instance != null)
             instance.DestroyInstance();
 
         instance = null;
+        return instance;
     }
 
     public static AppManager getInstance()

@@ -26,10 +26,11 @@ public class loginController {
     @FXML
     Button register;
     @FXML
-    private void handleLoginPressed(ActionEvent event) throws IOException, SQLException {
+    private void handleLoginPressed(ActionEvent event) throws IOException, SQLException, InterruptedException {
         String user = userName.getText();
         String pass = password.getText();
         DbBridge db = AppManager.getInstance().getDb();
+        Thread.sleep(1500);
         if(db.validateLogIn(user,pass)){
             AppManager.getInstance().setUser(user);
             switch (UserType.values()[db.getUserType(user)])
