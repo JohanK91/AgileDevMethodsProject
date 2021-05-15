@@ -198,13 +198,13 @@ insert into address (address, city, postcode, x, y)
 values ("Hello", "There", 123, 11, 22);
 
 Insert into user (userName, name, type, phone, pass, Address_ID)
-values ("test0", "TestDoner", 0, 123, "root", 2);
+values ("test0", "TestDoner", 0, 123, "root", 1);
   
 Insert into user (userName, name, type, phone, pass, Address_ID)
-values ("test1", "TestDriver", 1, 123, "root", 3);
+values ("test1", "TestDriver", 1, 123, "root", 2);
 
 Insert into user (userName, name, type, phone, pass, Address_ID)
-values ("test2", "TestCharity", 2, 123, "root", 4);
+values ("test2", "TestCharity", 2, 123, "root", 3);
 
 
 -- clothes 
@@ -272,6 +272,7 @@ INSERT into itemtype (Description, Name)
 values ("Fabrics on floor and windows", "Carpets and curtains");
 
 select * from task;
+select * from user;
 
 
 -- hello
