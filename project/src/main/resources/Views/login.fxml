@@ -20,14 +20,14 @@
          </columnConstraints>
          <rowConstraints>
             <RowConstraints maxHeight="178.0" minHeight="10.0" prefHeight="142.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="313.0" minHeight="10.0" prefHeight="177.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="128.0" minHeight="10.0" prefHeight="81.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="313.0" minHeight="10.0" prefHeight="192.66667683919272" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="128.0" minHeight="10.0" prefHeight="70.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
             <TextField fx:id="userName" promptText="Username" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.valignment="TOP" />
             <PasswordField fx:id="password" prefHeight="18.0" prefWidth="315.0" promptText="Password" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-            <Button fx:id="login" defaultButton="true" mnemonicParsing="false" onAction="#handleLoginPressed" prefHeight="51.0" prefWidth="133.0" text="Log In" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-            <Button fx:id="register" mnemonicParsing="false" onAction="#handleRegisterPressed" prefHeight="55.0" prefWidth="60.0" text="Register" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+            <Button fx:id="login" defaultButton="true" mnemonicParsing="false" onAction="#handleLoginPressed" prefHeight="40.0" prefWidth="133.0" text="Log In" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+            <Button fx:id="register" mnemonicParsing="false" onAction="#handleRegisterPressed" prefHeight="40.0" prefWidth="60.0" text="Register" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
          </children>
       </GridPane>
    </children>

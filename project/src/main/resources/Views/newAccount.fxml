@@ -32,7 +32,7 @@
             <RowConstraints maxHeight="178.0" minHeight="10.0" prefHeight="50.0" />
             <RowConstraints maxHeight="313.0" minHeight="10.0" prefHeight="50.0" />
             <RowConstraints maxHeight="313.0" minHeight="10.0" prefHeight="50.0" />
-            <RowConstraints maxHeight="128.0" minHeight="10.0" prefHeight="81.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="128.0" minHeight="10.0" prefHeight="70.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Password" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
@@ -56,8 +56,8 @@
             <TextField GridPane.columnIndex="2" GridPane.rowIndex="9" fx:id="xField" />
             <TextField fx:id="yField" GridPane.columnIndex="2" GridPane.rowIndex="10" />
             <Text fx:id="text" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.rowSpan="2147483647" GridPane.valignment="CENTER" />
-            <Button fx:id="register" defaultButton="true" mnemonicParsing="false" onAction="#handleRegisterPressed" prefHeight="51.0" prefWidth="133.0" text="Register" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="11" GridPane.valignment="CENTER" />
-            <Button fx:id="login" mnemonicParsing="false" onAction="#handleLoginPressed" prefHeight="55.0" prefWidth="60.0" text="Log in" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="11" GridPane.valignment="CENTER" />
+            <Button fx:id="register" defaultButton="true" mnemonicParsing="false" onAction="#handleRegisterPressed" prefHeight="40.0" prefWidth="133.0" text="Register" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="11" GridPane.valignment="CENTER" />
+            <Button fx:id="login" mnemonicParsing="false" onAction="#handleLoginPressed" prefHeight="40.0" prefWidth="60.0" text="Log in" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="11" GridPane.valignment="CENTER" />
          </children>
       </GridPane>
    </children>

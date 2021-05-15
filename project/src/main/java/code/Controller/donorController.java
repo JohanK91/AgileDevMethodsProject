@@ -66,7 +66,10 @@ public class donorController implements Initializable
     }
     @FXML
     private void handleLogoutPressed(ActionEvent event) throws IOException {
+        DbBridge db = AppManager.getInstance().getDb();
+        db.disconnect();
         switchView("Views/login.fxml", event);
+
     }
 
 

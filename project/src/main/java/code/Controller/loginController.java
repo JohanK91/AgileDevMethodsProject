@@ -37,6 +37,8 @@ public class loginController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         login.setDefaultButton(true);
+        DbBridge db = AppManager.getInstance().getDb();
+        db.connect();
 
     }
 

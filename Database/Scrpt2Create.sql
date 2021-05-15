@@ -271,7 +271,7 @@ values ("Kitchen and table fabrics", "Tablecloths");
 INSERT into itemtype (Description, Name) 
 values ("Fabrics on floor and windows", "Carpets and curtains");
 
-
+-- hello
 
 
 
