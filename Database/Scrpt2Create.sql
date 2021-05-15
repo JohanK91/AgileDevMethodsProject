@@ -185,3 +185,96 @@ SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 select * from user;
+select * from itemtype;
+select * from address;
+
+insert into address (address, city, postcode, x, y)
+values ("qaz", "wsx", 123, 11, 22);
+
+insert into address (address, city, postcode, x, y)
+values ("blabla", "gdsgfdg", 123, 11, 22);
+
+insert into address (address, city, postcode, x, y)
+values ("Hello", "There", 123, 11, 22);
+
+Insert into user (userName, name, type, phone, pass, Address_ID)
+values ("test0", "TestDoner", 0, 123, "root", 2);
+  
+Insert into user (userName, name, type, phone, pass, Address_ID)
+values ("test1", "TestDriver", 1, 123, "root", 3);
+
+Insert into user (userName, name, type, phone, pass, Address_ID)
+values ("test2", "TestCharity", 2, 123, "root", 4);
+
+
+-- clothes 
+INSERT into itemtype (Description, Name) 
+values ("Things you can wear in the summer", "Summer clothes");
+
+INSERT into itemtype (Description, Name) 
+values ("Things you can wear in the winter", "Winter clothes");
+
+INSERT into itemtype (Description, Name) 
+values ("Things you can wear on your head", "Hats");
+
+INSERT into itemtype (Description, Name) 
+values ("Things you can wear on your feet", "Shoes");
+
+
+-- furniture
+INSERT into itemtype (Description, Name) 
+values ("Chairs and tables", "Dining furniture");
+
+INSERT into itemtype (Description, Name) 
+values ("Things you can sit or sleep in", "Beds and couches");
+
+INSERT into itemtype (Description, Name) 
+values ("Things you can put clothes or books in", "Bookcases and closets");
+
+INSERT into itemtype (Description, Name) 
+values ("General furniture", "Other furniture items");
+
+
+-- electrical items
+INSERT into itemtype (Description, Name) 
+values ("Things that run on electricity", "Electrical items");
+
+INSERT into itemtype (Description, Name) 
+values ("Computer kinds of items", "Computer items");
+
+-- battery powered items
+INSERT into itemtype (Description, Name) 
+values ("Things that run on batteries", "Battery powered items");
+
+
+-- tools
+INSERT into itemtype (Description, Name) 
+values ("Crafting and work tools", "Tools");
+
+-- toys
+INSERT into itemtype (Description, Name) 
+values ("Hard toys for children", "Hard toys");
+
+INSERT into itemtype (Description, Name) 
+values ("Soft toys for children", "Soft toys");
+
+INSERT into itemtype (Description, Name) 
+values ("Battery powered toys for children", "Battery toys");
+
+-- fabrics
+INSERT into itemtype (Description, Name) 
+values ("Bed fabric items", "Bed covers");
+
+INSERT into itemtype (Description, Name) 
+values ("Kitchen and table fabrics", "Tablecloths");
+
+INSERT into itemtype (Description, Name) 
+values ("Fabrics on floor and windows", "Carpets and curtains");
+
+
+
+
+
+
+
+

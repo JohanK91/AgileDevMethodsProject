@@ -62,8 +62,7 @@ public class newAccountController implements Initializable
     Text text;
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle)
-    {
+    public void initialize(URL url, ResourceBundle resourceBundle) {
         for (UserType userType : UserType.values())
         {
             MenuItem userTypeItem = new MenuItem(userType.toString());
@@ -76,6 +75,7 @@ public class newAccountController implements Initializable
 
         typeMenu.setText(UserType.values()[0].toString());
         type = 0;
+        register.setDefaultButton(true);
     }
 
     @FXML

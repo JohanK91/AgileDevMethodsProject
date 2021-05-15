@@ -56,6 +56,7 @@ public class donorSettingsController implements Initializable {
     private PreparedStatement statement;
     private ResultSet resultSet;
     private String mysqlUrl = "jdbc:mysql://localhost:3306/mydb2?";
+    private boolean correct;
 
 
 
@@ -74,6 +75,7 @@ public class donorSettingsController implements Initializable {
         welcome.setText(welcome.getText() + name + ", alter your settings here!");
         oldPassText.setText("");
         passText.setText("");
+        setCorrect(false);
 
     }
 
@@ -86,6 +88,14 @@ public class donorSettingsController implements Initializable {
     @FXML
     private void handleBackPressed(ActionEvent event) throws IOException {
         switchView("Views/donor.fxml", event);
+    }
+
+    public boolean isCorrect() {
+        return correct;
+    }
+
+    public void setCorrect(boolean correct) {
+        this.correct = correct;
     }
 
     @FXML
@@ -102,7 +112,8 @@ public class donorSettingsController implements Initializable {
         if (db.validateLogIn(user, pass)) {
             AppManager.getInstance().setUser(user);
             oldPassText.setText(oldPassText.getText() + "Password confirmed!");
-            boolean correct = true;
+            //boolean correct = true;
+            setCorrect(true);
 
         } else {
             oldPassText.setText(oldPassText.getText() + "Wrong password!");
@@ -114,8 +125,19 @@ public class donorSettingsController implements Initializable {
 
         passText.setText("");
         oldPassText.setText("");
-        passText.setText(passText.getText() + "Password changed!");
+        if (isCorrect()) {
+            passText.setText(passText.getText() + "Password changed!");
+        } else {
+            passText.setText(passText.getText() + "You must first confirm your old password!");
+        }
+
         sleepMode();
+        changePass();
+
+
+    }
+
+    private void changePass() throws SQLException {
         String user = AppManager.getInstance().getUser();
         String pass = oldPasslist.getText();
         String newpass = changePasslist.getText();
@@ -135,7 +157,6 @@ public class donorSettingsController implements Initializable {
 
         }
     }
-
        // changePass.setOnAction(new EventHandler<ActionEvent>() {
          //   @Override public void handle(ActionEvent event) {
            //     passText.setText("");

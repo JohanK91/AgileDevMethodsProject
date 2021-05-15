@@ -80,6 +80,8 @@ public class donorItemsController implements Initializable {
         textItem.setText(textItem.getText() + item + " added");
         DbBridge db = AppManager.getInstance().getDb();
 
+
+
     }
 
     @FXML
