@@ -8,6 +8,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -43,18 +44,17 @@ public class loginController implements Initializable {
         DbBridge db = AppManager.getInstance().getDb();
         db.connect();
         loginFailText.setText("");
-
     }
 
+    
         @FXML
         private void handleLoginPressed (ActionEvent event) throws IOException, SQLException, InterruptedException {
             String user = userName.getText();
             String pass = password.getText();
             DbBridge db = AppManager.getInstance().getDb();
-            Thread.sleep(1500);
-
 
             if (db.validateLogIn(user, pass)) {
+                Thread.sleep(1000);
                 AppManager.getInstance().setUser(user);
                 switch (UserType.values()[db.getUserType(user)]) {
                     case Donor -> switchView("Views/donor.fxml", event);

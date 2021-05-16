@@ -121,19 +121,15 @@ public class donorSettingsController implements Initializable {
 
     @FXML
     private void handleChangePassPressed(ActionEvent event) throws IOException, InterruptedException, SQLException {
-
         passText.setText("");
         oldPassText.setText("");
         if (isCorrect()) {
             passText.setText(passText.getText() + "Password changed!");
+            changePass();
+            sleepMode();
         } else {
             passText.setText(passText.getText() + "You must first confirm your old password!");
         }
-
-        sleepMode();
-        changePass();
-
-
     }
 
     private void changePass() throws SQLException {
