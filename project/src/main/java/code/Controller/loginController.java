@@ -33,7 +33,7 @@ public class loginController implements Initializable {
     @FXML
     Button register;
     @FXML
-    Text loginFail;
+    Text loginFailText;
 
 
 
@@ -42,7 +42,7 @@ public class loginController implements Initializable {
         login.setDefaultButton(true);
         DbBridge db = AppManager.getInstance().getDb();
         db.connect();
-        loginFail.setText("");
+        loginFailText.setText("");
 
     }
 
@@ -62,8 +62,7 @@ public class loginController implements Initializable {
                     case Charity -> switchView("Views/charity.fxml", event);
                 }
             }else {
-                loginFail.setText("Login failed. Please try again!");
-
+                loginFailText.setText("Login failed. \nPlease check your inputs.");
             }
         }
 

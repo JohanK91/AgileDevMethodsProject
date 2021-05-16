@@ -60,9 +60,15 @@ public class newAccountController implements Initializable
     MenuItem charity;
     @FXML
     Text text;
+    @FXML
+    Text userCreatedText;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        text.setText("");
+        userCreatedText.setText("");
+
         for (UserType userType : UserType.values())
         {
             MenuItem userTypeItem = new MenuItem(userType.toString());
@@ -123,6 +129,8 @@ public class newAccountController implements Initializable
 
         }
         if(okInput) {
+            userCreatedText.setText("User created");
+
             ArrayList<Object> values = new ArrayList<>();
             if (db.getAddressID(street) == -1) {
                 values.add(street);

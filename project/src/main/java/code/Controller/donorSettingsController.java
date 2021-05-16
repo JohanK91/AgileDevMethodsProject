@@ -102,8 +102,7 @@ public class donorSettingsController implements Initializable {
     private void handleConfirmOldPassPressed(ActionEvent event) throws IOException, InterruptedException {
         oldPassText.setText("");
         passText.setText("");
-        //String oldPass = oldPasslist.getText();
-        //add in if statement to check if the same or not
+
 
         String user = AppManager.getInstance().getUser();
         String pass = oldPasslist.getText();
