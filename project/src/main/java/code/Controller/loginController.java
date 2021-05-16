@@ -16,6 +16,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
@@ -31,6 +32,8 @@ public class loginController implements Initializable {
     Button login;
     @FXML
     Button register;
+    @FXML
+    Text loginFail;
 
 
 
@@ -39,6 +42,7 @@ public class loginController implements Initializable {
         login.setDefaultButton(true);
         DbBridge db = AppManager.getInstance().getDb();
         db.connect();
+        loginFail.setText("");
 
     }
 
@@ -57,6 +61,9 @@ public class loginController implements Initializable {
                     case Driver -> switchView("Views/driver.fxml", event);
                     case Charity -> switchView("Views/charity.fxml", event);
                 }
+            }else {
+                loginFail.setText("Login failed. Please try again!");
+
             }
         }
 
