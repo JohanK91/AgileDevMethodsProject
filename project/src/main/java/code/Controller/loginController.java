@@ -25,6 +25,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class loginController implements Initializable {
+    DbBridge db;
     @FXML
     TextField userName;
     @FXML
@@ -41,45 +42,47 @@ public class loginController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         login.setDefaultButton(true);
-        DbBridge db = AppManager.getInstance().getDb();
+        db= AppManager.getInstance().getDb();
         db.connect();
         loginFailText.setText("");
     }
 
-    
-        @FXML
-        private void handleLoginPressed (ActionEvent event) throws IOException, SQLException, InterruptedException {
-            String user = userName.getText();
-            String pass = password.getText();
-            DbBridge db = AppManager.getInstance().getDb();
 
-            if (db.validateLogIn(user, pass)) {
-                Thread.sleep(1000);
-                AppManager.getInstance().setUser(user);
-                switch (UserType.values()[db.getUserType(user)]) {
-                    case Donor -> switchView("Views/donor.fxml", event);
-                    case Driver -> switchView("Views/driver.fxml", event);
-                    case Charity -> switchView("Views/charity.fxml", event);
-                }
-            }else {
-                loginFailText.setText("Login failed. \nPlease check your inputs.");
+    @FXML
+    private void handleLoginPressed (ActionEvent event) throws IOException, SQLException, InterruptedException {
+
+        String user = capitalize(userName.getText());
+        String pass = password.getText();
+
+        if (db.validateLogIn(user, pass)) {
+            AppManager.getInstance().setUser(user);
+            switch (UserType.values()[db.getUserType(user)]) {
+                case Donor -> switchView("Views/donor.fxml", event);
+                case Driver -> switchView("Views/driver.fxml", event);
+                case Charity -> switchView("Views/charity.fxml", event);
             }
+        }else {
+            loginFailText.setText("Login failed. \nPlease check your inputs.");
         }
+    }
 
-        @FXML
-        private void handleRegisterPressed (ActionEvent event) throws IOException {
-            switchView("Views/newAccount.fxml", event);
-
-        }
-
-        private void switchView (String view, ActionEvent event) throws IOException {
-            Parent p = FXMLLoader.load(getClass().getClassLoader().getResource(view));
-            Scene newScene = new Scene(p);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(newScene);
-            stage.show();
-        }
+    @FXML
+    private void handleRegisterPressed (ActionEvent event) throws IOException {
+        switchView("Views/newAccount.fxml", event);
 
     }
 
+    private void switchView (String view, ActionEvent event) throws IOException {
+        Parent p = FXMLLoader.load(getClass().getClassLoader().getResource(view));
+        Scene newScene = new Scene(p);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(newScene);
+        stage.show();
+    }
 
+    public static String capitalize(String input) {
+        if(input.isEmpty())
+            return input;
+        return input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
+    }
+}
