@@ -34,6 +34,9 @@ public class driverController implements Initializable
     @FXML
     Button removeTaskButton;
 
+    @FXML
+    Button logoutButton;
+
     ArrayList<String> myUnassignedAddresses = new ArrayList<>();
     ArrayList<String> myAssignedAddresses = new ArrayList<>();
 
@@ -112,5 +115,13 @@ public class driverController implements Initializable
             AppManager.getInstance().getDb().assignUnassignedTaskToDriver(myUnassignedTasks.get(idx).getId(), AppManager.getInstance().getDb().getUID(AppManager.getInstance().getUser()));
             reload();
         }
+    }
+
+    @FXML
+    public void logoutPressed(ActionEvent actionEvent) throws IOException
+    {
+        DbBridge db = AppManager.getInstance().getDb();
+        db.disconnect();
+        AppManager.getInstance().switchView("Views/login.fxml", actionEvent.getSource());
     }
 }
