@@ -64,7 +64,7 @@ public class DbBridge {
     }
     public void createAddress(ArrayList<Object> values) {
         // create address based on input
-        execute("INSERT INTO ADDRESS(address, city, postcode, x, y) Values(?,?,?,?,?)",values);
+        execute("INSERT INTO ADDRESS(street, city, postcode, x, y) Values(?,?,?,?,?)",values);
 
     }
 
@@ -112,6 +112,7 @@ public class DbBridge {
             }
         return -1;
     }
+
     public ResultSet getAllTask() {
         return resultSet;
     }
@@ -210,7 +211,7 @@ public class DbBridge {
     {
         try
         {
-            statement = connection.prepareStatement("SELECT address.address FROM address LEFT JOIN task ON task.pickupAddress_ID = address.ID WHERE task.ID = ?");
+            statement = connection.prepareStatement("SELECT address.street FROM address LEFT JOIN task ON task.pickupAddress_ID = address.ID WHERE task.ID = ?");
             statement.setInt(1, anId);
             resultSet = statement.executeQuery();
             if (resultSet.next())

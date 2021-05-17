@@ -3,6 +3,7 @@ package code.Controller;
 import code.Model.AppManager;
 import code.Model.DbBridge;
 import code.Model.UserType;
+import com.mysql.cj.util.StringUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,30 +11,36 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class donorItemsController implements Initializable {
+import static java.lang.Integer.parseInt;
 
+public class donorItemsDefaultAddressController implements Initializable
+{
 
-    @FXML
-    Button addItem;
     @FXML
     TextField listItem;
     @FXML
-    Button ButtonAddAddress;
-    @FXML
-    TextField listAddress;
+    Button ButtonAddItem;
     @FXML
     Button ButtonAddCharity;
+    @FXML
+    Button ButtonAddDay;
+    @FXML
+    Button ButtonAddTime;
+    @FXML
+    TextField listDay;
+    @FXML
+    TextField listTime;
     @FXML
     TextField listCharity;
     @FXML
@@ -41,20 +48,35 @@ public class donorItemsController implements Initializable {
     @FXML
     Text textItem;
     @FXML
-    Text textAddress;
-    @FXML
     Text textCharity;
     @FXML
     Text welcome;
-    @FXML
-    TextField listDay;
-    @FXML
-    TextField listTime;
     @FXML
     Text textDay;
     @FXML
     Text textTime;
 
+
+    private void handleWelcomeText() {
+        String name = AppManager.getInstance().getUser();
+        welcome.setText("");
+        welcome.setText(welcome.getText() + name + ", what items do you wish to donate?");
+        textTime.setText("");
+        textDay.setText("");
+        textItem.setText("");
+        textCharity.setText("");
+
+    }
+
+    @FXML
+    private void handleBackPressed(ActionEvent event) throws IOException {
+        switchView("Views/donorDecideAddress.fxml", event);
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        handleWelcomeText();
+    }
 
     private void switchView(String view, ActionEvent event) throws IOException {
         Parent p = FXMLLoader.load(getClass().getClassLoader().getResource(view));
@@ -64,27 +86,10 @@ public class donorItemsController implements Initializable {
         stage.show();
     }
 
-    private void handleWelcomeText() {
-        String name = AppManager.getInstance().getUser();
-        welcome.setText("");
-        welcome.setText(welcome.getText() + name + ", what items do you wish to donate?");
-        textTime.setText("");
-        textDay.setText("");
-        textItem.setText("");
-        textAddress.setText("");
-        textCharity.setText("");
-
-
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        handleWelcomeText();
-    }
-
     @FXML
-    private void handleBackPressed(ActionEvent event) throws IOException {
-        switchView("Views/donor.fxml", event);
+    private void handleItemChoiceMenuPressed(ActionEvent event) throws IOException, SQLException {
+        DbBridge db = AppManager.getInstance().getDb();
+
     }
 
     @FXML
@@ -96,19 +101,13 @@ public class donorItemsController implements Initializable {
 
     }
 
-    @FXML
-    private void handleAddAddressPressed(ActionEvent event) throws IOException {
-        textAddress.setText("");
-        String address = listAddress.getText();
-        textAddress.setText(textAddress.getText() + address + " added");
-
-    }
 
     @FXML
     private void handleAddCharityPressed(ActionEvent event) throws IOException {
         textCharity.setText("");
         String charity = listCharity.getText();
         textCharity.setText(textCharity.getText() + charity + " added");
+        DbBridge db = AppManager.getInstance().getDb();
 
     }
 
@@ -129,6 +128,7 @@ public class donorItemsController implements Initializable {
         DbBridge db = AppManager.getInstance().getDb();
 
     }
+
 
 
 }

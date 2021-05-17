@@ -46,7 +46,7 @@ public class loginController implements Initializable {
         loginFailText.setText("");
     }
 
-    
+
         @FXML
         private void handleLoginPressed (ActionEvent event) throws IOException, SQLException, InterruptedException {
             String user = userName.getText();

@@ -19,24 +19,28 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class donorController implements Initializable
+public class donorDecideAddressController implements Initializable
 {
 
     @FXML
     Text welcome;
     @FXML
-    Button donate;
+    Text defaultText;
+    @FXML
+    Text NewAddText;
+    @FXML
+    Button defaultAddress;
     @FXML
     Button logout;
     @FXML
-    Button settings;
+    Button newAddress;
 
 
     private void handleWelcomeText() {
         String name = AppManager.getInstance().getUser();
         welcome.setText("");
-        welcome.setText(welcome.getText() + name +  ", welcome to Uber Charity!\n" +
-                "Thank you for generosity!");
+        welcome.setText(welcome.getText() + name +  ",\n" +
+                "Please click on one of the two buttons");
     }
 
     @Override
@@ -46,30 +50,17 @@ public class donorController implements Initializable
 
 
     @FXML
-    private void handleDonatePressed1(ActionEvent event) throws IOException {
-        Parent p = FXMLLoader.load(getClass().getClassLoader().getResource("Views/donorItems.fxml"));
-        Scene newScene= new Scene(p);
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        stage.setScene(newScene);
-
-        stage.show();
-    }
-
-
-    @FXML
-    private void handleDonatePressed(ActionEvent event) throws IOException {
-        switchView("Views/donorDecideAddress.fxml", event);
+    private void handleDefaultAddressPressed(ActionEvent event) throws IOException {
+        switchView("Views/donorItemsDefaultAddress.fxml", event);
     }
     @FXML
-    private void handleSettingsPressed(ActionEvent event) throws IOException {
-        switchView("Views/donorSettings.fxml", event);
+    private void handleNewAddressPressed(ActionEvent event) throws IOException {
+        switchView("Views/donorItemsNewAddress.fxml", event);
     }
-    @FXML
-    private void handleLogoutPressed(ActionEvent event) throws IOException {
-        DbBridge db = AppManager.getInstance().getDb();
-        db.disconnect();
-        switchView("Views/login.fxml", event);
 
+    @FXML
+    private void handleBackPressed(ActionEvent event) throws IOException {
+        switchView("Views/donor.fxml", event);
     }
 
 
