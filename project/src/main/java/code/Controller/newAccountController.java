@@ -129,10 +129,7 @@ public class newAccountController implements Initializable
 
         }
         if(okInput) {
-
             userCreatedText.setText("User created");
-
-
 
             ArrayList<Object> values = new ArrayList<>();
             if (db.getAddressID(street) == -1) {

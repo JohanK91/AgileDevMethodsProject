@@ -33,7 +33,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb2`.`User` (
   `ID` INT NOT NULL AUTO_INCREMENT,
-  `userName` VARCHAR(45) NOT NULL,
+  `userName` VARCHAR(45) UNIQUE NOT NULL, 
   `name` VARCHAR(45) NOT NULL,
   `type` INT NOT NULL,
   `phone` VARCHAR(45) NOT NULL,
@@ -184,7 +184,6 @@ SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
-
 select * from user;
 select * from itemtype;
 select * from address;
@@ -274,6 +273,16 @@ values ("Fabrics on floor and windows", "Carpets and curtains");
 
 select * from task;
 select * from user;
+select * from address;
+select * from itemtype;
+
+-- ALTER TABLE address RENAME COLUMN Street TO street;
 
 
 -- hello
+
+
+
+
+
+
