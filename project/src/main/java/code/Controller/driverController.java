@@ -38,8 +38,8 @@ public class driverController implements Initializable
         DbBridge dbBridge = AppManager.getInstance().getDb();
         try
         {
-            myTasks = dbBridge.getDriversTasks(dbBridge.getUID(AppManager.getInstance().getUser()));
-            myUnassignedTasks = dbBridge.getDriversTasks(-1);
+            myTasks = dbBridge.getDriverTasksUndone(dbBridge.getUID(AppManager.getInstance().getUser()));
+            myUnassignedTasks = dbBridge.getDriverTasksUndone(-1);
         }
         catch (SQLException throwable)
         {

@@ -9,6 +9,7 @@
       <Label fx:id="taskAddressText" layoutX="115.0" layoutY="93.0" text="ERROR" />
       <Label layoutX="60.0" layoutY="93.0" text="Task is at: " />
       <Button fx:id="arrivedButton" alignment="CENTER" layoutX="126.0" layoutY="277.0" mnemonicParsing="false" onAction="#arrivedPressed" text="Arrived" />
-      <Button fx:id="taskCompleteButton" alignment="CENTER" layoutX="126.0" layoutY="277.0" mnemonicParsing="false" text="Task Done" visible="false" />
+      <Button fx:id="taskCompleteButton" alignment="CENTER" layoutX="126.0" layoutY="277.0" mnemonicParsing="false" onAction="#taskCompletedPressed" text="Task Done" visible="false" />
+      <Button fx:id="continueDriveButton" alignment="CENTER" layoutX="128.0" layoutY="277.0" mnemonicParsing="false" onAction="#continueDrivePressed" text="Continue drive" textAlignment="CENTER" visible="false" />
    </children>
 </AnchorPane>

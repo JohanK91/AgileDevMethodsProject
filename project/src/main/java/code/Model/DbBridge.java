@@ -116,24 +116,7 @@ public class DbBridge {
         return resultSet;
     }
 
-    public ArrayList<Task> getDriversTasks(int aDriverId) {
-        ArrayList<Task> tasks = new ArrayList<>();
-        try {
-            statement = connection.prepareStatement("SELECT ID FROM task WHERE Driver_User_ID = ?");
-            statement.setInt(1, aDriverId);
-            resultSet = statement.executeQuery();
 
-            while (resultSet.next())
-            {
-                tasks.add(new Task(resultSet.getInt(1)));
-            }
-        }
-        catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
-        return tasks;
-    }
     public ResultSet getCharityTask(String charityUserName) {
         return resultSet;
     }
@@ -224,5 +207,39 @@ public class DbBridge {
         }
 
         return null;
+    }
+
+    public ArrayList<Task> getDriverTasksUndone(int aDriverId)
+    {
+        ArrayList<Task> tasks = new ArrayList<>();
+        try {
+            statement = connection.prepareStatement("SELECT ID FROM task WHERE Driver_User_ID = ? AND NOT status = 'completed'");
+            statement.setInt(1, aDriverId);
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next())
+            {
+                tasks.add(new Task(resultSet.getInt(1)));
+            }
+        }
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return tasks;
+    }
+
+    public void completeTask(int anId)
+    {
+        try
+        {
+            statement = connection.prepareStatement("UPDATE task SET status = 'completed' WHERE ID = ?");
+            statement.setInt(1, anId);
+            statement.executeUpdate();
+        }
+        catch (SQLException throwables)
+        {
+            throwables.printStackTrace();
+        }
     }
 }
