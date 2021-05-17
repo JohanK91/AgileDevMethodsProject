@@ -12,5 +12,7 @@
       <ListView fx:id="unassignedTaskView" layoutX="334.0" layoutY="100.0" prefHeight="200.0" prefWidth="200.0" />
       <Label layoutX="334.0" layoutY="83.0" text="Unassigned tasks" />
       <Button fx:id="beginDriveButton" layoutX="264.0" layoutY="361.0" mnemonicParsing="false" onAction="#beginDrivePressed" text="Start Drive" />
+      <Button fx:id="removeTaskButton" layoutX="139.0" layoutY="300.0" mnemonicParsing="false" onAction="#removeTaskPressed" text="Remove" />
+      <Button fx:id="addTaskButton" layoutX="408.0" layoutY="300.0" mnemonicParsing="false" onAction="#addTaskPressed" text="Add" />
    </children>
 </AnchorPane>

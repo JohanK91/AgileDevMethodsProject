@@ -212,9 +212,18 @@ public class DbBridge {
     public ArrayList<Task> getDriverTasksUndone(int aDriverId)
     {
         ArrayList<Task> tasks = new ArrayList<>();
-        try {
-            statement = connection.prepareStatement("SELECT ID FROM task WHERE Driver_User_ID = ? AND NOT status = 'completed'");
-            statement.setInt(1, aDriverId);
+        try
+        {
+            if (aDriverId == -1)
+            {
+                statement = connection.prepareStatement("SELECT ID FROM task WHERE Driver_User_ID IS NULL AND (NOT status = 'completed' OR status IS NULL)");
+            }
+            else
+            {
+                statement = connection.prepareStatement("SELECT ID FROM task WHERE Driver_User_ID = ? AND (NOT status = 'completed' OR status IS NULL)");
+                statement.setInt(1, aDriverId);
+            }
+
             resultSet = statement.executeQuery();
 
             while (resultSet.next())
@@ -235,6 +244,35 @@ public class DbBridge {
         {
             statement = connection.prepareStatement("UPDATE task SET status = 'completed' WHERE ID = ?");
             statement.setInt(1, anId);
+            statement.executeUpdate();
+        }
+        catch (SQLException throwables)
+        {
+            throwables.printStackTrace();
+        }
+    }
+
+    public void assignUnassignedTaskToDriver(int aTaskId, int aDriverId)
+    {
+        try
+        {
+            statement = connection.prepareStatement("UPDATE task SET Driver_User_ID = ? WHERE ID = ?");
+            statement.setInt(1, aDriverId);
+            statement.setInt(2, aTaskId);
+            statement.executeUpdate();
+        }
+        catch (SQLException throwables)
+        {
+            throwables.printStackTrace();
+        }
+    }
+
+    public void unassignTask(int aTaskId)
+    {
+        try
+        {
+            statement = connection.prepareStatement("UPDATE task SET Driver_User_ID = NULL WHERE ID = ?");
+            statement.setInt(1, aTaskId);
             statement.executeUpdate();
         }
         catch (SQLException throwables)

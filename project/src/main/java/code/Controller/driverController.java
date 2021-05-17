@@ -3,6 +3,7 @@ package code.Controller;
 import code.Model.AppManager;
 import code.Model.DbBridge;
 import code.Model.Task;
+import com.mysql.cj.protocol.a.NativePacketPayload;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -26,6 +27,12 @@ public class driverController implements Initializable
 
     @FXML
     Button beginDriveButton;
+
+    @FXML
+    Button addTaskButton;
+
+    @FXML
+    Button removeTaskButton;
 
     ArrayList<String> myUnassignedAddresses = new ArrayList<>();
     ArrayList<String> myAssignedAddresses = new ArrayList<>();
@@ -83,5 +90,27 @@ public class driverController implements Initializable
     public void beginDrivePressed(ActionEvent actionEvent) throws IOException
     {
         AppManager.getInstance().switchView("Views/driverDriving.fxml", actionEvent.getSource());
+    }
+
+    @FXML
+    public void removeTaskPressed(ActionEvent actionEvent)
+    {
+        int idx = taskView.getSelectionModel().getSelectedIndex();
+        if (idx != -1)
+        {
+            AppManager.getInstance().getDb().unassignTask(myTasks.get(idx).getId());
+            reload();
+        }
+    }
+
+    @FXML
+    public void addTaskPressed(ActionEvent actionEvent) throws SQLException
+    {
+        int idx = unassignedTaskView.getSelectionModel().getSelectedIndex();
+        if (idx != -1)
+        {
+            AppManager.getInstance().getDb().assignUnassignedTaskToDriver(myUnassignedTasks.get(idx).getId(), AppManager.getInstance().getDb().getUID(AppManager.getInstance().getUser()));
+            reload();
+        }
     }
 }
