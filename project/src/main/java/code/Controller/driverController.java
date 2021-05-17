@@ -4,12 +4,15 @@ import code.Model.AppManager;
 import code.Model.DbBridge;
 import code.Model.Task;
 import com.mysql.cj.protocol.a.NativePacketPayload;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
 import java.net.URL;
@@ -81,6 +84,9 @@ public class driverController implements Initializable
         {
             beginDriveButton.setDisable(true);
         }
+
+        removeTaskButton.setDisable(taskView.getSelectionModel().getSelectedIndex() == -1);
+        addTaskButton.setDisable(unassignedTaskView.getSelectionModel().getSelectedIndex() == -1);
     }
 
     @Override
@@ -123,5 +129,15 @@ public class driverController implements Initializable
         DbBridge db = AppManager.getInstance().getDb();
         db.disconnect();
         AppManager.getInstance().switchView("Views/login.fxml", actionEvent.getSource());
+    }
+
+    public void taskViewClicked(MouseEvent mouseEvent)
+    {
+        removeTaskButton.setDisable(taskView.getSelectionModel().getSelectedIndex() == -1);
+    }
+
+    public void unassignedTaskViewClicked(MouseEvent mouseEvent)
+    {
+        addTaskButton.setDisable(unassignedTaskView.getSelectionModel().getSelectedIndex() == -1);
     }
 }
