@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="code.Controller.driverController">
    <children>
-      <ListView fx:id="taskView" layoutX="65.0" layoutY="100.0" prefHeight="200.0" prefWidth="200.0" />
+      <ListView fx:id="taskView" layoutX="65.0" layoutY="100.0" onMouseClicked="#taskViewClicked" prefHeight="200.0" prefWidth="200.0" />
       <Label layoutX="65.0" layoutY="83.0" text="My tasks" />
-      <ListView fx:id="unassignedTaskView" layoutX="334.0" layoutY="100.0" prefHeight="200.0" prefWidth="200.0" />
+      <ListView fx:id="unassignedTaskView" layoutX="334.0" layoutY="100.0" onMouseClicked="#unassignedTaskViewClicked" prefHeight="200.0" prefWidth="200.0" />
       <Label layoutX="334.0" layoutY="83.0" text="Unassigned tasks" />
+      <Button fx:id="beginDriveButton" layoutX="264.0" layoutY="361.0" mnemonicParsing="false" onAction="#beginDrivePressed" text="Start Drive" />
+      <Button fx:id="removeTaskButton" layoutX="139.0" layoutY="300.0" mnemonicParsing="false" onAction="#removeTaskPressed" text="Remove" />
+      <Button fx:id="addTaskButton" layoutX="408.0" layoutY="300.0" mnemonicParsing="false" onAction="#addTaskPressed" text="Add" />
+      <Button fx:id="logoutButton" layoutX="534.0" layoutY="14.0" mnemonicParsing="false" onAction="#logoutPressed" text="Logout" />
    </children>
 </AnchorPane>
