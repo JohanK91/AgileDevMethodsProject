@@ -1,5 +1,14 @@
 package code.Model;
 
+import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+
 //singleton
 public class AppManager {
     private static AppManager instance = null;
@@ -40,5 +49,14 @@ public class AppManager {
         if (instance == null)
             instance = new AppManager();
         return instance;
+    }
+
+    public void switchView(String view, Object source) throws IOException
+    {
+        Parent p = FXMLLoader.load(getClass().getClassLoader().getResource(view));
+        Scene newScene = new Scene(p);
+        Stage stage = (Stage) ((Node) source).getScene().getWindow();
+        stage.setScene(newScene);
+        stage.show();
     }
 }

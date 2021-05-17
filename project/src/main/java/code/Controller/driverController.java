@@ -4,9 +4,13 @@ import code.Model.AppManager;
 import code.Model.DbBridge;
 import code.Model.Task;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -20,11 +24,14 @@ public class driverController implements Initializable
     @FXML
     ListView<String> unassignedTaskView;
 
-    ArrayList<String> myUnassignedAddresses;
-    ArrayList<String> myAssignedAddresses;
+    @FXML
+    Button beginDriveButton;
+
+    ArrayList<String> myUnassignedAddresses = new ArrayList<>();
+    ArrayList<String> myAssignedAddresses = new ArrayList<>();
 
     ArrayList<Task> myTasks;
-    ArrayList<Task> myUnAssignedTasks;
+    ArrayList<Task> myUnassignedTasks;
 
     private void setupTasks()
     {
@@ -32,17 +39,18 @@ public class driverController implements Initializable
         try
         {
             myTasks = dbBridge.getDriversTasks(dbBridge.getUID(AppManager.getInstance().getUser()));
-            myUnAssignedTasks = dbBridge.getDriversTasks(-1);
-        } catch (SQLException throwables)
+            myUnassignedTasks = dbBridge.getDriversTasks(-1);
+        }
+        catch (SQLException throwable)
         {
-            throwables.printStackTrace();
+            throwable.printStackTrace();
         }
 
         for (Task task : myTasks)
         {
             myAssignedAddresses.add(task.getAddress());
         }
-        for (Task task : myUnAssignedTasks)
+        for (Task task : myUnassignedTasks)
         {
             myUnassignedAddresses.add(task.getAddress());
         }
@@ -51,11 +59,29 @@ public class driverController implements Initializable
         unassignedTaskView.setItems(FXCollections.observableArrayList(myUnassignedAddresses));
     }
 
+    public void reload()
+    {
+        myUnassignedAddresses.clear();
+        myAssignedAddresses.clear();
+        setupTasks();
+
+        beginDriveButton.setDisable(false);
+
+        if (myAssignedAddresses.size() == 0)
+        {
+            beginDriveButton.setDisable(true);
+        }
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
-        myAssignedAddresses = new ArrayList<>();
-        myUnassignedAddresses = new ArrayList<>();
-        setupTasks();
+        reload();
+    }
+
+    @FXML
+    public void beginDrivePressed(ActionEvent actionEvent) throws IOException
+    {
+        AppManager.getInstance().switchView("Views/driverDriving.fxml", actionEvent.getSource());
     }
 }
