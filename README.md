@@ -3,17 +3,15 @@ Project for Agile Development Methods(DA116A) course at Högskolan Kristianstad(
 
 ## What you think is junk could be somebody else's treasure, delivery to charities. 
 
+## Requirements
+
+An IDE with support for Maven, & JDK 16.
+
 ## Installation
 
-Add these to the project folder:
-- javafx-sdk-11.0.2
-- mysql-connector-java-8.0.23.jar
-
-Create a database called "mydb2", and restore it from the sql.sql file.
+Create a database called "mydb2", and restore it from the Database/Scrpt2Create.sql file.
+Open the project in your prefered IDE, and generate the Maven project.
 
 ## Running the app
 
-Open the project folder in IntelliJ, and create a configuration for each Main file.
-
-For sample/main add these VM options:
---module-path "path/to/javafx/lib" --add-modules javafx.controls,javafx.fxml
+Use the Maven plugin javafx's javafx:run
