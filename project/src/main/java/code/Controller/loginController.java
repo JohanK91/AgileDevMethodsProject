@@ -43,15 +43,15 @@ public class loginController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         login.setDefaultButton(true);
         db= AppManager.getInstance().getDb();
-        db.connect();
         loginFailText.setText("");
     }
 
 
     @FXML
     private void handleLoginPressed (ActionEvent event) throws IOException, SQLException, InterruptedException {
+        db.connect();
 
-        String user = capitalize(userName.getText());
+        String user = userName.getText();
         String pass = password.getText();
 
         if (db.validateLogIn(user, pass)) {
@@ -80,9 +80,4 @@ public class loginController implements Initializable {
         stage.show();
     }
 
-    public static String capitalize(String input) {
-        if(input.isEmpty())
-            return input;
-        return input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
-    }
 }

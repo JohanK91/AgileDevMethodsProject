@@ -26,7 +26,9 @@ import static java.lang.Integer.parseInt;
 public class newAccountController implements Initializable
 {
     int type;
+    DbBridge db;
     Boolean okInput;
+
     @FXML
     TextField userName;
     @FXML
@@ -65,9 +67,10 @@ public class newAccountController implements Initializable
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        db= AppManager.getInstance().getDb();
+        db.connect();
         text.setText("");
         userCreatedText.setText("");
-        okInput = true;
         register.setDefaultButton(true);
 
         for (UserType userType : UserType.values())
@@ -89,9 +92,9 @@ public class newAccountController implements Initializable
         // This is so dirty... please help
         text.setText("");
         userCreatedText.setText("");
-        DbBridge db = AppManager.getInstance().getDb();
+        okInput=true;
         String user = userName.getText();
-        if (db.getUID(capitalize(user)) > 0 || user.isEmpty()) {
+        if (db.getUID(user) > 0 || user.isEmpty()) {
             invalid("Username already exist or is empty");
         }
         String pass = password.getText();
@@ -141,7 +144,7 @@ public class newAccountController implements Initializable
                 db.createAddress(values);
             }
             values = new ArrayList<>();
-            values.add(capitalize(user));
+            values.add(user);
             values.add(capitalize(name));
             values.add(type);
             values.add(phone);

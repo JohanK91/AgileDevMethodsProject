@@ -1,6 +1,7 @@
 package code.Model;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class DbBridge {
 
@@ -73,8 +74,8 @@ public class DbBridge {
         try {
             execute("SELECT userName FROM USER");
             while (resultSet.next()) {
-                if(username.equals(resultSet.getString(1))){
-                    execute("SELECT pass FROM USER WHERE userName ='"+username+"'");
+                if(username.equalsIgnoreCase(resultSet.getString(1))){
+                    execute("SELECT pass FROM USER WHERE lower(userName) ='"+username.toLowerCase()+"'");
                     resultSet.next();
                     if (password.equals(resultSet.getString(1))){
                         return true;
@@ -89,7 +90,7 @@ public class DbBridge {
     }
 
     public int getUserType(String username) throws SQLException {
-        execute("SELECT type FROM USER WHERE username ='"+username+"'");
+        execute("SELECT type FROM USER WHERE lower(username) ='"+username.toLowerCase()+"'");
         resultSet.next();
         return resultSet.getInt(1);
 
@@ -98,7 +99,7 @@ public class DbBridge {
         //returns id for user if found else return -1
         execute("SELECT ID,USERNAME FROM USER");
         while (resultSet.next()) {
-            if (resultSet.getString("USERNAME").equals(username))
+            if (resultSet.getString("USERNAME").equalsIgnoreCase(username))
                 return resultSet.getInt("ID");
         }
         return -1;
@@ -107,7 +108,7 @@ public class DbBridge {
         //returns id for address if found else return -1
         execute("SELECT ID,street FROM ADDRESS");
             while (resultSet.next()) {
-                if(resultSet.getString("street").equals(street))
+                if(resultSet.getString("street").equalsIgnoreCase(street))
                     return resultSet.getInt("ID");
             }
         return -1;
@@ -172,14 +173,14 @@ public class DbBridge {
         try {
             while(getUID(user) > 0) {
                 statement = connection.prepareStatement(" DELETE FROM USER " +
-                        "WHERE Username = ?");
-                statement.setString(1, user);
+                        "WHERE lower(Username) = ?");
+                statement.setString(1, user.toLowerCase());
                 statement.executeUpdate();
             }
             while(getAddressID(street) > 0) {
                 statement = connection.prepareStatement(" DELETE FROM Address " +
-                        "WHERE street = ?");
-                statement.setString(1, street);
+                        "WHERE lower(street) = ?");
+                statement.setString(1, street.toLowerCase());
                 statement.executeUpdate();
             }
         } catch (SQLException throwables) {
