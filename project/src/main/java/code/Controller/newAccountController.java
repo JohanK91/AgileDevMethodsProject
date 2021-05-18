@@ -15,7 +15,6 @@ import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -27,7 +26,9 @@ import static java.lang.Integer.parseInt;
 public class newAccountController implements Initializable
 {
     int type;
-    Boolean okInput = true;
+    DbBridge db;
+    Boolean okInput;
+
     @FXML
     TextField userName;
     @FXML
@@ -66,8 +67,11 @@ public class newAccountController implements Initializable
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        db= AppManager.getInstance().getDb();
+        db.connect();
         text.setText("");
         userCreatedText.setText("");
+        register.setDefaultButton(true);
 
         for (UserType userType : UserType.values())
         {
@@ -81,63 +85,59 @@ public class newAccountController implements Initializable
 
         typeMenu.setText(UserType.values()[0].toString());
         type = 0;
-        register.setDefaultButton(true);
     }
 
     @FXML
     private void handleRegisterPressed(ActionEvent event) throws IOException, SQLException {
         // This is so dirty... please help
         text.setText("");
-        DbBridge db = AppManager.getInstance().getDb();
+        userCreatedText.setText("");
+        okInput=true;
         String user = userName.getText();
         if (db.getUID(user) > 0 || user.isEmpty()) {
-            invalid("Username");
+            invalid("Username already exist or is empty");
         }
         String pass = password.getText();
         if (pass.isEmpty()){
-            invalid("Password");
+            invalid("Password is empty");
         }
         String name = nameField.getText();
         if (name.isEmpty()){
-            invalid("Name");
+            invalid("Name is empty");
 
         }
         String phone = phoneField.getText();
         if (phone.isEmpty() || !StringUtils.isStrictlyNumeric(phone)){
-            invalid("Phone");
+            invalid("Phone can only have numbers ");
         }
 
         String street= streetField.getText();
         if (street.isEmpty()){
-            invalid("Street");
+            invalid("Street is empty");
         }
         String city  = cityField.getText();
         if (city.isEmpty()){
-            invalid("City");
+            invalid("City is empty");
         }
         String postcode = postcodeField.getText();
         if (postcode.isEmpty() || !StringUtils.isStrictlyNumeric(postcode)){
-            invalid("Postcode");
+            invalid("Postcode can only have numbers");
         }
         String x = xField.getText();
         if (x.isEmpty() || !StringUtils.isStrictlyNumeric(x)){
-            invalid("X");
+            invalid("X can only have numbers");
         }
         String y = yField.getText() ;
         if (y.isEmpty() || !StringUtils.isStrictlyNumeric(y)){
-            invalid("Y");
+            invalid("Y can only have numbers");
 
         }
         if(okInput) {
 
-            userCreatedText.setText("User created");
-
-
-
             ArrayList<Object> values = new ArrayList<>();
-            if (db.getAddressID(street) == -1) {
-                values.add(street);
-                values.add(city);
+            if (db.getAddressID(capitalize(street)) == -1) {
+                values.add(capitalize(street));
+                values.add(capitalize(city));
                 values.add(postcode);
                 values.add(parseInt(x));
                 values.add(parseInt(y));
@@ -145,25 +145,37 @@ public class newAccountController implements Initializable
             }
             values = new ArrayList<>();
             values.add(user);
-            values.add(name);
+            values.add(capitalize(name));
             values.add(type);
             values.add(phone);
             values.add(pass);
-            values.add(db.getAddressID(street));
+            values.add(db.getAddressID(capitalize(street)));
             db.createUser(values);
+            userCreatedText.setText("User creation success");
         }
+
     }
     @FXML
     private void handleLoginPressed(ActionEvent event) throws IOException {
-        Parent p = FXMLLoader.load(getClass().getClassLoader().getResource("Views/login.fxml"));
-        Scene newScene= new Scene(p);
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        stage.setScene(newScene);
-        stage.show();
+
+        switchView("Views/login.fxml", event);
     }
     public void invalid(String input){
         okInput = false;
-        text.setText(text.getText()+"Invalid "+ input+ "\n");
+        text.setText(text.getText()+input+ "\n");
 
+    }
+
+    public static String capitalize(String input){
+        if(input.isEmpty())
+            return input;
+        return  input.substring(0,1).toUpperCase() + input.substring(1).toLowerCase();
+    }
+    private void switchView (String view, ActionEvent event) throws IOException {
+        Parent p = FXMLLoader.load(getClass().getClassLoader().getResource(view));
+        Scene newScene = new Scene(p);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(newScene);
+        stage.show();
     }
 }

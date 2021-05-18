@@ -185,17 +185,18 @@ insert into address (street, city, postcode, x, y)
 values ("Hello", "There", 123, 11, 22);
 
 Insert into user (userName, name, type, phone, pass, Address_ID)
-values ("test0", "TestDoner", 0, 123, "root", 1);
+values ("Test0", "TestDoner", 0, 123, "root", 1);
 
 
   
 Insert into user (userName, name, type, phone, pass, Address_ID)
-values ("test1", "TestDriver", 1, 123, "root", 2);
+values ("Test1", "TestDriver", 1, 123, "root", 2);
 
 insert driver(User_id,status)
 values (2, "test");
+
 Insert into user (userName, name, type, phone, pass, Address_ID)
-values ("test2", "TestCharity", 2, 123, "root", 3);
+values ("Test2", "TestCharity", 2, 123, "root", 3);
 
 insert charity(User_id,webpage,description)
 values(3,"www.kzxl.se","klxzc");
