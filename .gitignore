@@ -24,4 +24,4 @@ hs_err_pid*
 
 project/project.iml
 project/target/*
-project/.idea/libraries/*
+project/.idea/*
