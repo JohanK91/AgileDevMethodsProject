@@ -113,13 +113,73 @@ public class DbBridge {
             }
         return -1;
     }
-    public ResultSet getAllTask() {
-        return resultSet;
+    public ArrayList<String> getUserInfo(String user)  {
+        ArrayList<String> output = new ArrayList<>();
+        user = user.toLowerCase();
+        try {
+            switch (UserType.values()[getUserType(user)]) {
+                case Donor -> {
+                    execute("SELECT name,phone,street,city,postcode " +
+                            "FROM user LEFT JOIN address ON address_id = address.id " +
+                            "WHERE lower(userName) = '" + user + "'");
+                }
+                case Driver -> {
+                    execute("SELECT name,phone,street,city,postcode,status " +
+                            "FROM user LEFT JOIN address ON address_id = address.id " +
+                            "LEFT JOIN driver ON user.id = User_ID " +
+                            "WHERE lower(userName) = '" + user + "'");
+                }
+                case Charity -> {
+                    execute("SELECT name,phone,street,city,postcode,webpage," +
+                            "description FROM user LEFT JOIN address " +
+                            "ON address_id = address.id LEFT JOIN charity " +
+                            "ON user.id = User_ID WHERE lower(userName) = '" + user + "'");
+                }
+            }
+            resultSet.next();
+            for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
+                output.add(resultSet.getObject(i).toString());
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return output;
     }
 
 
-    public ResultSet getCharityTask(String charityUserName) {
-        return resultSet;
+    public ArrayList<Task> getCharityTask(int chID) {
+        ArrayList<Task> tasks = new ArrayList<>();
+        execute("SELECT ID FROM task WHERE Charity_User_ID ='"+chID+"'");
+        try {
+            while (resultSet.next())
+            {
+                tasks.add(new Task(resultSet.getInt(1)));
+            }
+        }
+        catch (SQLException throwables)
+            {
+                throwables.printStackTrace();
+            }
+
+        return tasks;
+    }
+    public ArrayList<String> getCharityTaskInfo(int taskId) {
+        ArrayList<String> output = new ArrayList<>();
+        execute("SELECT description,task.Donor_ID,task.Driver_User_ID," +
+                "end_date,start_date, status FROM task "+
+                "WHERE task.ID= '" + taskId + "'");
+        try {
+            resultSet.next();
+            for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
+                if(resultSet.getObject(i)==null) output.add("Unassigned");
+                else output.add(resultSet.getObject(i).toString());
+            }
+        }
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return output;
     }
     public Connection getConnection()  {
         return connection;

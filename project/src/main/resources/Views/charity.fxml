@@ -1,10 +1,131 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="code.Controller.charityController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="588.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="code.Controller.charityController">
    <children>
-      <TextArea layoutX="177.0" layoutY="100.0" prefHeight="200.0" prefWidth="200.0" text="Charity" />
+      <GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="588.0" prefWidth="954.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <columnConstraints>
+            <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="300.0" minWidth="10.0" prefWidth="130.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="710.0" minWidth="10.0" prefWidth="703.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="NEVER" maxWidth="483.0" minWidth="0.0" prefWidth="122.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints maxHeight="178.0" minHeight="10.0" prefHeight="66.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="313.0" minHeight="10.0" prefHeight="205.0" valignment="CENTER" vgrow="ALWAYS" />
+            <RowConstraints maxHeight="197.0" minHeight="10.0" prefHeight="38.0" valignment="CENTER" vgrow="ALWAYS" />
+            <RowConstraints maxHeight="197.0" minHeight="0.0" prefHeight="0.0" valignment="CENTER" vgrow="ALWAYS" />
+            <RowConstraints maxHeight="238.0" minHeight="0.0" prefHeight="173.0" valignment="CENTER" vgrow="ALWAYS" />
+            <RowConstraints maxHeight="279.0" minHeight="10.0" prefHeight="106.0" valignment="CENTER" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <Text fx:id="name" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Text>
+            <Button fx:id="logout" alignment="CENTER" contentDisplay="CENTER" maxWidth="-Infinity" minWidth="57.0" mnemonicParsing="false" onAction="#logoutPressed" prefHeight="25.0" prefWidth="78.0" text="Log Out" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <Button fx:id="taskView" mnemonicParsing="false" onAction="#taskViewPressed" text="Task View" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <BorderPane prefHeight="181.0" prefWidth="512.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <top>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Incoming Tasks" BorderPane.alignment="CENTER">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Text>
+               </top>
+               <left>
+                  <TextFlow prefHeight="193.0" prefWidth="151.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <TextField editable="false" text="Donor " />
+                        <TextField editable="false" text="Driver" />
+                        <TextField editable="false" text="ETA" />
+                        <TextField editable="false" text="Start" />
+                        <TextField editable="false" text="Status" />
+                     </children>
+                  </TextFlow>
+               </left>
+               <bottom>
+                  <Button mnemonicParsing="false" text="Choose" BorderPane.alignment="CENTER" />
+               </bottom>
+               <right>
+                  <TextArea maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="153.0" prefWidth="408.0" text="Task&#10;Description&#10;" BorderPane.alignment="CENTER" />
+               </right>
+               <center>
+                  <ListView fx:id="taskList" prefHeight="153.0" prefWidth="130.0" BorderPane.alignment="CENTER" />
+               </center>
+            </BorderPane>
+            <BorderPane prefHeight="235.0" prefWidth="512.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+               <center>
+                  <TextFlow BorderPane.alignment="CENTER">
+                     <children>
+                        <TextArea fx:id="CharityDescription" prefHeight="164.0" prefWidth="200.0" text="Charity Descripton&#10;" />
+                        <ListView prefHeight="164.0" prefWidth="200.0" />
+                     </children>
+                  </TextFlow>
+               </center>
+               <bottom>
+                  <GridPane BorderPane.alignment="CENTER">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="169.0" minWidth="10.0" prefWidth="161.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="237.0" minWidth="10.0" prefWidth="186.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="231.0" minWidth="10.0" prefWidth="196.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="154.0" minWidth="10.0" prefWidth="154.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Button fx:id="savesettings" maxHeight="-Infinity" mnemonicParsing="false" onAction="#savePressed" prefHeight="25.0" prefWidth="110.0" text="Save Settings" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                        <Button fx:id="newitemtype" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#newItemPressed" prefHeight="25.0" prefWidth="114.0" text="Add ItemType" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
+                     </children>
+                  </GridPane>
+               </bottom>
+               <left>
+                  <TextFlow prefHeight="159.0" prefWidth="156.0" textAlignment="CENTER" BorderPane.alignment="CENTER">
+                     <children>
+                        <TextField fx:id="username" alignment="CENTER" text="Username" />
+                        <TextField fx:id="webpage" alignment="CENTER" prefHeight="25.0" text="Webpage" />
+                        <TextField fx:id="phone" alignment="CENTER" text="Phone" />
+                        <Separator prefHeight="22.0" prefWidth="149.0" />
+                        <PasswordField fx:id="oldpassword" alignment="CENTER" prefHeight="25.0" promptText="Old Password" />
+                        <PasswordField fx:id="newpassword" alignment="CENTER" prefHeight="25.0" promptText="New Password" />
+                     </children>
+                  </TextFlow>
+               </left>
+               <right>
+                  <TextFlow prefHeight="167.0" prefWidth="149.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <TextField fx:id="address" alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" prefHeight="25.0" text="Address" />
+                        <TextField alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" prefHeight="25.0" text="Postcode" />
+                        <TextField alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" prefHeight="25.0" text="City" />
+                        <Separator prefHeight="22.0" prefWidth="149.0" />
+                      <Button fx:id="newaddress" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#newAddressPressed" prefHeight="25.0" prefWidth="150.0" text="New Address" />
+                     </children>
+                  </TextFlow>
+               </right>
+               <top>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Settings" wrappingWidth="71.064453125" BorderPane.alignment="CENTER">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Text>
+               </top>
+            </BorderPane>
+         </children>
+      </GridPane>
    </children>
 </AnchorPane>
