@@ -1,29 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
+
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="code.Controller.charityTaskController">
    <children>
       <GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <columnConstraints>
-            <ColumnConstraints hgrow="NEVER" maxWidth="194.0" minWidth="10.0" prefWidth="101.0" />
-            <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="460.0" minWidth="10.0" prefWidth="166.0" />
-            <ColumnConstraints hgrow="NEVER" maxWidth="157.0" minWidth="10.0" prefWidth="71.0" />
+            <ColumnConstraints halignment="LEFT" hgrow="NEVER" maxWidth="194.0" minWidth="10.0" prefWidth="28.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="545.0" minWidth="10.0" prefWidth="545.0" />
+            <ColumnConstraints halignment="RIGHT" hgrow="NEVER" maxWidth="157.0" minWidth="10.0" prefWidth="27.0" />
          </columnConstraints>
          <rowConstraints>
-            <RowConstraints maxHeight="178.0" minHeight="10.0" prefHeight="62.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="317.0" minHeight="10.0" prefHeight="314.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="128.0" minHeight="10.0" prefHeight="24.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="178.0" minHeight="10.0" prefHeight="62.0" valignment="TOP" vgrow="NEVER" />
+            <RowConstraints maxHeight="356.0" minHeight="10.0" prefHeight="356.0" valignment="CENTER" vgrow="ALWAYS" />
+            <RowConstraints maxHeight="128.0" minHeight="10.0" prefHeight="24.0" valignment="BOTTOM" vgrow="NEVER" />
          </rowConstraints>
          <children>
             <Text fx:id="user" strokeType="OUTSIDE" strokeWidth="0.0" text="User" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
@@ -31,27 +35,83 @@
                   <Font size="22.0" />
                </font>
             </Text>
-            <BorderPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
-               <center>
-                  <TextArea fx:id="taskDescription" editable="false" prefHeight="314.0" prefWidth="159.0" text="Task Descripton&#10;" wrapText="true" BorderPane.alignment="CENTER" />
-               </center>
-               <left>
-                  <ListView fx:id="taskList" onMouseClicked="#taskViewClick" prefHeight="272.0" prefWidth="132.0" BorderPane.alignment="CENTER" />
-               </left>
-               <right>
-                  <TextFlow prefHeight="273.0" prefWidth="139.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <TextField fx:id="donor" editable="false" prefHeight="25.0" prefWidth="136.0" text="Donor" />
-                        <TextField fx:id="driver" editable="false" prefHeight="25.0" prefWidth="135.0" text="Driver" />
-                        <TextField fx:id="eta" editable="false" prefHeight="25.0" prefWidth="135.0" text="ETA" />
-                        <TextField fx:id="start" editable="false" prefHeight="25.0" prefWidth="134.0" text="Start" />
-                        <TextField editable="false" prefHeight="25.0" prefWidth="134.0" text="Task ID" />
-                        <TextField fx:id="status" editable="false" prefHeight="25.0" prefWidth="136.0" text="Status" />
-                        <ListView fx:id="itemTypes" maxWidth="1.7976931348623157E308" prefHeight="164.0" prefWidth="133.0" />
-                     </children>
-                  </TextFlow>
-               </right>
-            </BorderPane>
+            <FlowPane prefHeight="363.0" prefWidth="554.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <children>
+                  <BorderPane prefHeight="339.0" prefWidth="130.0">
+                     <center>
+                        <ListView fx:id="taskList" onMouseClicked="#taskViewClick" prefHeight="281.0" prefWidth="132.0" />
+                     </center>
+                     <bottom>
+                        <Button fx:id="completeButton" mnemonicParsing="false" onAction="#completeButtonPressed" prefHeight="25.0" prefWidth="113.0" text="Mark Completed" BorderPane.alignment="CENTER" />
+                     </bottom>
+                     <top>
+                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Incoming Tasks" underline="true" BorderPane.alignment="CENTER">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Text>
+                     </top>
+                  </BorderPane>
+                  <BorderPane>
+                     <center>
+                        <ListView fx:id="taskListCompleted" onMouseClicked="#taskListCompletedClick" prefHeight="300.0" prefWidth="77.0" />
+                     </center>
+                     <top>
+                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Completed" underline="true" BorderPane.alignment="CENTER">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Text>
+                     </top>
+                     <bottom>
+                        <Separator prefHeight="25.0" prefWidth="132.0" BorderPane.alignment="CENTER" />
+                     </bottom>
+                  </BorderPane>
+                  <BorderPane prefHeight="341.0" prefWidth="281.0">
+                     <center>
+                        <TextFlow maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="299.0" prefWidth="147.0" BorderPane.alignment="CENTER">
+                           <children>
+                              <TextField fx:id="donor" editable="false" prefHeight="40.0" prefWidth="145.0" text="Donor" />
+                              <TextField fx:id="driver" editable="false" prefHeight="40.0" prefWidth="145.0" text="Driver" />
+                              <TextField fx:id="start" editable="false" prefHeight="40.0" prefWidth="145.0" text="Start" />
+                              <TextField fx:id="eta" editable="false" prefHeight="40.0" prefWidth="146.0" text="End" />
+                              <TextField fx:id="status" editable="false" prefHeight="40.0" prefWidth="145.0" text="Status " />
+                              <TextArea fx:id="taskDescription" editable="false" prefHeight="99.0" prefWidth="145.0" text="Task Descripton&#10;" wrapText="true">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </TextArea>
+                           </children>
+                        </TextFlow>
+                     </center>
+                     <top>
+                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Details" underline="true" BorderPane.alignment="CENTER">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Text>
+                     </top>
+                     <bottom>
+                        <Separator prefHeight="25.0" prefWidth="132.0" BorderPane.alignment="CENTER" />
+                     </bottom>
+                     <right>
+                        <BorderPane BorderPane.alignment="CENTER">
+                           <center>
+                              <ListView fx:id="itemTypes" onMouseClicked="#itemListClick" prefHeight="201.0" prefWidth="109.0" />
+                           </center>
+                           <bottom>
+                              <TextArea fx:id="itemDescription" editable="false" prefHeight="99.0" prefWidth="135.0" text="Item Descripton&#10;" wrapText="true" BorderPane.alignment="CENTER">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </TextArea>
+                           </bottom>
+                        </BorderPane>
+                     </right>
+                  </BorderPane>
+               </children>
+            </FlowPane>
+            <Button fx:id="logout" mnemonicParsing="false" onAction="#logoutPressed" text="Log Out" GridPane.columnIndex="1" GridPane.halignment="RIGHT" />
          </children>
       </GridPane>
    </children>

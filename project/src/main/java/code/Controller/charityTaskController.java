@@ -2,6 +2,7 @@ package code.Controller;
 
 import code.Model.AppManager;
 import code.Model.DbBridge;
+import code.Model.ItemType;
 import code.Model.Task;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -17,11 +18,6 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class charityTaskController implements Initializable {
-    DbBridge db;
-    ArrayList<Task> myTasks;
-    ArrayList<Integer> myIDs = new ArrayList<>();
-    ArrayList<String> taskItems= new ArrayList<>();
-    Integer activeTask;
 
     @FXML
     TextField donor;
@@ -37,61 +33,130 @@ public class charityTaskController implements Initializable {
     @FXML
     TextArea taskDescription;
     @FXML
+    TextArea itemDescription;
+
+    @FXML
     ListView<String> itemTypes;
     @FXML
     ListView<Integer> taskList;
     @FXML
+    ListView<Integer> taskListCompleted;
+
+    @FXML
     Text user;
 
+    @FXML
+    Button completeButton;
+    @FXML
+    Button logout;
 
 
+    DbBridge db;
+    ArrayList<Task> myIncomingTasks;
+    ArrayList<Task> myCompletedTasks;
+    ArrayList<ItemType> taskItems;
 
+    ArrayList<Integer> myInCompletedIDs = new ArrayList<>();
+    ArrayList<Integer> myCompletedIDs = new ArrayList<>();
+    ArrayList<String> listItems= new ArrayList<>();
+
+    Integer activeTask;
+    String activeItemType;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         user.setText(AppManager.getInstance().getUser());
         reload();
+        completeButton.setDisable(true);
     }
 
     private void setupTask(){
         db= AppManager.getInstance().getDb();
         try {
-            myTasks = db.getCharityTask(db.getUID(AppManager.getInstance().getUser()));
+            myIncomingTasks = db.getCharityTask(db.getUID(AppManager.getInstance().getUser()),"");
+            myCompletedTasks = db.getCharityTask(db.getUID(AppManager.getInstance().getUser()),
+                    "Completed");
+
         }
         catch (SQLException throwable)
         {
             throwable.printStackTrace();
         }
-        for (Task task : myTasks) {
-            myIDs.add(task.getId());
+        for (Task task : myIncomingTasks) {
+            myInCompletedIDs.add(task.getId());
         }
-        taskList.setItems(FXCollections.observableArrayList(myIDs));
+        taskList.setItems(FXCollections.observableArrayList(myInCompletedIDs));
+
+        for (Task task : myCompletedTasks) {
+            myCompletedIDs.add(task.getId());
+        }
+        taskListCompleted.setItems(FXCollections.observableArrayList(myCompletedIDs));
+
 
     }
-    private void setText(int taskId) {
+    private void setDetails() {
         db= AppManager.getInstance().getDb();
-        ArrayList<String> info = db.getCharityTaskInfo(taskId);
+        ArrayList<String> info = db.getCharityTaskInfo(activeTask);
 
         taskDescription.setText(info.get(0));
-        donor.setText(info.get(1));
-        driver.setText(info.get(2));
-        eta.setText(info.get(3));
-        start.setText(info.get(4));
-        status.setText(info.get(5));
+        donor.setText("Donor: "+info.get(1));
+        driver.setText("Driver: "+info.get(2));
+        eta.setText("End: "+info.get(3));
+        start.setText("Start: "+info.get(4));
+        status.setText("Status: "+info.get(5));
+
+        if(status.getText().equalsIgnoreCase("Status: arrivedToCharity")){
+            completeButton.setDisable(false);
+        }
+        else  completeButton.setDisable(true);
+
+        //items
+        taskItems = db.getTaskItemTypes(activeTask);
+        for (ItemType itemType : taskItems) {
+            listItems.add(itemType.getName());
+            }
+        itemTypes.setItems(FXCollections.observableArrayList(listItems));
+        if(activeItemType!=null){
+            for (ItemType itemType : taskItems) {
+                if(activeItemType.equalsIgnoreCase(itemType.getName()))
+                    itemDescription.setText(itemType.getDescription());
+            }
+        }
     }
+
     public void reload() {
-        myIDs.clear();
-        taskItems.clear();
+        itemDescription.setText(" ");
+        myInCompletedIDs.clear();
+        myCompletedIDs.clear();
+        listItems.clear();
         setupTask();
-        if(!(activeTask == null))
-            setText(activeTask);
+        if(!(activeTask == null)) {
+            setDetails();
+        }
     }
     public void taskViewClick(){
         activeTask = taskList.getSelectionModel().getSelectedItem();
+        activeItemType=null;
         reload();
     }
-    private void switchView (String view, ActionEvent event) throws IOException {
-        db.disconnect();
-        AppManager.getInstance().switchView(view, event.getSource());
+    public void taskListCompletedClick(){
+        activeTask = taskListCompleted.getSelectionModel().getSelectedItem();
+        activeItemType=null;
+        reload();
     }
+
+    public void itemListClick(){
+        activeItemType =itemTypes.getSelectionModel().getSelectedItem();
+        reload();
+    }
+
+    public void completeButtonPressed(ActionEvent event){
+        db.execute("UPDATE task SET status = 'completed' WHERE ID ='"+activeTask+"'");
+        reload();
+    }
+    public void logoutPressed(ActionEvent event) throws IOException {
+        db.disconnect();
+        AppManager.getInstance().switchView("Views/login.fxml", event.getSource());
+    }
+
 }

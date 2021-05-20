@@ -148,9 +148,17 @@ public class DbBridge {
     }
 
 
-    public ArrayList<Task> getCharityTask(int chID) {
+
+
+    public ArrayList<Task> getCharityTask(int chID,String value) {
         ArrayList<Task> tasks = new ArrayList<>();
-        execute("SELECT ID FROM task WHERE Charity_User_ID ='"+chID+"'");
+        if(value.equalsIgnoreCase("completed"))
+            execute("SELECT ID FROM task WHERE Charity_User_ID ='"+chID+"'AND " +
+                    "Status = 'Completed'");
+
+        else execute("SELECT ID FROM task WHERE Charity_User_ID ='"+chID+"'AND " +
+                " NOT Status = 'Completed'");
+
         try {
             while (resultSet.next())
             {
@@ -158,22 +166,41 @@ public class DbBridge {
             }
         }
         catch (SQLException throwables)
-            {
-                throwables.printStackTrace();
-            }
+        {
+            throwables.printStackTrace();
+        }
 
         return tasks;
     }
     public ArrayList<String> getCharityTaskInfo(int taskId) {
         ArrayList<String> output = new ArrayList<>();
-        execute("SELECT description,task.Donor_ID,task.Driver_User_ID," +
-                "end_date,start_date, status FROM task "+
-                "WHERE task.ID= '" + taskId + "'");
+        execute("SELECT description,donor.userName,driver.userName," +
+                "end_date,start_date, status FROM task LEFT JOIN user as donor " +
+                "ON Donor_ID = donor.ID LEFT JOIN user as driver ON " +
+                "Driver_User_ID = driver.ID WHERE task.ID =" + taskId);
         try {
             resultSet.next();
             for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
                 if(resultSet.getObject(i)==null) output.add("Unassigned");
                 else output.add(resultSet.getObject(i).toString());
+            }
+        }
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return output;
+    }
+    public ArrayList<ItemType> getTaskItemTypes(int taskID) {
+        ArrayList<ItemType> output = new ArrayList<>();
+
+            execute("SELECT task.id,itemtype.name,itemtype.description " +
+                    "FROM task LEFT JOIN task_has_itemtype ON task.ID = task_has_itemtype.Task_ID " +
+                    "Left Join itemtype On task_has_itemtype.itemType_ID=itemtype.ID " +
+                    "where task.id=" + taskID );
+
+        try {
+            while(resultSet.next()) {
+                output.add(new ItemType(resultSet.getInt(1),resultSet.getString(2),resultSet.getString(3)));
             }
         }
         catch (SQLException throwables) {
@@ -341,4 +368,6 @@ public class DbBridge {
             throwables.printStackTrace();
         }
     }
+
+
 }
