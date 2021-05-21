@@ -59,7 +59,7 @@ public class loginController implements Initializable {
             switch (UserType.values()[db.getUserType(user)]) {
                 case Donor -> switchView("Views/donor.fxml", event);
                 case Driver -> switchView("Views/driver.fxml", event);
-                case Charity -> switchView("Views/charity.fxml", event);
+                case Charity -> switchView("Views/charityTask.fxml", event);
             }
         }else {
             loginFailText.setText("Login failed. \nPlease check your inputs.");
