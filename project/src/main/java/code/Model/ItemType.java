@@ -5,11 +5,11 @@ public class ItemType {
     private String name;
     private String description;
 
-    ItemType(int anId,String name,String description)
+    ItemType(int id,String name,String description)
     {
-        id = id;
-        this.name=name;
-        this.description =description;
+        this.id = id;
+        this.name = name;
+        this.description = description;
     }
 
     public String getName(){
