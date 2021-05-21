@@ -25,6 +25,9 @@ public class driverDrivingController implements Initializable
     Button continueDriveButton;
 
     @FXML
+    Button taskIncompleteButton;
+
+    @FXML
     Label taskAddressText;
 
     private DriverTaskList myTaskList;
@@ -33,6 +36,8 @@ public class driverDrivingController implements Initializable
     {
         //Could message the server and say "We're at the task."
         arrivedButton.setVisible(false);
+        if (myTaskList.getActiveTask().isTask())
+            taskIncompleteButton.setVisible(true);
         taskCompleteButton.setVisible(true);
     }
 
@@ -70,8 +75,41 @@ public class driverDrivingController implements Initializable
     public void taskCompletedPressed(ActionEvent actionEvent)
     {
         taskCompleteButton.setVisible(false);
+        taskIncompleteButton.setVisible(false);
 
         myTaskList.completeTaskAndAdvance();
+
+        try
+        {
+            reload();
+        }
+        catch (SQLException throwable)
+        {
+            throwable.printStackTrace();
+        }
+
+        if (myTaskList.getActiveTask() != null)
+            continueDriveButton.setVisible(true);
+        else
+        {
+            try
+            {
+                myTaskList.close();
+                AppManager.getInstance().switchView("Views/driver.fxml", actionEvent.getSource());
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void taskIncompletePressed(ActionEvent actionEvent)
+    {
+        taskCompleteButton.setVisible(false);
+        taskIncompleteButton.setVisible(false);
+
+        myTaskList.advanceIterator();
 
         try
         {

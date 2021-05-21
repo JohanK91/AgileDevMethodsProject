@@ -58,7 +58,8 @@ public class DriverTaskList
         refresh();
     }
 
-    public void AddTask(int anId)
+
+    public void addTask(int anId)
     {
         AppManager.getInstance().getDb().addTaskToDriverTaskList(myDriverID, anId);
     }
@@ -74,9 +75,16 @@ public class DriverTaskList
 
     public void completeTaskAndAdvance()
     {
-        if (myActiveTask != null && myActiveTask.getTaskID() != -1)
+        if (myActiveTask != null)
         {
-            AppManager.getInstance().getDb().changeTaskStatus(myActiveTask.getTaskID(), TaskStatus.ArrivedToCharity);
+            if (myActiveTask.isTask())
+            {
+                AppManager.getInstance().getDb().changeTaskStatus(myActiveTask.getTaskID(), TaskStatus.PickedUp);
+            }
+            else
+            {
+                AppManager.getInstance().getDb().handOverTasksToCharity(myDriverID, myActiveTask.getCharityID());
+            }
         }
 
         advanceIterator();

@@ -70,7 +70,7 @@ public class driverController implements Initializable
 
             for (Task task : tasks)
             {
-                myTaskList.AddTask(task.getId());
+                myTaskList.addTask(task.getId());
             }
 
             myTaskList.fixCharities();

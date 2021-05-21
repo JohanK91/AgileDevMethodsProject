@@ -352,6 +352,22 @@ public class DbBridge {
         return null;
     }
 
+    public void handOverTasksToCharity(int aDriverId, int aCharityId)
+    {
+        try
+        {
+            statement = connection.prepareStatement("UPDATE task SET status = 'arrivedToCharity' WHERE Driver_User_ID = ? AND " +
+                    "Charity_User_ID = ? AND status = 'pickedUp'");
+            statement.setInt(1, aDriverId);
+            statement.setInt(2, aCharityId);
+            statement.executeUpdate();
+        }
+        catch (SQLException throwables)
+        {
+            throwables.printStackTrace();
+        }
+    }
+
     public ArrayList<Task> getDriverTasksUndone(int aDriverId)
     {
         ArrayList<Task> tasks = new ArrayList<>();
@@ -394,6 +410,7 @@ public class DbBridge {
                     {
                         case ArrivedToCharity -> "arrivedToCharity";
                         case Completed -> "completed";
+                        case PickedUp -> "pickedUp";
                     };
 
             statement.setString(1, status);
