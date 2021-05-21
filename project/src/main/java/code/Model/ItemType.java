@@ -3,13 +3,13 @@ package code.Model;
 public class ItemType {
     private int myId;
     private String myName;
-    private String mydescription;
+    private String myDescription;
 
     ItemType(int anId,String name,String description)
     {
         myId = anId;
         myName=name;
-        mydescription=description;
+        myDescription =description;
     }
 
     public String getName(){
@@ -17,7 +17,7 @@ public class ItemType {
     }
 
     public String getDescription() {
-        return mydescription;
+        return myDescription;
     }
     public int getId(){
         return myId;

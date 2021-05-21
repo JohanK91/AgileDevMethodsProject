@@ -208,6 +208,7 @@ public class DbBridge {
         }
         return output;
     }
+
     public Connection getConnection()  {
         return connection;
     }
