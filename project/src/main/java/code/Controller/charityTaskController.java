@@ -52,12 +52,12 @@ public class charityTaskController implements Initializable {
 
 
     DbBridge db;
-    ArrayList<Task> myIncomingTasks;
-    ArrayList<Task> myCompletedTasks;
+    ArrayList<Task> incomingTasks;
+    ArrayList<Task> completedTasks;
     ArrayList<ItemType> taskItems;
 
-    ArrayList<Integer> myInCompletedIDs = new ArrayList<>();
-    ArrayList<Integer> myCompletedIDs = new ArrayList<>();
+    ArrayList<Integer> inCompletedIDs = new ArrayList<>();
+    ArrayList<Integer> completedIDs = new ArrayList<>();
     ArrayList<String> listItems= new ArrayList<>();
 
     Integer activeTask;
@@ -73,8 +73,8 @@ public class charityTaskController implements Initializable {
     private void setupTask(){
         db= AppManager.getInstance().getDb();
         try {
-            myIncomingTasks = db.getCharityTask(db.getUID(AppManager.getInstance().getUser()),"");
-            myCompletedTasks = db.getCharityTask(db.getUID(AppManager.getInstance().getUser()),
+            incomingTasks = db.getCharityTask(db.getUID(AppManager.getInstance().getUser()),"");
+            completedTasks = db.getCharityTask(db.getUID(AppManager.getInstance().getUser()),
                     "Completed");
 
         }
@@ -82,15 +82,15 @@ public class charityTaskController implements Initializable {
         {
             throwable.printStackTrace();
         }
-        for (Task task : myIncomingTasks) {
-            myInCompletedIDs.add(task.getId());
+        for (Task task : incomingTasks) {
+            inCompletedIDs.add(task.getId());
         }
-        taskList.setItems(FXCollections.observableArrayList(myInCompletedIDs));
+        taskList.setItems(FXCollections.observableArrayList(inCompletedIDs));
 
-        for (Task task : myCompletedTasks) {
-            myCompletedIDs.add(task.getId());
+        for (Task task : completedTasks) {
+            completedIDs.add(task.getId());
         }
-        taskListCompleted.setItems(FXCollections.observableArrayList(myCompletedIDs));
+        taskListCompleted.setItems(FXCollections.observableArrayList(completedIDs));
 
 
     }
@@ -126,8 +126,8 @@ public class charityTaskController implements Initializable {
 
     public void reload() {
         itemDescription.setText(" ");
-        myInCompletedIDs.clear();
-        myCompletedIDs.clear();
+        inCompletedIDs.clear();
+        completedIDs.clear();
         listItems.clear();
         setupTask();
         if(!(activeTask == null)) {

@@ -1,25 +1,25 @@
 package code.Model;
 
 public class ItemType {
-    private int myId;
-    private String myName;
-    private String myDescription;
+    private int id;
+    private String name;
+    private String description;
 
     ItemType(int anId,String name,String description)
     {
-        myId = anId;
-        myName=name;
-        myDescription =description;
+        id = id;
+        this.name=name;
+        this.description =description;
     }
 
     public String getName(){
-        return myName;
+        return this.name;
     }
 
     public String getDescription() {
-        return myDescription;
+        return this.description;
     }
     public int getId(){
-        return myId;
+        return this.id;
     }
 }
