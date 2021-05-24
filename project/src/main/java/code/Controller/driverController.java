@@ -128,7 +128,7 @@ public class driverController implements Initializable
     {
         DbBridge db = AppManager.getInstance().getDb();
         db.disconnect();
-        AppManager.getInstance().switchView("Views/login.fxml", actionEvent.getSource());
+        AppManager.getInstance().switchView("Views/settings.fxml", actionEvent.getSource());
     }
 
     public void taskViewClicked(MouseEvent mouseEvent)
