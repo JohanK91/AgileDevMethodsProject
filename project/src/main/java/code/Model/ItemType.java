@@ -13,7 +13,7 @@ public class ItemType {
     }
 
     public String getName(){
-        return this.name;
+       return this.name;
     }
 
     public String getDescription() {
