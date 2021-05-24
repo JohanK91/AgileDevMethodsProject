@@ -19,7 +19,10 @@ public class driverDrivingController implements Initializable
     Button arrivedButton;
 
     @FXML
-    Button taskCompleteButton;
+    Button taskPickedUpButton;
+
+    @FXML
+    Button deliveredTasksButton;
 
     @FXML
     Button continueDriveButton;
@@ -37,8 +40,14 @@ public class driverDrivingController implements Initializable
         //Could message the server and say "We're at the task."
         arrivedButton.setVisible(false);
         if (myTaskList.getActiveTask().isTask())
+        {
             taskIncompleteButton.setVisible(true);
-        taskCompleteButton.setVisible(true);
+            taskPickedUpButton.setVisible(true);
+        }
+        else
+        {
+            deliveredTasksButton.setVisible(true);
+        }
     }
 
     public void reload() throws SQLException
@@ -72,13 +81,8 @@ public class driverDrivingController implements Initializable
         }
     }
 
-    public void taskCompletedPressed(ActionEvent actionEvent)
+    private void yoCheckIt(Object aSource)
     {
-        taskCompleteButton.setVisible(false);
-        taskIncompleteButton.setVisible(false);
-
-        myTaskList.completeTaskAndAdvance();
-
         try
         {
             reload();
@@ -95,7 +99,7 @@ public class driverDrivingController implements Initializable
             try
             {
                 myTaskList.close();
-                AppManager.getInstance().switchView("Views/driver.fxml", actionEvent.getSource());
+                AppManager.getInstance().switchView("Views/driver.fxml", aSource);
             }
             catch (IOException e)
             {
@@ -104,36 +108,33 @@ public class driverDrivingController implements Initializable
         }
     }
 
+    public void taskPickedUpPressed(ActionEvent actionEvent)
+    {
+        taskPickedUpButton.setVisible(false);
+        taskIncompleteButton.setVisible(false);
+
+        myTaskList.completeTaskAndAdvance();
+
+        yoCheckIt(actionEvent.getSource());
+    }
+
     public void taskIncompletePressed(ActionEvent actionEvent)
     {
-        taskCompleteButton.setVisible(false);
+        taskPickedUpButton.setVisible(false);
         taskIncompleteButton.setVisible(false);
 
         myTaskList.advanceIterator();
 
-        try
-        {
-            reload();
-        }
-        catch (SQLException throwable)
-        {
-            throwable.printStackTrace();
-        }
+        yoCheckIt(actionEvent.getSource());
+    }
 
-        if (myTaskList.getActiveTask() != null)
-            continueDriveButton.setVisible(true);
-        else
-        {
-            try
-            {
-                myTaskList.close();
-                AppManager.getInstance().switchView("Views/driver.fxml", actionEvent.getSource());
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-        }
+    public void deliveredTasksPressed(ActionEvent actionEvent)
+    {
+        deliveredTasksButton.setVisible(false);
+
+        myTaskList.completeTaskAndAdvance();
+
+        yoCheckIt(actionEvent.getSource());
     }
 
     public void continueDrivePressed()
