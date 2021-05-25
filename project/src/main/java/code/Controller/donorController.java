@@ -45,16 +45,6 @@ public class donorController implements Initializable
     }
 
 
-    @FXML
-    private void handleDonatePressed1(ActionEvent event) throws IOException {
-        Parent p = FXMLLoader.load(getClass().getClassLoader().getResource("Views/donorItems.fxml"));
-        Scene newScene= new Scene(p);
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        stage.setScene(newScene);
-
-        stage.show();
-    }
-
 
     @FXML
     private void handleDonatePressed(ActionEvent event) throws IOException {

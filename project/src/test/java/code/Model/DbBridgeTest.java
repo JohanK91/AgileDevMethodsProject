@@ -74,7 +74,7 @@ class DbBridgeTest
     @DisplayName("Test validateLogIn")
     public void TestValidateLogIn()
     {
-        assertFalse(myDBBridge.validateLogIn("Test","pass"));
+        assertTrue(myDBBridge.validateLogIn("Test","pass"));
         assertFalse(myDBBridge.validateLogIn("test","Pass"));
         assertTrue(myDBBridge.validateLogIn("test","pass"));
     }

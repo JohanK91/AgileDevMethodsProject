@@ -51,6 +51,7 @@ public class donorItemsNewAddressController implements Initializable
     public void initialize(URL url, ResourceBundle resourceBundle) {
         invalidText.setText("");
         addressCreatedText.setText("");
+        clickNextText.setText("");
     }
 
     @FXML
