@@ -105,7 +105,7 @@
             </GridPane>
             <Button fx:id="save" mnemonicParsing="false" onAction="#savePressed" text="Save" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
             <Button fx:id="back" mnemonicParsing="false" onAction="#backPressed" text="Back" GridPane.columnIndex="1" GridPane.halignment="RIGHT" />
-            <Text fx:id="userCreatedText" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="220.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+            <Text fx:id="userCreatedText" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="252.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
          </children>
       </GridPane>
    </children>

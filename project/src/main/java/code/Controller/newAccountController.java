@@ -135,7 +135,7 @@ public class newAccountController implements Initializable
         if(okInput) {
 
             ArrayList<Object> values = new ArrayList<>();
-            if (db.getAddressID(capitalize(street)) == -1) {
+            if (db.getAddressID(street,city) == -1) {
                 values.add(capitalize(street));
                 values.add(capitalize(city));
                 values.add(postcode);
@@ -149,7 +149,7 @@ public class newAccountController implements Initializable
             values.add(type);
             values.add(phone);
             values.add(pass);
-            values.add(db.getAddressID(capitalize(street)));
+            values.add(db.getAddressID(street,city));
             db.createUser(values);
             userCreatedText.setText("User creation success");
         }

@@ -148,11 +148,12 @@ public class DbBridge {
         }
         return -1;
     }
-    public int getAddressID(String street) throws SQLException {
+    public int getAddressID(String street,String city) throws SQLException {
         //returns id for address if found else return -1
-        execute("SELECT ID,street FROM ADDRESS");
+        execute("SELECT ID,street,city FROM ADDRESS");
             while (resultSet.next()) {
-                if(resultSet.getString("street").equalsIgnoreCase(street))
+                if(resultSet.getString("street").equalsIgnoreCase(street)&&
+                resultSet.getString("city").equalsIgnoreCase(city))
                     return resultSet.getInt("ID");
             }
         return -1;
@@ -335,19 +336,18 @@ public class DbBridge {
         }
     }
 
-    public void removeUserAddress(String user, String street){
+    public void removeUserAddress(String user, String street, String city){
         // removes all instances of user with user as username and all addresses with street as address
         try {
             while(getUID(user) > 0) {
-                statement = connection.prepareStatement(" DELETE FROM USER " +
-                        "WHERE lower(Username) = ?");
-                statement.setString(1, user.toLowerCase());
-                statement.executeUpdate();
+                execute("DELETE FROM user " +
+                        "WHERE lower(userName) = '"+user.toLowerCase()+"'");
             }
-            while(getAddressID(street) > 0) {
-                statement = connection.prepareStatement(" DELETE FROM Address " +
-                        "WHERE lower(street) = ?");
-                statement.setString(1, street.toLowerCase());
+            while(getAddressID(street,city) > 0) {
+                execute("DELETE FROM Address " +
+                        "WHERE street ='"+street+"'" +
+                        " and city ='"+city+"'");
+
                 statement.executeUpdate();
             }
         } catch (SQLException throwables) {

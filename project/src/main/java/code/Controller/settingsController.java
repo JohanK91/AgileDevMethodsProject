@@ -118,6 +118,7 @@ public class settingsController implements Initializable {
         refreshItems();
 
 
+
     }
 
     private void refreshItems() {
@@ -178,7 +179,7 @@ public class settingsController implements Initializable {
         }
         String pass = password.getText();
         if (pass.isEmpty()) {
-            invalid("Password is empty");
+            invalid("You need to enter password to save");
         }
         String name = nameField.getText();
         if (name.isEmpty()) {
@@ -223,7 +224,7 @@ public class settingsController implements Initializable {
         }
         if (okInput && db.validateLogIn(AppManager.getInstance().getUser(), pass)) {
             ArrayList<Object> values = new ArrayList<>();
-            if (db.getAddressID(capitalize(street)) == -1) {
+            if (db.getAddressID(street,city) == -1) {
                 values.add(capitalize(street));
                 values.add(capitalize(city));
                 values.add(postcode);
@@ -238,7 +239,7 @@ public class settingsController implements Initializable {
             if (!newPassword.getText().isEmpty())
                 pass = newPassword.getText();
             values.add(pass);
-            values.add(db.getAddressID(capitalize(street)));
+            values.add(db.getAddressID(street,city));
             if (grid0.getMaxHeight() > 0) {
                 values.add(webbPage.getText());
                 values.add(description.getText());
@@ -308,6 +309,7 @@ public class settingsController implements Initializable {
     }
 
     public void removePressed() throws SQLException {
+        userCreatedText.setText("");
         if (activeItemType != null) {
             for (ItemType item : charityItems) {
                 if (item.getName() != null && item.getName().equalsIgnoreCase(activeItemType)) {
@@ -330,6 +332,8 @@ public class settingsController implements Initializable {
         userCreatedText.setText("");
         setData();
     }
+
+
 
     public static String capitalize(String input) {
         if (input.isEmpty())
