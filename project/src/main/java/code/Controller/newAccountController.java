@@ -172,10 +172,6 @@ public class newAccountController implements Initializable
         return  input.substring(0,1).toUpperCase() + input.substring(1).toLowerCase();
     }
     private void switchView (String view, ActionEvent event) throws IOException {
-        Parent p = FXMLLoader.load(getClass().getClassLoader().getResource(view));
-        Scene newScene = new Scene(p);
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(newScene);
-        stage.show();
+        AppManager.getInstance().switchView(view, event.getSource());
     }
 }

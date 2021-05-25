@@ -88,8 +88,8 @@ public class settingsController implements Initializable {
     DbBridge db;
     Boolean okInput;
 
-    ArrayList<ItemType> charityItems ;
-    ArrayList<ItemType> allItems ;
+    ArrayList<ItemType> charityItems;
+    ArrayList<ItemType> allItems;
 
     ArrayList<String> listItems = new ArrayList<>();
 
@@ -99,7 +99,6 @@ public class settingsController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         try {
             db = AppManager.getInstance().getDb();
-            db.connect();
 
             switch (UserType.values()[db.getUserType(AppManager.getInstance().getUser())]) {
                 case Donor, Driver -> {
@@ -113,17 +112,20 @@ public class settingsController implements Initializable {
         reload();
 
     }
-    private void reload(){
+
+    private void reload() {
         listItems.clear();
         refreshItems();
 
 
     }
-    private void refreshItems()   {
+
+    private void refreshItems() {
         try {
             charityItems = db.getCharityItemTypes(db.getUID(AppManager.getInstance().getUser()));
             for (ItemType itemType : charityItems) {
-                listItems.add(itemType.getName());
+                if (itemType.getName() != null)
+                    listItems.add(itemType.getName());
             }
             itemList.setItems(FXCollections.observableArrayList(listItems));
 
@@ -137,15 +139,14 @@ public class settingsController implements Initializable {
             }
             allItems = db.getAllItemType();
 
-        }
-        catch (SQLException throwables) {
+        } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
 
     }
 
-    public void itemListClick(){
-        if(listItems.get(0) != null)
+    public void itemListClick() {
+        if (listItems.size() > 0)
             activeItemType = itemList.getSelectionModel().getSelectedItem();
         reload();
     }
@@ -167,11 +168,12 @@ public class settingsController implements Initializable {
             description.setText(info.get(8));
         }
     }
+
     private void setData() throws SQLException {
         okInput = true;
         String user = userName.getText();
         if (db.getUID(user) > 0 && !user.equalsIgnoreCase(AppManager.getInstance().getUser())
-                || user.isEmpty())  {
+                || user.isEmpty()) {
             invalid("Username already exist or is empty");
         }
         String pass = password.getText();
@@ -219,7 +221,7 @@ public class settingsController implements Initializable {
                 invalid("Charity Description is empty");
             }
         }
-        if (okInput && db.validateLogIn(AppManager.getInstance().getUser(),pass)) {
+        if (okInput && db.validateLogIn(AppManager.getInstance().getUser(), pass)) {
             ArrayList<Object> values = new ArrayList<>();
             if (db.getAddressID(capitalize(street)) == -1) {
                 values.add(capitalize(street));
@@ -233,11 +235,11 @@ public class settingsController implements Initializable {
             values.add(user);
             values.add(capitalize(name));
             values.add(phone);
-            if(!newPassword.getText().isEmpty())
-                pass=newPassword.getText();
+            if (!newPassword.getText().isEmpty())
+                pass = newPassword.getText();
             values.add(pass);
             values.add(db.getAddressID(capitalize(street)));
-            if(grid0.getMaxHeight() > 0){
+            if (grid0.getMaxHeight() > 0) {
                 values.add(webbPage.getText());
                 values.add(description.getText());
             }
@@ -246,7 +248,8 @@ public class settingsController implements Initializable {
             AppManager.getInstance().setUser(user);
             userCreatedText.setText("User updated");
             getData();
-        }
+        } else
+            userCreatedText.setText(userCreatedText.getText() + " Something went wrong, check your input");
     }
 
     public void hide() {
@@ -271,7 +274,7 @@ public class settingsController implements Initializable {
 
     public void addNewItemPressed() throws SQLException {
         okInput = true;
-        Boolean itemExist= false;
+        Boolean itemExist = false;
         String name = itemName.getText();
         String desc = itemDesc.getText();
         if (name.isEmpty()) {
@@ -280,7 +283,7 @@ public class settingsController implements Initializable {
         if (desc.isEmpty()) {
             invalid("Item description is empty");
         }
-        if(listItems.get(0) != null)  {
+        if (listItems.size() > 0) {
             for (ItemType item : charityItems) {
                 if (item.getName().equalsIgnoreCase(name) &&
                         item.getDescription().equalsIgnoreCase(desc)) {
@@ -288,31 +291,33 @@ public class settingsController implements Initializable {
                 }
             }
         }
-        if(!itemExist ){
+        if (!itemExist) {
             if (db.getItemTypeID(name, desc) == -1) {
-                db.addItemType(name,desc);
+                db.addItemType(name, desc);
             }
-            db.addItemTypeToCharity(db.getUID( AppManager.getInstance().getUser()),
-                    db.getItemTypeID(name,desc));
+            db.addItemTypeToCharity(db.getUID(AppManager.getInstance().getUser()),
+                    db.getItemTypeID(name, desc));
         }
         reload();
     }
 
-    public void invalid(String input){
+    public void invalid(String input) {
         okInput = false;
-        userCreatedText.setText(userCreatedText.getText()+input+ "\n");
+        userCreatedText.setText(userCreatedText.getText() + input + "\n");
 
     }
+
     public void removePressed() throws SQLException {
-        if(activeItemType!=null){
+        if (activeItemType != null) {
             for (ItemType item : charityItems) {
-                if(item.getName().equalsIgnoreCase(activeItemType)){
-                    db.removeItemCharity(item.getId(),db.getUID(AppManager.getInstance().getUser()));
+                if (item.getName() != null && item.getName().equalsIgnoreCase(activeItemType)) {
+                    db.removeItemCharity(item.getId(), db.getUID(AppManager.getInstance().getUser()));
                 }
             }
         }
         reload();
     }
+
     public void backPressed(ActionEvent event) throws SQLException, IOException {
         switch (UserType.values()[db.getUserType(AppManager.getInstance().getUser())]) {
             case Donor -> switchView("Views/donor.fxml", event);
@@ -326,17 +331,14 @@ public class settingsController implements Initializable {
         setData();
     }
 
-    public static String capitalize(String input){
-        if(input.isEmpty())
+    public static String capitalize(String input) {
+        if (input.isEmpty())
             return input;
-        return  input.substring(0,1).toUpperCase() + input.substring(1).toLowerCase();
+        return input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
     }
-    private void switchView (String view, ActionEvent event) throws IOException {
-        Parent p = FXMLLoader.load(getClass().getClassLoader().getResource(view));
-        Scene newScene = new Scene(p);
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(newScene);
-        stage.show();
+
+    private void switchView(String view, ActionEvent event) throws IOException {
+        AppManager.getInstance().switchView(view, event.getSource());
     }
 }
 

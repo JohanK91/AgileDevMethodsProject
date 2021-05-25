@@ -161,7 +161,6 @@ public class charityTaskController implements Initializable {
         AppManager.getInstance().switchView("Views/login.fxml", event.getSource());
     }
     public void settingsPressed(ActionEvent event) throws IOException {
-        db.disconnect();
         AppManager.getInstance().switchView("Views/settings.fxml", event.getSource());
     }
 
