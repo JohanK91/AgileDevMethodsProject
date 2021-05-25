@@ -3,60 +3,49 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SplitMenuButton?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="text" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="561.0" prefWidth="688.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="code.Controller.donorItemsDefaultAddressController">
+<AnchorPane fx:id="text" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="542.0" prefWidth="688.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="code.Controller.donorItemsDefaultAddressController">
    <children>
       <Button fx:id="ButtonAddItem" layoutX="231.0" layoutY="131.0" mnemonicParsing="false" onAction="#handleAddItemPressed" prefHeight="25.0" prefWidth="103.0" text="Add item -&gt;">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></Button>
-      <Button id="back" fx:id="back" layoutX="605.0" layoutY="456.0" mnemonicParsing="false" onAction="#handleBackPressed" text="Back">
+      <Button id="back" fx:id="back" layoutX="633.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleBackPressed" text="Back">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></Button>
-      <Text fx:id="textCharity" layoutX="190.0" layoutY="366.0" strokeType="OUTSIDE" strokeWidth="0.0" text="charity" wrappingWidth="215.33335367838538" />
-      <Text fx:id="textItem" layoutX="181.0" layoutY="258.0" strokeType="OUTSIDE" strokeWidth="0.0" text="item" wrappingWidth="313.58396911621094" />
+      <Text fx:id="textCharity" layoutX="14.0" layoutY="335.0" strokeType="OUTSIDE" strokeWidth="0.0" text="charity" wrappingWidth="200.0" />
       <Text fx:id="welcome" layoutX="291.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="welcome" />
-      <Text fx:id="textDay" layoutX="19.0" layoutY="330.0" strokeType="OUTSIDE" strokeWidth="0.0" text="day" wrappingWidth="170.99087524414062" />
-      <Text fx:id="textTime" layoutX="360.0" layoutY="330.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Time" wrappingWidth="182.05722045898438" />
-      <SplitMenuButton fx:id="timeMenuChoice" layoutX="360.0" layoutY="281.0" mnemonicParsing="false" text="Time for pickup">
-         <items>
-            <MenuItem fx:id="menu11" mnemonicParsing="false" text="Action 1" />
-            <MenuItem fx:id="menu21" mnemonicParsing="false" text="Action 2" />
-         </items>
+      <SplitMenuButton fx:id="timeMenuChoice" layoutX="354.0" layoutY="412.0" mnemonicParsing="false" text="Time for pickup">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </SplitMenuButton>
-      <DatePicker fx:id="datePicker" layoutX="26.0" layoutY="281.0" prefHeight="25.0" prefWidth="157.0" promptText="Pick a date for pickup" showWeekNumbers="true">
+      <DatePicker fx:id="datePicker" layoutX="354.0" layoutY="377.0" prefHeight="25.0" prefWidth="157.0" promptText="Pick a date for pickup" showWeekNumbers="true">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </DatePicker>
-      <ListView fx:id="itemListView" layoutX="14.0" layoutY="44.0" prefHeight="200.0" prefWidth="200.0" />
+      <ListView fx:id="itemListView" layoutX="14.0" layoutY="44.0" onMouseClicked="#itemListViewClicked" prefHeight="200.0" prefWidth="200.0" />
       <Button fx:id="ButtonRemoveItem" layoutX="231.0" layoutY="161.0" mnemonicParsing="false" onAction="#handleRemoveItemPressed" text="&lt;- Remove item">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <ListView fx:id="addedItemListView" layoutX="342.0" layoutY="44.0" prefHeight="200.0" prefWidth="200.0" />
-      <Text layoutX="214.0" layoutY="299.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select date then time" />
-      <Button fx:id="ButtonAddCharity" layoutX="231.0" layoutY="431.0" mnemonicParsing="false" onAction="#handleAddCharityPressed" prefHeight="25.0" prefWidth="103.0" text="Add item -&gt;">
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </Button>
-      <Button fx:id="ButtonRemoveCharity" layoutX="231.0" layoutY="480.0" mnemonicParsing="false" onAction="#handleRemoveCharityPressed" text="&lt;- Remove item">
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </Button>
-      <ListView fx:id="addedCharityListView" layoutX="360.0" layoutY="380.0" prefHeight="200.0" prefWidth="200.0" />
-      <ListView fx:id="CharityListView" layoutX="14.0" layoutY="380.0" prefHeight="200.0" prefWidth="200.0" />
+      <ListView fx:id="addedItemListView" layoutX="342.0" layoutY="44.0" onMouseClicked="#addedItemListViewClicked" prefHeight="200.0" prefWidth="200.0" />
+      <Text layoutX="354.0" layoutY="365.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Date and time" />
+      <ListView fx:id="CharityListView" layoutX="14.0" layoutY="339.0" onMouseClicked="#charityListViewClicked" prefHeight="170.0" prefWidth="200.0" />
+      <Button fx:id="setCharityButton" layoutX="77.0" layoutY="510.0" mnemonicParsing="false" onAction="#handleSetCharityPressed" text="Set Charity" />
+      <Label layoutX="221.0" layoutY="343.0" text="Desired Charity:" />
+      <Label fx:id="desiredCharityLabel" layoutX="221.0" layoutY="360.0" text="None" />
+      <Button fx:id="donateItemsButton" layoutX="590.0" layoutY="510.0" mnemonicParsing="false" onAction="#donateItemsPressed" text="Donate Items" />
+      <TextArea fx:id="itemTypeDescriptionText" editable="false" layoutX="14.0" layoutY="251.0" prefHeight="61.0" prefWidth="200.0" promptText="Item Description" wrapText="true" />
+      <TextArea fx:id="addedItemTypeDescriptionText" editable="false" layoutX="342.0" layoutY="251.0" prefHeight="61.0" prefWidth="200.0" promptText="Item Description" />
    </children>
 </AnchorPane>
