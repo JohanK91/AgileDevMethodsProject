@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="code.Controller.donorItemsNewAddressController">
+   <children>
+      <GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="194.0" minWidth="10.0" prefWidth="93.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="194.0" minWidth="10.0" prefWidth="114.0" />
+            <ColumnConstraints hgrow="NEVER" maxWidth="460.0" minWidth="10.0" prefWidth="211.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="157.0" minWidth="0.0" prefWidth="118.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="157.0" minWidth="10.0" prefWidth="71.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints maxHeight="313.0" minHeight="10.0" prefHeight="19.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="178.0" minHeight="10.0" prefHeight="44.0" />
+            <RowConstraints maxHeight="178.0" minHeight="10.0" prefHeight="50.0" />
+            <RowConstraints maxHeight="178.0" minHeight="10.0" prefHeight="50.0" />
+            <RowConstraints maxHeight="178.0" minHeight="10.0" prefHeight="50.0" />
+            <RowConstraints maxHeight="313.0" minHeight="10.0" prefHeight="50.0" />
+            <RowConstraints maxHeight="313.0" minHeight="10.0" prefHeight="50.0" />
+            <RowConstraints maxHeight="313.0" minHeight="10.0" prefHeight="50.0" />
+            <RowConstraints maxHeight="178.0" minHeight="10.0" prefHeight="50.0" />
+            <RowConstraints maxHeight="313.0" minHeight="10.0" prefHeight="50.0" />
+            <RowConstraints maxHeight="313.0" minHeight="10.0" prefHeight="50.0" />
+            <RowConstraints maxHeight="128.0" minHeight="10.0" prefHeight="70.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Street" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="City" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Postcode" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER" />
+            <TextField fx:id="streetField" promptText="Input your street" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <TextField fx:id="cityField" promptText="Input your city" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+            <TextField fx:id="postcodeField" promptText="Input your postcode" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+            <Text fx:id="invalidText" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="invalidText" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+            <Button fx:id="register" defaultButton="true" mnemonicParsing="false" onAction="#handleRegisterPressed" prefHeight="40.0" prefWidth="133.0" text="Register" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="11" GridPane.valignment="CENTER">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
+            <Text fx:id="addressCreatedText" strokeType="OUTSIDE" strokeWidth="0.0" text="addressCreatedText" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="9" GridPane.valignment="CENTER" />
+            <Button fx:id="nextButton" mnemonicParsing="false" onAction="#handleNextButtonPressed" text="Next" GridPane.columnIndex="4" GridPane.rowIndex="11" />
+            <Text fx:id="clickNextText" strokeType="OUTSIDE" strokeWidth="0.0" text="Click Next" GridPane.columnIndex="4" GridPane.rowIndex="10" />
+         </children>
+      </GridPane>
+   </children>
+</AnchorPane>
