@@ -53,14 +53,34 @@ public class DbBridge {
     public void createUser(ArrayList<Object> values) throws SQLException {
         // creates user based on input
         execute("INSERT INTO USER(userName, name, type, phone, pass, Address_ID) Values(?,?,?,?,?,?)"
-                ,values);
-        if((Integer) values.get(2)==1){
-            execute("INSERT INTO Driver(USER_ID)Values("+getUID((String) values.get(0))+")");
-        }
-        if((Integer) values.get(2)==2){
-            execute("INSERT INTO Charity(USER_ID)Values("+getUID((String) values.get(0))+")");
+                , values);
+        switch (UserType.values()[(int) values.get(2)]) {
+            case Driver -> execute("INSERT INTO Driver(USER_ID)Values(" + getUID((String) values.get(0)) + ")");
+            case Charity -> execute("INSERT INTO Charity(USER_ID)Values(" + getUID((String) values.get(0)) + ")");
 
         }
+    }
+        public void updateUser(String user, ArrayList<Object> values) throws SQLException {
+            switch (UserType.values()[getUserType(user)]) {
+                case Donor,Driver -> execute("UPDATE User SET userName = ?," +
+                        "name = ?,phone = ?,pass = ?,address_id = ? " +
+                        "WHERE ID = "+getUID(user),values);
+                case Charity -> {
+                    ArrayList<Object> input =  new ArrayList<>();
+                    input.add(values.get(5));
+                    input.add(values.get(6));
+                    values.remove(6);
+                    values.remove(5);
+
+                    execute("UPDATE User SET userName = ?,name = ?,phone = ?," +
+                            "pass = ?,address_id = ? " +
+                        "WHERE ID = "+getUID(user),values);
+
+                    execute("UPDATE Charity SET webpage = ?, description = ?" +
+                            "WHERE User_ID =" +getUID(user),input);
+                }
+            }
+
 
     }
     public void createAddress(ArrayList<Object> values) {
@@ -68,7 +88,30 @@ public class DbBridge {
         execute("INSERT INTO ADDRESS(street, city, postcode, x, y) Values(?,?,?,?,?)",values);
 
     }
+    public void addItemTypeToCharity(int Uid,int item) {
+        String input =Uid+","+item+")";
+        execute("INSERT INTO charity_has_itemtype " +
+                "(Charity_User_ID, itemType_ID) " +
+                "Values("+input);
 
+    }
+    public void addItemType(String name, String desc) {
+        String input ="'"+name+"','"+desc+"')";
+        execute("INSERT INTO itemtype" +
+                "(Name, Description) Values("+input);
+
+
+    }
+
+    public int getItemTypeID(String name, String desc) throws SQLException {
+
+        execute("SELECT ID FROM itemtype WHERE lower(name) ='"+ name.toLowerCase()+"'"+
+                " and lower(description) = '"+desc.toLowerCase()+"'");
+        if(resultSet.next())
+            return resultSet.getInt("ID");
+
+        return -1;
+    }
     public boolean validateLogIn(String username, String password) {
         // will try to log in
         try {
@@ -91,6 +134,7 @@ public class DbBridge {
 
     public int getUserType(String username) throws SQLException {
         execute("SELECT type FROM USER WHERE lower(username) ='"+username.toLowerCase()+"'");
+
         resultSet.next();
         return resultSet.getInt(1);
 
@@ -104,11 +148,12 @@ public class DbBridge {
         }
         return -1;
     }
-    public int getAddressID(String street) throws SQLException {
+    public int getAddressID(String street,String city) throws SQLException {
         //returns id for address if found else return -1
-        execute("SELECT ID,street FROM ADDRESS");
+        execute("SELECT ID,street,city FROM ADDRESS");
             while (resultSet.next()) {
-                if(resultSet.getString("street").equalsIgnoreCase(street))
+                if(resultSet.getString("street").equalsIgnoreCase(street)&&
+                resultSet.getString("city").equalsIgnoreCase(city))
                     return resultSet.getInt("ID");
             }
         return -1;
@@ -118,20 +163,14 @@ public class DbBridge {
         user = user.toLowerCase();
         try {
             switch (UserType.values()[getUserType(user)]) {
-                case Donor -> {
-                    execute("SELECT name,phone,street,city,postcode " +
+                case Donor,Driver -> {
+                    execute("SELECT name,phone,street,city,postcode,x,y " +
                             "FROM user LEFT JOIN address ON address_id = address.id " +
-                            "WHERE lower(userName) = '" + user + "'");
-                }
-                case Driver -> {
-                    execute("SELECT name,phone,street,city,postcode,status " +
-                            "FROM user LEFT JOIN address ON address_id = address.id " +
-                            "LEFT JOIN driver ON user.id = User_ID " +
                             "WHERE lower(userName) = '" + user + "'");
                 }
                 case Charity -> {
-                    execute("SELECT name,phone,street,city,postcode,webpage," +
-                            "description FROM user LEFT JOIN address " +
+                    execute("SELECT name,phone,street,city,postcode,x,y," +
+                            "webpage,description FROM user LEFT JOIN address " +
                             "ON address_id = address.id LEFT JOIN charity " +
                             "ON user.id = User_ID WHERE lower(userName) = '" + user + "'");
                 }
@@ -208,6 +247,47 @@ public class DbBridge {
         }
         return output;
     }
+    public ArrayList<ItemType> getAllItemType() {
+        ArrayList<ItemType> output = new ArrayList<>();
+        execute("SELECT * FROM itemtype");
+        try {
+            while(resultSet.next()) {
+                output.add(new ItemType(resultSet.getInt(1),resultSet.getString(2),resultSet.getString(3)));
+            }
+        }
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return output;
+    }
+
+
+    public ArrayList<ItemType> getCharityItemTypes(int chID) {
+        ArrayList<ItemType> output = new ArrayList<>();
+
+        execute("SELECT itemtype.ID,itemtype.name,itemtype.description " +
+                "FROM charity LEFT JOIN charity_has_itemtype ON " +
+                "user_id = charity_has_itemtype.Charity_user_ID " +
+                "Left Join itemtype On charity_has_itemtype.itemType_ID=itemtype.ID" +
+                " where user_id="+ chID);
+
+
+        try {
+            while(resultSet.next()) {
+                output.add(new ItemType(resultSet.getInt(1),resultSet.getString(2),resultSet.getString(3)));
+            }
+        }
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return output;
+    }
+
+    public  void removeItemCharity(int itemID, int chID){
+        execute("DELETE FROM charity_has_itemtype " +
+                "WHERE itemType_ID =" +itemID+
+                " AND Charity_User_ID ="+chID);
+    }
 
     public Connection getConnection()  {
         return connection;
@@ -256,19 +336,18 @@ public class DbBridge {
         }
     }
 
-    public void removeUserAddress(String user, String street){
+    public void removeUserAddress(String user, String street, String city){
         // removes all instances of user with user as username and all addresses with street as address
         try {
             while(getUID(user) > 0) {
-                statement = connection.prepareStatement(" DELETE FROM USER " +
-                        "WHERE lower(Username) = ?");
-                statement.setString(1, user.toLowerCase());
-                statement.executeUpdate();
+                execute("DELETE FROM user " +
+                        "WHERE lower(userName) = '"+user.toLowerCase()+"'");
             }
-            while(getAddressID(street) > 0) {
-                statement = connection.prepareStatement(" DELETE FROM Address " +
-                        "WHERE lower(street) = ?");
-                statement.setString(1, street.toLowerCase());
+            while(getAddressID(street,city) > 0) {
+                execute("DELETE FROM Address " +
+                        "WHERE street ='"+street+"'" +
+                        " and city ='"+city+"'");
+
                 statement.executeUpdate();
             }
         } catch (SQLException throwables) {

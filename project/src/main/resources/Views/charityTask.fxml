@@ -15,7 +15,6 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="code.Controller.charityTaskController">
    <children>
       <GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -112,6 +111,7 @@
                </children>
             </FlowPane>
             <Button fx:id="logout" mnemonicParsing="false" onAction="#logoutPressed" text="Log Out" GridPane.columnIndex="1" GridPane.halignment="RIGHT" />
+            <Button fx:id="settings" mnemonicParsing="false" onAction="#settingsPressed" text="Settings" GridPane.columnIndex="1" GridPane.halignment="LEFT" />
          </children>
       </GridPane>
    </children>
