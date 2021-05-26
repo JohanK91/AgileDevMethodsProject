@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.PasswordField?>
@@ -31,9 +30,9 @@
             <GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="465.0" prefWidth="636.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="194.0" minWidth="-Infinity" prefWidth="78.0" />
-                  <ColumnConstraints hgrow="NEVER" maxWidth="460.0" minWidth="-Infinity" prefWidth="210.0" />
-                  <ColumnConstraints hgrow="NEVER" maxWidth="460.0" minWidth="-Infinity" prefWidth="170.0" />
-                  <ColumnConstraints hgrow="NEVER" maxWidth="460.0" minWidth="-Infinity" prefWidth="150.0" />
+                  <ColumnConstraints hgrow="NEVER" maxWidth="460.0" minWidth="-Infinity" prefWidth="166.0" />
+                  <ColumnConstraints hgrow="NEVER" maxWidth="460.0" minWidth="-Infinity" prefWidth="228.0" />
+                  <ColumnConstraints hgrow="NEVER" maxWidth="460.0" minWidth="-Infinity" prefWidth="166.0" />
                </columnConstraints>
                <rowConstraints>
                   <RowConstraints maxHeight="178.0" minHeight="10.0" prefHeight="27.0" valignment="CENTER" vgrow="ALWAYS" />
@@ -42,20 +41,20 @@
                   <RowConstraints maxHeight="178.0" minHeight="-Infinity" prefHeight="30.0" valignment="CENTER" vgrow="ALWAYS" />
                   <RowConstraints maxHeight="178.0" minHeight="-Infinity" prefHeight="30.0" valignment="CENTER" vgrow="ALWAYS" />
                   <RowConstraints maxHeight="313.0" minHeight="-Infinity" prefHeight="30.0" valignment="CENTER" vgrow="ALWAYS" />
-                  <RowConstraints maxHeight="313.0" minHeight="-Infinity" prefHeight="27.0" valignment="CENTER" vgrow="ALWAYS" />
-                  <RowConstraints fx:id="grid0" maxHeight="313.0" minHeight="-Infinity" prefHeight="85.0" valignment="CENTER" vgrow="ALWAYS" />
-                  <RowConstraints fx:id="grid1" maxHeight="132.0" minHeight="-Infinity" prefHeight="28.0" valignment="CENTER" vgrow="ALWAYS" />
-                  <RowConstraints fx:id="grid2" maxHeight="175.0" minHeight="10.0" prefHeight="89.0" valignment="CENTER" vgrow="ALWAYS" />
+                  <RowConstraints maxHeight="313.0" minHeight="-Infinity" prefHeight="13.0" valignment="CENTER" vgrow="ALWAYS" />
+                  <RowConstraints fx:id="grid0" maxHeight="313.0" minHeight="-Infinity" prefHeight="65.0" valignment="CENTER" vgrow="ALWAYS" />
+                  <RowConstraints fx:id="grid1" maxHeight="132.0" minHeight="-Infinity" prefHeight="52.0" valignment="CENTER" vgrow="ALWAYS" />
+                  <RowConstraints fx:id="grid2" maxHeight="175.0" minHeight="10.0" prefHeight="127.0" valignment="CENTER" vgrow="ALWAYS" />
                </rowConstraints>
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="New Password" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Full Name" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Phone" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Street" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="City" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Postcode" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="X" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="y" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Street " textAlignment="RIGHT" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="City " GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Postcode " GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="X " GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Y " GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Username" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
                   <TextField fx:id="userName" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
                   <PasswordField fx:id="newPassword" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
@@ -67,40 +66,44 @@
                   <TextField GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" fx:id="xField" />
                   <TextField fx:id="yField" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
                   <Text fx:id="textPage" strokeType="OUTSIDE" strokeWidth="0.0" text="Webpage" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="7" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
-                  <Text fx:id="textDesc" strokeType="OUTSIDE" strokeWidth="0.0" text="Description" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="7" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
+                  <Text fx:id="textDesc" strokeType="OUTSIDE" strokeWidth="0.0" text="Description" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="7" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
                   <TextField fx:id="webbPage" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="7" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
-                  <Text fx:id="textAccept" strokeType="OUTSIDE" strokeWidth="0.0" text="Acceptable Items" textAlignment="CENTER" wrappingWidth="60.0" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="9" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
+                  <Text fx:id="textAccept" strokeType="OUTSIDE" strokeWidth="0.0" text="Acceptable Items" textAlignment="CENTER" wrappingWidth="118.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="8" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
                   <ListView fx:id="itemList" onMouseClicked="#itemListClick" prefHeight="93.0" prefWidth="230.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
                   <GridPane prefHeight="96.0" prefWidth="137.0" GridPane.columnIndex="2" GridPane.rowIndex="9">
                      <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
                      </columnConstraints>
                      <rowConstraints>
-                        <RowConstraints maxHeight="99.0" minHeight="10.0" prefHeight="36.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="99.0" minHeight="10.0" prefHeight="27.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="99.0" minHeight="10.0" prefHeight="63.0" vgrow="SOMETIMES" />
                         <RowConstraints maxHeight="41.0" minHeight="10.0" prefHeight="41.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <Button fx:id="addNewItem" mnemonicParsing="false" onAction="#addNewItemPressed" prefHeight="30.0" prefWidth="96.0" text="Add new item" wrapText="true" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                        <Button fx:id="addNewItem" mnemonicParsing="false" onAction="#addNewItemPressed" prefHeight="30.0" prefWidth="85.0" text="Add new item" wrapText="true" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                            <font>
                               <Font size="11.0" />
                            </font>
                         </Button>
                         <TextField fx:id="itemName" prefHeight="27.0" prefWidth="136.0" />
+                        <TextArea fx:id="itemDesc" prefHeight="59.0" prefWidth="177.0" wrapText="true" GridPane.rowIndex="1" />
+                        <Button fx:id="remove" alignment="CENTER" mnemonicParsing="false" onAction="#removePressed" prefHeight="30.0" prefWidth="85.0" text="Remove Item" textOverrun="CENTER_ELLIPSIS" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                           <font>
+                              <Font size="11.0" />
+                           </font>
+                        </Button>
                      </children>
                   </GridPane>
                   <PasswordField fx:id="password" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Password" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
                   <FlowPane GridPane.columnIndex="3" GridPane.rowIndex="9">
                      <children>
-                        <TextArea fx:id="itemDesc" prefHeight="58.0" prefWidth="158.0" wrapText="true" />
-                        <Button fx:id="remove" alignment="CENTER" mnemonicParsing="false" onAction="#removePressed" prefHeight="32.0" prefWidth="90.0" text="Remove Item" textAlignment="CENTER" textOverrun="CLIP">
-                           <FlowPane.margin>
-                              <Insets left="35.0" top="5.0" />
-                           </FlowPane.margin>
-                        </Button>
+                        <ListView fx:id="allList" onMouseClicked="#allListClick" prefHeight="132.0" prefWidth="170.0" />
                      </children>
                   </FlowPane>
                   <TextArea fx:id="description" prefHeight="200.0" prefWidth="200.0" wrapText="true" GridPane.columnIndex="3" GridPane.rowIndex="7" />
+                  <Text fx:id="textAccept1" strokeType="OUTSIDE" strokeWidth="0.0" text="New Acceptable Item" textAlignment="CENTER" wrappingWidth="115.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="8" />
+                  <Text fx:id="textAccept11" strokeType="OUTSIDE" strokeWidth="0.0" text="Items From DB" textAlignment="CENTER" wrappingWidth="114.0" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="8" />
                </children>
             </GridPane>
             <Button fx:id="save" mnemonicParsing="false" onAction="#savePressed" text="Save" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />

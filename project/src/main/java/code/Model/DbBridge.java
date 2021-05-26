@@ -103,10 +103,9 @@ public class DbBridge {
 
     }
 
-    public int getItemTypeID(String name, String desc) throws SQLException {
+    public int getItemTypeID(String name) throws SQLException {
 
-        execute("SELECT ID FROM itemtype WHERE lower(name) ='"+ name.toLowerCase()+"'"+
-                " and lower(description) = '"+desc.toLowerCase()+"'");
+        execute("SELECT ID FROM itemtype WHERE lower(name) ='"+ name.toLowerCase()+"'");
         if(resultSet.next())
             return resultSet.getInt("ID");
 
@@ -249,7 +248,7 @@ public class DbBridge {
     }
     public ArrayList<ItemType> getAllItemType() {
         ArrayList<ItemType> output = new ArrayList<>();
-        execute("SELECT * FROM itemtype");
+        execute("SELECT Id,Name,Description FROM itemtype");
         try {
             while(resultSet.next()) {
                 output.add(new ItemType(resultSet.getInt(1),resultSet.getString(2),resultSet.getString(3)));
