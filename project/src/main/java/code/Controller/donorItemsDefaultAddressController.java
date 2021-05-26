@@ -2,18 +2,20 @@ package code.Controller;
 
 import code.Model.AppManager;
 import code.Model.DbBridge;
+import code.Model.ItemType;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
 
 import java.io.IOException;
 import java.net.URL;
@@ -22,43 +24,28 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import static java.lang.Integer.parseInt;
-
 public class donorItemsDefaultAddressController implements Initializable
 {
-    Boolean okInput = true;
     @FXML
-    TextField listItem;
+    TextArea itemTypeDescriptionText;
+    @FXML
+    TextArea addedItemTypeDescriptionText;
+    @FXML
+    Button donateItemsButton;
     @FXML
     Button ButtonAddItem;
     @FXML
     Button ButtonRemoveItem;
     @FXML
-    Button ButtonAddCharity;
+    Button setCharityButton;
     @FXML
-    Button dayConfirmButton;
-    @FXML
-    Button ButtonAddTime;
-    @FXML
-    TextField listDay;
-    @FXML
-    TextField listTime;
-    @FXML
-    TextField listCharity;
+    Label desiredCharityLabel;
     @FXML
     Button back;
-    @FXML
-    Text textItem;
     @FXML
     Text textCharity;
     @FXML
     Text welcome;
-    @FXML
-    Text textDay;
-    @FXML
-    Text textTime;
-    @FXML
-    Text invalidText;
     @FXML
     DatePicker datePicker;
     @FXML
@@ -67,228 +54,255 @@ public class donorItemsDefaultAddressController implements Initializable
     ListView<String> itemListView;
     @FXML
     ListView<String> addedItemListView;
-    String itemtypeName;
-    String itemtypeDescription;
     @FXML
     ListView<String> CharityListView;
-    @FXML
-    ListView<String> addedCharityListView;
-
-    @FXML
-    String timeChoice;
 
     ArrayList<String> itemListViewArray = new ArrayList<>();
+    ArrayList<Integer> itemTypesViewArrayIds = new ArrayList<>();
+
     ArrayList<String> addedItemListViewArray = new ArrayList<>();
+    ArrayList<Integer> addedItemTypesViewArrayIds = new ArrayList<>();
+
+    ArrayList<ItemType> itemTypes = new ArrayList<>();
 
     ArrayList<String> CharityListViewArray = new ArrayList<>();
-    ArrayList<String> addedCharityListViewArray = new ArrayList<>();
 
-
+    String selectedCharity = "None";
 
     private void handleWelcomeText() {
-        String name = AppManager.getInstance().getUser();
-        welcome.setText("");
-        welcome.setText(welcome.getText() + name + ", what items do you wish to donate?");
-        textTime.setText("");
-        textDay.setText("");
-        textItem.setText("");
-        textCharity.setText("");
-
-
+        welcome.setText(welcome.getText() + " " + AppManager.getInstance().getUser() + ", what items do you wish to donate?");
     }
 
-
-    public void timeMenu() throws SQLException {
+    public void timeMenu() {
         MenuItem choice1 = new MenuItem("08-12");
         MenuItem choice2 = new MenuItem("12-16");
         MenuItem choice3 = new MenuItem("16-20");
 
         timeMenuChoice.getItems().addAll(choice1, choice2, choice3);
-        DbBridge db = AppManager.getInstance().getDb();
+        timeMenuChoice.setText(timeMenuChoice.getItems().get(0).getText());
 
-        textDay.setText("");
-        String userName = AppManager.getInstance().getUser();
-        int donorId = db.getUID(userName);
-
-        choice1.setOnAction((e)-> {
-            textTime.setText("08-12 selected for pickup");
-            timeChoice = "08-12";
-            LocalDate day = datePicker.getValue();
-            textDay.setText(textDay.getText() + day + " added");
-            db.addDateToTask(day, timeChoice, donorId);
-
-        });
-        choice2.setOnAction((e)-> {
-            textTime.setText("12-16 selected for pickup");
-            timeChoice = "12-16";
-            LocalDate day = datePicker.getValue();
-            textDay.setText(textDay.getText() + day + " added");
-            db.addDateToTask(day, timeChoice, donorId);
-
-        });
-        choice3.setOnAction((e)-> {
-            textTime.setText("16-20 selected for pickup");
-            timeChoice = "16-20";
-            LocalDate day = datePicker.getValue();
-            textDay.setText(textDay.getText() + day + " added");
-            db.addDateToTask(day, timeChoice, donorId);
-
-        });
+        choice1.setOnAction((e)-> timeMenuChoice.setText(choice1.getText()));
+        choice2.setOnAction((e)-> timeMenuChoice.setText(choice2.getText()));
+        choice3.setOnAction((e)-> timeMenuChoice.setText(choice3.getText()));
     }
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         handleWelcomeText();
-        try {
-            timeMenu();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+        timeMenu();
 
-        try { handleListViewStart(); } catch (SQLException throwables) {
-            throwables.printStackTrace(); }
+        try
+        {
+            handleListViewStart();
+        }
+        catch (SQLException throwable)
+        {
+            throwable.printStackTrace();
+        }
 
         itemListView.setItems(FXCollections.observableArrayList(itemListViewArray));
         addedItemListView.setItems(FXCollections.observableArrayList(addedItemListViewArray));
 
         CharityListView.setItems(FXCollections.observableArrayList(CharityListViewArray));
-        addedCharityListView.setItems(FXCollections.observableArrayList(addedCharityListViewArray));
 
+        ButtonAddItem.setDisable(true);
+        ButtonRemoveItem.setDisable(true);
+        setCharityButton.setDisable(true);
     }
 
-
-
-
-    private void handleListViewStart() throws SQLException {
+    private void handleListViewStart() throws SQLException
+    {
         DbBridge db = AppManager.getInstance().getDb();
-        ArrayList<String> test = new ArrayList<String>();
-        itemListViewArray = db.getItemtypeNameDesc();
+        itemTypes = db.getItemTypes();
+        itemListViewArray.clear();
+        for (ItemType itemType : itemTypes)
+        {
+            itemListViewArray.add(itemType.getName());
+            itemTypesViewArrayIds.add(itemType.getId());
+        }
         CharityListViewArray = db.getCharityNameDesc();
         reloadItem();
         reloadCharity();
-
-        //  for (String i : itemListViewArray) { System.out.println(i);System.out.println("Hello"); }
-    }
-
-
-
-
-    public ArrayList<String> getItemListViewArray() {
-        return itemListViewArray;
-    }
-
-    public void setItemListViewArray(ArrayList<String> itemListViewArray) {
-        this.itemListViewArray = itemListViewArray;
-    }
-
-    public ArrayList<String> getCharityListViewArray() {
-        return CharityListViewArray;
-    }
-
-    public void setCharityListViewArray(ArrayList<String> charityListViewArray) {
-        CharityListViewArray = charityListViewArray;
     }
 
     @FXML
-    private void handleAddItemPressed(ActionEvent event) throws IOException {
+    private void handleAddItemPressed() {
+        int clickItem = itemListView.getSelectionModel().getSelectedIndex();
+        if (clickItem != -1) {
+            itemListView.getSelectionModel().clearSelection();
 
-        DbBridge db = AppManager.getInstance().getDb();
-            String clickItem = itemListView.getSelectionModel().getSelectedItem();
-            if (clickItem != null) {
-                itemListView.getSelectionModel().clearSelection();
-                addedItemListViewArray.add(clickItem);
-                itemListViewArray.remove(clickItem);
-            }
-        textItem.setText("");
-        textItem.setText(textItem.getText() + clickItem + " added");
-            reloadItem();
+            addedItemTypesViewArrayIds.add(itemTypesViewArrayIds.get(clickItem));
+            itemTypesViewArrayIds.remove(clickItem);
+
+            addedItemListViewArray.add(itemListViewArray.get(clickItem));
+            itemListViewArray.remove(clickItem);
         }
 
-
+        reloadItem();
+    }
 
     public void reloadItem() {
         itemListView.setItems(FXCollections.observableArrayList(itemListViewArray));
         addedItemListView.setItems(FXCollections.observableArrayList(addedItemListViewArray));
+
+        ButtonAddItem.setDisable(itemListView.getSelectionModel().getSelectedIndex() == -1);
+        ButtonRemoveItem.setDisable(addedItemListView.getSelectionModel().getSelectedIndex() == -1);
+
+        if (ButtonAddItem.isDisabled())
+            itemTypeDescriptionText.setText(null);
+        if (ButtonRemoveItem.isDisabled())
+            addedItemTypeDescriptionText.setText(null);
     }
 
     @FXML
-    private void handleRemoveItemPressed(ActionEvent event) throws IOException {
-        DbBridge db = AppManager.getInstance().getDb();
-        String clickAddedItem = addedItemListView.getSelectionModel().getSelectedItem();
-        if (clickAddedItem != null) {
+    private void handleRemoveItemPressed() {
+        int clickAddedItem = addedItemListView.getSelectionModel().getSelectedIndex();
+        if (clickAddedItem != -1) {
             addedItemListView.getSelectionModel().clearSelection();
-            itemListViewArray.add(clickAddedItem);
+
+            itemTypesViewArrayIds.add(addedItemTypesViewArrayIds.get(clickAddedItem));
+            addedItemTypesViewArrayIds.remove(clickAddedItem);
+
+            itemListViewArray.add(addedItemListViewArray.get(clickAddedItem));
             addedItemListViewArray.remove(clickAddedItem);
         }
-        textItem.setText("");
-        textItem.setText(textItem.getText() + clickAddedItem + " removed");
 
         reloadItem();
-
-    }
-
-    @FXML
-    private void handleAddCharityPressed(ActionEvent event) throws IOException {
-        DbBridge db = AppManager.getInstance().getDb();
-        String clickCharity = CharityListView.getSelectionModel().getSelectedItem();
-        if (clickCharity != null) {
-            CharityListView.getSelectionModel().clearSelection();
-            addedCharityListViewArray.add(clickCharity);
-            CharityListViewArray.remove(clickCharity);
-        }
-        textCharity.setText("");
-        textCharity.setText(textCharity.getText() + clickCharity + " added");
-        reloadCharity();
-    }
-
-    @FXML
-    private void handleRemoveCharityPressed(ActionEvent event) throws IOException {
-        DbBridge db = AppManager.getInstance().getDb();
-        String clickAddedCharity = addedCharityListView.getSelectionModel().getSelectedItem();
-        if (clickAddedCharity != null) {
-            addedCharityListView.getSelectionModel().clearSelection();
-            CharityListViewArray.add(clickAddedCharity);
-            addedCharityListViewArray.remove(clickAddedCharity);
-        }
-        textCharity.setText("");
-        textCharity.setText(textCharity.getText() + clickAddedCharity + " removed");
-        reloadCharity();
-
     }
 
     public void reloadCharity() {
         CharityListView.setItems(FXCollections.observableArrayList(CharityListViewArray));
-        addedCharityListView.setItems(FXCollections.observableArrayList(addedCharityListViewArray));
-    }
-
-
-
-    @FXML
-    private void handleAddDayPressed1(ActionEvent event) throws IOException, SQLException {
-
-        textDay.setText("");
-        LocalDate day = datePicker.getValue();
-        textDay.setText(textDay.getText() + day + " added");
-        DbBridge db = AppManager.getInstance().getDb();
-        String userName = AppManager.getInstance().getUser();
-        int donorId = db.getUID(userName);
-       // db.addDateToTask(day, donorId);
-
     }
 
     @FXML
     private void handleBackPressed(ActionEvent event) throws IOException {
-        switchView("Views/donorDecideAddress.fxml", event);
+        AppManager.getInstance().switchView("Views/donorDecideAddress.fxml", event.getSource());
     }
 
-    private void switchView(String view, ActionEvent event) throws IOException {
-        Parent p = FXMLLoader.load(getClass().getClassLoader().getResource(view));
-        Scene newScene= new Scene(p);
-        Stage stage= (Stage)((Node)event.getSource()).getScene().getWindow();
-        stage.setScene(newScene);
-        stage.show();
+    public void handleSetCharityPressed()
+    {
+        int selectedCharityIdx = CharityListView.getSelectionModel().getSelectedIndex();
+        if (selectedCharityIdx != -1)
+        {
+            selectedCharity = CharityListViewArray.get(selectedCharityIdx);
+            desiredCharityLabel.setText(selectedCharity);
+        }
+    }
+
+    @FXML
+    public void charityListViewClicked()
+    {
+        setCharityButton.setDisable(CharityListView.getSelectionModel().getSelectedIndex() == -1);
+    }
+
+    @FXML
+    public void itemListViewClicked()
+    {
+        boolean itemSelected = itemListView.getSelectionModel().getSelectedIndex() != -1;
+        ButtonAddItem.setDisable(!itemSelected);
+
+        if (itemSelected)
+        {
+            int selectedIdx = itemListView.getSelectionModel().getSelectedIndex();
+            for (ItemType itemType : itemTypes)
+            {
+                if (itemType.getId() == itemTypesViewArrayIds.get(selectedIdx))
+                {
+                    itemTypeDescriptionText.setText(itemType.getDescription());
+                    break;
+                }
+            }
+        }
+        else
+        {
+            itemTypeDescriptionText.setText(null);
+        }
+    }
+
+    @FXML
+    public void addedItemListViewClicked()
+    {
+        boolean itemSelected = addedItemListView.getSelectionModel().getSelectedIndex() != -1;
+        ButtonRemoveItem.setDisable(!itemSelected);
+
+        if (itemSelected)
+        {
+            int selectedId = addedItemTypesViewArrayIds.get(addedItemListView.getSelectionModel().getSelectedIndex());
+            for (ItemType itemType : itemTypes)
+            {
+                if (itemType.getId() == selectedId)
+                {
+                    addedItemTypeDescriptionText.setText(itemType.getDescription());
+                    break;
+                }
+            }
+        }
+        else
+        {
+            addedItemTypeDescriptionText.setText(null);
+        }
     }
 
 
+    public static void showStage(){
+            Stage newStage = new Stage();
+            VBox comp = new VBox();
+            Text confirmText = new Text("Donation confirmed!");
+            Text thanksText = new Text("Thank you for using D3!");
+            Text goodbyeText = new Text("You may now close the application.");
+            confirmText.setX(50);
+            confirmText.setY(50);
+            thanksText.setX(50);
+            thanksText.setY(50);
+            confirmText.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
+            thanksText.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
+            comp.getChildren().add(confirmText);
+            comp.getChildren().add(thanksText);
+            comp.getChildren().add(goodbyeText);
+
+        //Setting the color
+           // confirmText.setFill(Color.WHITE);
+
+//Setting the Stroke
+           // confirmText.setStrokeWidth(1);
+//Setting the stroke color
+           // confirmText.setStroke(Color.BLACK);
+        //thanksText.setUnderline(true);
+
+        Scene stageScene = new Scene(comp, 300, 70);
+            newStage.setScene(stageScene);
+            newStage.show();
+        }
+
+    @FXML
+    public void donateItemsPressed(ActionEvent actionEvent) throws IOException, SQLException
+    {
+        DbBridge dbBridge = AppManager.getInstance().getDb();
+        int charityId = dbBridge.getUIDFromName(selectedCharity);
+        int userId = dbBridge.getUID(AppManager.getInstance().getUser());
+        int addressId = dbBridge.getUserAddressId(userId);
+
+        LocalDate day = datePicker.getValue();
+
+        String time = timeMenuChoice.getText();
+
+        String timeStart = time.substring(0, 2);
+        String timeEnd = time.substring(3, 5);
+
+        boolean okInput = charityId != -1;
+        okInput &= addressId != -1;
+        okInput &= addedItemTypesViewArrayIds.size() > 0;
+        okInput &= day != null;
+
+        if (okInput)
+        {
+            String startDate = day + ", " + timeStart;
+            String endDate = day + ", " + timeEnd;
+            DbBridge.TaskData taskData = new DbBridge.TaskData("Desc", startDate, endDate,
+                    userId, addressId, charityId, addedItemTypesViewArrayIds);
+            dbBridge.createTask(taskData);
+            handleBackPressed(actionEvent);
+            showStage();
+        }
+    }
 }

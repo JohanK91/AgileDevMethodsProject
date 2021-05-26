@@ -505,45 +505,46 @@ public class DbBridge {
         }
     }
 
+    public ArrayList<ItemType> getItemTypes()
+    {
+        ArrayList<ItemType> itemTypes = new ArrayList<>();
 
-    public ArrayList<String> getItemtypeNameDesc() throws SQLException {
-        String NameDesc = null;
-        ArrayList<String> test = new ArrayList<>();
-        donorItemsDefaultAddressController defaultAdd = new donorItemsDefaultAddressController();
+        try
+        {
+            statement = connection.prepareStatement("SELECT ID, Name, Description FROM itemtype");
+            resultSet = statement.executeQuery();
 
-        statement = connection.prepareStatement("SELECT Name, Description FROM itemtype");
-        ResultSet r1 = statement.executeQuery();
-
-        while (r1.next()) {
-            NameDesc = r1.getString("Name") + ", " + r1.getString("Description");
-            test.add(NameDesc);
-            defaultAdd.setItemListViewArray(test);
+            while (resultSet.next())
+            {
+                itemTypes.add(new ItemType(resultSet.getInt(1), resultSet.getString(2),
+                        resultSet.getString(3)));
+            }
         }
-        return test;
+        catch (SQLException throwable)
+        {
+            throwable.printStackTrace();
+        }
+
+        return itemTypes;
     }
 
     public ArrayList<String> getCharityNameDesc() throws SQLException {
-        String NameDesc = null;
         ArrayList<String> test = new ArrayList<>();
-        donorItemsDefaultAddressController defaultAdd = new donorItemsDefaultAddressController();
 
-        statement = connection.prepareStatement("SELECT Description FROM charity");
+        statement = connection.prepareStatement("SELECT name FROM user WHERE type = 2");
         ResultSet r1 = statement.executeQuery();
 
         while (r1.next()) {
-            NameDesc = r1.getString("Description");
-            test.add(NameDesc);
-            defaultAdd.setCharityListViewArray(test);
+            test.add(r1.getString(1));
         }
         return test;
     }
-
 
     public void addDateToTask(LocalDate day, String timeChoice, int donorId) {
         try {
             statement = connection.prepareStatement("UPDATE task SET start_date = ? WHERE donor_id = ?");
             String date = day + ", " + timeChoice;
-            statement.setString(1, String.valueOf(date));
+            statement.setString(1, date);
             statement.setInt(2, donorId);
             statement.executeUpdate();
         } catch (SQLException throwables) {
@@ -552,4 +553,76 @@ public class DbBridge {
 
     }
 
+    public int getUserAddressId(int userId)
+    {
+        int addressId = -1;
+        try
+        {
+            statement = connection.prepareStatement("SELECT Address_ID FROM user WHERE ID = ?");
+            statement.setInt(1, userId);
+            resultSet = statement.executeQuery();
+
+            if (resultSet.next())
+            {
+                addressId = resultSet.getInt(1);
+            }
+        }
+        catch (SQLException throwable)
+        {
+            throwable.printStackTrace();
+        }
+
+        return addressId;
+    }
+
+    public int getUIDFromName(String name) throws SQLException
+    {
+        //returns id for user if found else return -1
+        statement = connection.prepareStatement("SELECT ID FROM USER WHERE LOWER(NAME) = LOWER(?)");
+        statement.setString(1, name);
+        resultSet = statement.executeQuery();
+        while (resultSet.next()) {
+            return resultSet.getInt(1);
+        }
+        return -1;
+    }
+
+    public record TaskData(String description, String startDate, String endDate, int donorId, int addressID, int charityId, ArrayList<Integer> itemTypes) {}
+
+    public void createTask(TaskData taskData)
+    {
+        try
+        {
+            statement = connection.prepareStatement("INSERT INTO task (description, start_date, end_date, " +
+                    "Donor_ID, pickupAddress_ID, Charity_User_ID) VALUES (?,?,?,?,?,?)");
+            statement.setString(1, taskData.description);
+            statement.setString(2, taskData.startDate);
+            statement.setString(3, taskData.endDate);
+            statement.setInt(4, taskData.donorId);
+            statement.setInt(5, taskData.addressID);
+            statement.setInt(6, taskData.charityId);
+            statement.executeUpdate();
+
+            statement = connection.prepareStatement("SELECT LAST_INSERT_ID()");
+            resultSet = statement.executeQuery();
+            int taskId = -1;
+            if (resultSet.next())
+            {
+                taskId = resultSet.getInt(1);
+            }
+
+            statement = connection.prepareStatement("INSERT INTO task_has_itemtype (Task_ID, itemType_ID) VALUES " +
+                    "(?,?)");
+            statement.setInt(1, taskId);
+            for (Integer itemTypeID : taskData.itemTypes)
+            {
+                statement.setInt(2, itemTypeID);
+                statement.executeUpdate();
+            }
+        }
+        catch (SQLException throwable)
+        {
+            throwable.printStackTrace();
+        }
+    }
 }
