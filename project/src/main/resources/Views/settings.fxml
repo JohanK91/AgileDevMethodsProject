@@ -102,8 +102,8 @@
                      </children>
                   </FlowPane>
                   <TextArea fx:id="description" prefHeight="200.0" prefWidth="200.0" wrapText="true" GridPane.columnIndex="3" GridPane.rowIndex="7" />
-                  <Text fx:id="textAccept1" strokeType="OUTSIDE" strokeWidth="0.0" text="New Acceptable Item" textAlignment="CENTER" wrappingWidth="115.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="8" />
-                  <Text fx:id="textAccept11" strokeType="OUTSIDE" strokeWidth="0.0" text="Items From DB" textAlignment="CENTER" wrappingWidth="114.0" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="8" />
+                  <Text fx:id="newItemText" strokeType="OUTSIDE" strokeWidth="0.0" text="New Acceptable Item" textAlignment="CENTER" wrappingWidth="115.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="8" />
+                  <Text fx:id="itemTextDb" strokeType="OUTSIDE" strokeWidth="0.0" text="Items From DB" textAlignment="CENTER" wrappingWidth="114.0" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="8" />
                </children>
             </GridPane>
             <Button fx:id="save" mnemonicParsing="false" onAction="#savePressed" text="Save" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />

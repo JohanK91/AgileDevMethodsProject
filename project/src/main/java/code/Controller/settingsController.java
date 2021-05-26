@@ -74,6 +74,10 @@ public class settingsController implements Initializable {
     Text textDesc;
     @FXML
     Text textAccept;
+    @FXML
+    Text newItemText;
+    @FXML
+    Text itemTextDb;
 
     @FXML
     ListView<String> itemList;
@@ -284,6 +288,11 @@ public class settingsController implements Initializable {
 
         remove.setVisible(false);
         addNewItem.setVisible(false);
+
+        allList.setVisible(false);
+        newItemText.setVisible(false);
+
+        itemTextDb.setVisible(false);
 
     }
 

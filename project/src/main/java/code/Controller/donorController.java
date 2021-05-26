@@ -52,7 +52,7 @@ public class donorController implements Initializable
     }
     @FXML
     private void handleSettingsPressed(ActionEvent event) throws IOException {
-        switchView("Views/donorSettings.fxml", event);
+        switchView("Views/settings.fxml", event);
     }
     @FXML
     private void handleLogoutPressed(ActionEvent event) throws IOException {
