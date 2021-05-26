@@ -18,9 +18,9 @@
    <children>
       <GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="529.0" prefWidth="642.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="194.0" minWidth="10.0" prefWidth="83.0" />
-            <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="552.0" minWidth="10.0" prefWidth="541.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="157.0" minWidth="10.0" prefWidth="83.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="194.0" minWidth="10.0" prefWidth="36.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="636.0" minWidth="10.0" prefWidth="636.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="157.0" minWidth="10.0" prefWidth="44.0" />
          </columnConstraints>
          <rowConstraints>
             <RowConstraints maxHeight="313.0" minHeight="0.0" prefHeight="42.0" vgrow="NEVER" />
@@ -28,12 +28,12 @@
             <RowConstraints maxHeight="128.0" minHeight="6.0" prefHeight="75.0" vgrow="NEVER" />
          </rowConstraints>
          <children>
-            <GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="458.0" prefWidth="546.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="465.0" prefWidth="636.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="194.0" minWidth="-Infinity" prefWidth="50.0" />
-                  <ColumnConstraints hgrow="NEVER" maxWidth="460.0" minWidth="-Infinity" prefWidth="50.0" />
-                  <ColumnConstraints hgrow="NEVER" maxWidth="460.0" minWidth="-Infinity" prefWidth="50.0" />
-                  <ColumnConstraints hgrow="NEVER" maxWidth="460.0" minWidth="-Infinity" prefWidth="50.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="194.0" minWidth="-Infinity" prefWidth="78.0" />
+                  <ColumnConstraints hgrow="NEVER" maxWidth="460.0" minWidth="-Infinity" prefWidth="210.0" />
+                  <ColumnConstraints hgrow="NEVER" maxWidth="460.0" minWidth="-Infinity" prefWidth="170.0" />
+                  <ColumnConstraints hgrow="NEVER" maxWidth="460.0" minWidth="-Infinity" prefWidth="150.0" />
                </columnConstraints>
                <rowConstraints>
                   <RowConstraints maxHeight="178.0" minHeight="10.0" prefHeight="27.0" valignment="CENTER" vgrow="ALWAYS" />
@@ -42,9 +42,9 @@
                   <RowConstraints maxHeight="178.0" minHeight="-Infinity" prefHeight="30.0" valignment="CENTER" vgrow="ALWAYS" />
                   <RowConstraints maxHeight="178.0" minHeight="-Infinity" prefHeight="30.0" valignment="CENTER" vgrow="ALWAYS" />
                   <RowConstraints maxHeight="313.0" minHeight="-Infinity" prefHeight="30.0" valignment="CENTER" vgrow="ALWAYS" />
-                  <RowConstraints maxHeight="313.0" minHeight="-Infinity" prefHeight="30.0" valignment="CENTER" vgrow="ALWAYS" />
-                  <RowConstraints fx:id="grid0" maxHeight="313.0" minHeight="-Infinity" prefHeight="30.0" valignment="CENTER" vgrow="ALWAYS" />
-                  <RowConstraints fx:id="grid1" maxHeight="132.0" minHeight="-Infinity" prefHeight="30.0" valignment="CENTER" vgrow="ALWAYS" />
+                  <RowConstraints maxHeight="313.0" minHeight="-Infinity" prefHeight="27.0" valignment="CENTER" vgrow="ALWAYS" />
+                  <RowConstraints fx:id="grid0" maxHeight="313.0" minHeight="-Infinity" prefHeight="85.0" valignment="CENTER" vgrow="ALWAYS" />
+                  <RowConstraints fx:id="grid1" maxHeight="132.0" minHeight="-Infinity" prefHeight="28.0" valignment="CENTER" vgrow="ALWAYS" />
                   <RowConstraints fx:id="grid2" maxHeight="175.0" minHeight="10.0" prefHeight="89.0" valignment="CENTER" vgrow="ALWAYS" />
                </rowConstraints>
                <children>
@@ -67,10 +67,9 @@
                   <TextField GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" fx:id="xField" />
                   <TextField fx:id="yField" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
                   <Text fx:id="textPage" strokeType="OUTSIDE" strokeWidth="0.0" text="Webpage" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="7" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
-                  <Text fx:id="textDesc" strokeType="OUTSIDE" strokeWidth="0.0" text="Description" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="8" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
+                  <Text fx:id="textDesc" strokeType="OUTSIDE" strokeWidth="0.0" text="Description" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="7" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
                   <TextField fx:id="webbPage" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="7" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
-                  <TextField fx:id="description" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="8" GridPane.valignment="CENTER" />
-                  <Text fx:id="textAccept" strokeType="OUTSIDE" strokeWidth="0.0" text="Acceptable Items" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="9" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
+                  <Text fx:id="textAccept" strokeType="OUTSIDE" strokeWidth="0.0" text="Acceptable Items" textAlignment="CENTER" wrappingWidth="60.0" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="9" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
                   <ListView fx:id="itemList" onMouseClicked="#itemListClick" prefHeight="93.0" prefWidth="230.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
                   <GridPane prefHeight="96.0" prefWidth="137.0" GridPane.columnIndex="2" GridPane.rowIndex="9">
                      <columnConstraints>
@@ -93,14 +92,15 @@
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Password" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
                   <FlowPane GridPane.columnIndex="3" GridPane.rowIndex="9">
                      <children>
-                        <TextArea fx:id="itemDesc" prefHeight="58.0" prefWidth="136.0" wrapText="true" />
-                        <Button fx:id="remove" alignment="CENTER" mnemonicParsing="false" onAction="#removePressed" prefHeight="32.0" prefWidth="103.0" text="Remove Item" textAlignment="CENTER" textOverrun="CLIP">
+                        <TextArea fx:id="itemDesc" prefHeight="58.0" prefWidth="158.0" wrapText="true" />
+                        <Button fx:id="remove" alignment="CENTER" mnemonicParsing="false" onAction="#removePressed" prefHeight="32.0" prefWidth="90.0" text="Remove Item" textAlignment="CENTER" textOverrun="CLIP">
                            <FlowPane.margin>
-                              <Insets left="15.0" top="5.0" />
+                              <Insets left="35.0" top="5.0" />
                            </FlowPane.margin>
                         </Button>
                      </children>
                   </FlowPane>
+                  <TextArea fx:id="description" prefHeight="200.0" prefWidth="200.0" wrapText="true" GridPane.columnIndex="3" GridPane.rowIndex="7" />
                </children>
             </GridPane>
             <Button fx:id="save" mnemonicParsing="false" onAction="#savePressed" text="Save" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
