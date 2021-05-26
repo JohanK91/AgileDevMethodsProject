@@ -5,7 +5,7 @@
 -- Server version	8.0.22
 
 -- use command below to create database first
--- create database mydb2;
+-- create database d3;
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;

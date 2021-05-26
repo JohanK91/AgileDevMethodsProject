@@ -77,6 +77,9 @@ public class settingsController implements Initializable {
 
     @FXML
     ListView<String> itemList;
+    @FXML
+    ListView<String> allList;
+
 
     @FXML
     RowConstraints grid0;
@@ -131,14 +134,20 @@ public class settingsController implements Initializable {
             itemList.setItems(FXCollections.observableArrayList(listItems));
 
             if (activeItemType != null) {
-                for (ItemType itemType : charityItems) {
+                for (ItemType itemType : allItems) {
                     if (activeItemType.equalsIgnoreCase(itemType.getName())) {
                         itemName.setText(itemType.getName());
                         itemDesc.setText(itemType.getDescription());
                     }
                 }
             }
+            listItems.clear();
             allItems = db.getAllItemType();
+            for (ItemType itemType : allItems) {
+                if (itemType.getName() != null)
+                    listItems.add(itemType.getName());
+            }
+            allList.setItems(FXCollections.observableArrayList(listItems));
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -152,6 +161,11 @@ public class settingsController implements Initializable {
         reload();
     }
 
+    public void allListClick() {
+        if (listItems.size() > 0)
+            activeItemType = allList.getSelectionModel().getSelectedItem();
+        reload();
+    }
     private void getData() {
         ArrayList<String> info = db.getUserInfo(AppManager.getInstance().getUser());
         userName.setText(AppManager.getInstance().getUser());
@@ -284,20 +298,19 @@ public class settingsController implements Initializable {
         if (desc.isEmpty()) {
             invalid("Item description is empty");
         }
-        if (listItems.size() > 0) {
+        if (charityItems.size() > 1) {
             for (ItemType item : charityItems) {
-                if (item.getName().equalsIgnoreCase(name) &&
-                        item.getDescription().equalsIgnoreCase(desc)) {
+                if (item.getName().equalsIgnoreCase(name) ) {
                     itemExist = true;
                 }
             }
         }
         if (!itemExist) {
-            if (db.getItemTypeID(name, desc) == -1) {
+            if (db.getItemTypeID(name) == -1) {
                 db.addItemType(name, desc);
             }
             db.addItemTypeToCharity(db.getUID(AppManager.getInstance().getUser()),
-                    db.getItemTypeID(name, desc));
+                    db.getItemTypeID(name));
         }
         reload();
     }
