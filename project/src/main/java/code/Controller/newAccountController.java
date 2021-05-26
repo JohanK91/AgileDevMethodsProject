@@ -135,7 +135,7 @@ public class newAccountController implements Initializable
         if(okInput) {
 
             ArrayList<Object> values = new ArrayList<>();
-            if (db.getAddressID(capitalize(street)) == -1) {
+            if (db.getAddressID(street,city) == -1) {
                 values.add(capitalize(street));
                 values.add(capitalize(city));
                 values.add(postcode);
@@ -149,7 +149,7 @@ public class newAccountController implements Initializable
             values.add(type);
             values.add(phone);
             values.add(pass);
-            values.add(db.getAddressID(capitalize(street)));
+            values.add(db.getAddressID(street,city));
             db.createUser(values);
             userCreatedText.setText("User creation success");
         }
@@ -163,7 +163,6 @@ public class newAccountController implements Initializable
     public void invalid(String input){
         okInput = false;
         text.setText(text.getText()+input+ "\n");
-
     }
 
     public static String capitalize(String input){
@@ -172,10 +171,6 @@ public class newAccountController implements Initializable
         return  input.substring(0,1).toUpperCase() + input.substring(1).toLowerCase();
     }
     private void switchView (String view, ActionEvent event) throws IOException {
-        Parent p = FXMLLoader.load(getClass().getClassLoader().getResource(view));
-        Scene newScene = new Scene(p);
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(newScene);
-        stage.show();
+        AppManager.getInstance().switchView(view, event.getSource());
     }
 }

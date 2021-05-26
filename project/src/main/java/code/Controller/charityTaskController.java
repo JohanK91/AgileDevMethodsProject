@@ -49,6 +49,8 @@ public class charityTaskController implements Initializable {
     Button completeButton;
     @FXML
     Button logout;
+    @FXML
+    Button settings;
 
 
     DbBridge db;
@@ -157,6 +159,9 @@ public class charityTaskController implements Initializable {
     public void logoutPressed(ActionEvent event) throws IOException {
         db.disconnect();
         AppManager.getInstance().switchView("Views/login.fxml", event.getSource());
+    }
+    public void settingsPressed(ActionEvent event) throws IOException {
+        AppManager.getInstance().switchView("Views/settings.fxml", event.getSource());
     }
 
 }

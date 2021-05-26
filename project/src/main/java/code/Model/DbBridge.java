@@ -1,7 +1,5 @@
 package code.Model;
 
-import code.Controller.donorItemsDefaultAddressController;
-
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -58,22 +56,63 @@ public class DbBridge {
         // creates user based on input
         execute("INSERT INTO USER(userName, name, type, phone, pass, Address_ID) Values(?,?,?,?,?,?)"
                 , values);
-        if ((Integer) values.get(2) == 1) {
-            execute("INSERT INTO Driver(USER_ID)Values(" + getUID((String) values.get(0)) + ")");
-        }
-        if ((Integer) values.get(2) == 2) {
-            execute("INSERT INTO Charity(USER_ID)Values(" + getUID((String) values.get(0)) + ")");
+        switch (UserType.values()[(int) values.get(2)]) {
+            case Driver -> execute("INSERT INTO Driver(USER_ID)Values(" + getUID((String) values.get(0)) + ")");
+            case Charity -> execute("INSERT INTO Charity(USER_ID)Values(" + getUID((String) values.get(0)) + ")");
 
         }
+    }
+        public void updateUser(String user, ArrayList<Object> values) throws SQLException {
+            switch (UserType.values()[getUserType(user)]) {
+                case Donor,Driver -> execute("UPDATE User SET userName = ?," +
+                        "name = ?,phone = ?,pass = ?,address_id = ? " +
+                        "WHERE ID = "+getUID(user),values);
+                case Charity -> {
+                    ArrayList<Object> input =  new ArrayList<>();
+                    input.add(values.get(5));
+                    input.add(values.get(6));
+                    values.remove(6);
+                    values.remove(5);
+
+                    execute("UPDATE User SET userName = ?,name = ?,phone = ?," +
+                            "pass = ?,address_id = ? " +
+                        "WHERE ID = "+getUID(user),values);
+
+                    execute("UPDATE Charity SET webpage = ?, description = ?" +
+                            "WHERE User_ID =" +getUID(user),input);
+                }
+            }
+
 
     }
 
     public void createAddress(ArrayList<Object> values) {
         // create address based on input
-        execute("INSERT INTO ADDRESS(street, city, postcode, x, y) Values(?,?,?,?,?)", values);
+        execute("INSERT INTO ADDRESS(street, city, postcode, x, y) Values(?,?,?,?,?)",values);
+    }
+    public void addItemTypeToCharity(int Uid,int item) {
+        String input =Uid+","+item+")";
+        execute("INSERT INTO charity_has_itemtype " +
+                "(Charity_User_ID, itemType_ID) " +
+                "Values("+input);
+    }
+    public void addItemType(String name, String desc) {
+        String input ="'"+name+"','"+desc+"')";
+        execute("INSERT INTO itemtype" +
+                "(Name, Description) Values("+input);
+
 
     }
 
+    public int getItemTypeID(String name, String desc) throws SQLException {
+
+        execute("SELECT ID FROM itemtype WHERE lower(name) ='"+ name.toLowerCase()+"'"+
+                " and lower(description) = '"+desc.toLowerCase()+"'");
+        if(resultSet.next())
+            return resultSet.getInt("ID");
+
+        return -1;
+    }
     public boolean validateLogIn(String username, String password) {
         // will try to log in
         try {
@@ -109,36 +148,29 @@ public class DbBridge {
         }
         return -1;
     }
-
-    public int getAddressID(String street) throws SQLException {
+    public int getAddressID(String street,String city) throws SQLException {
         //returns id for address if found else return -1
-        execute("SELECT ID,street FROM ADDRESS");
-        while (resultSet.next()) {
-            if (resultSet.getString("street").equalsIgnoreCase(street))
-                return resultSet.getInt("ID");
-        }
+        execute("SELECT ID,street,city FROM ADDRESS");
+            while (resultSet.next()) {
+                if(resultSet.getString("street").equalsIgnoreCase(street)&&
+                resultSet.getString("city").equalsIgnoreCase(city))
+                    return resultSet.getInt("ID");
+            }
         return -1;
     }
-
-    public ArrayList<String> getUserInfo(String user) {
+    public ArrayList<String> getUserInfo(String user)  {
         ArrayList<String> output = new ArrayList<>();
         user = user.toLowerCase();
         try {
             switch (UserType.values()[getUserType(user)]) {
-                case Donor -> {
-                    execute("SELECT name,phone,street,city,postcode " +
+                case Donor,Driver -> {
+                    execute("SELECT name,phone,street,city,postcode,x,y " +
                             "FROM user LEFT JOIN address ON address_id = address.id " +
-                            "WHERE lower(userName) = '" + user + "'");
-                }
-                case Driver -> {
-                    execute("SELECT name,phone,street,city,postcode,status " +
-                            "FROM user LEFT JOIN address ON address_id = address.id " +
-                            "LEFT JOIN driver ON user.id = User_ID " +
                             "WHERE lower(userName) = '" + user + "'");
                 }
                 case Charity -> {
-                    execute("SELECT name,phone,street,city,postcode,webpage," +
-                            "description FROM user LEFT JOIN address " +
+                    execute("SELECT name,phone,street,city,postcode,x,y," +
+                            "webpage,description FROM user LEFT JOIN address " +
                             "ON address_id = address.id LEFT JOIN charity " +
                             "ON user.id = User_ID WHERE lower(userName) = '" + user + "'");
                 }
@@ -153,7 +185,6 @@ public class DbBridge {
         }
         return output;
     }
-
 
     public ArrayList<Task> getCharityTask(int chID, String value) {
         ArrayList<Task> tasks = new ArrayList<>();
@@ -174,7 +205,7 @@ public class DbBridge {
 
         return tasks;
     }
-
+	
     public ArrayList<String> getCharityTaskInfo(int taskId) {
         ArrayList<String> output = new ArrayList<>();
         execute("SELECT description,donor.userName,driver.userName," +
@@ -210,8 +241,50 @@ public class DbBridge {
         }
         return output;
     }
+	
+    public ArrayList<ItemType> getAllItemType() {
+        ArrayList<ItemType> output = new ArrayList<>();
+        execute("SELECT * FROM itemtype");
+        try {
+            while(resultSet.next()) {
+                output.add(new ItemType(resultSet.getInt(1),resultSet.getString(2),resultSet.getString(3)));
+            }
+        }
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return output;
+    }
 
-    public Connection getConnection() {
+
+    public ArrayList<ItemType> getCharityItemTypes(int chID) {
+        ArrayList<ItemType> output = new ArrayList<>();
+
+        execute("SELECT itemtype.ID,itemtype.name,itemtype.description " +
+                "FROM charity LEFT JOIN charity_has_itemtype ON " +
+                "user_id = charity_has_itemtype.Charity_user_ID " +
+                "Left Join itemtype On charity_has_itemtype.itemType_ID=itemtype.ID" +
+                " where user_id="+ chID);
+
+
+        try {
+            while(resultSet.next()) {
+                output.add(new ItemType(resultSet.getInt(1),resultSet.getString(2),resultSet.getString(3)));
+            }
+        }
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return output;
+    }
+
+    public  void removeItemCharity(int itemID, int chID){
+        execute("DELETE FROM charity_has_itemtype " +
+                "WHERE itemType_ID =" +itemID+
+                " AND Charity_User_ID ="+chID);
+    }
+
+    public Connection getConnection()  {
         return connection;
     }
 
@@ -256,19 +329,17 @@ public class DbBridge {
         }
     }
 
-    public void removeUserAddress(String user, String street) {
+    public void removeUserAddress(String user, String street, String city){
         // removes all instances of user with user as username and all addresses with street as address
         try {
-            while (getUID(user) > 0) {
-                statement = connection.prepareStatement(" DELETE FROM USER " +
-                        "WHERE lower(Username) = ?");
-                statement.setString(1, user.toLowerCase());
-                statement.executeUpdate();
+            while(getUID(user) > 0) {
+                execute("DELETE FROM user " +
+                        "WHERE lower(userName) = '"+user.toLowerCase()+"'");
             }
-            while (getAddressID(street) > 0) {
-                statement = connection.prepareStatement(" DELETE FROM Address " +
-                        "WHERE lower(street) = ?");
-                statement.setString(1, street.toLowerCase());
+            while(getAddressID(street,city) > 0) {
+                execute("DELETE FROM Address " +
+                        "WHERE street ='"+street+"'" +
+                        " and city ='"+city+"'");
                 statement.executeUpdate();
             }
         } catch (SQLException throwables) {
@@ -277,15 +348,20 @@ public class DbBridge {
 
     }
 
-    public String getCharityAddress(int anId) {
-        try {
+    public String getCharityAddress(int anId)
+    {
+        try
+        {
             statement = connection.prepareStatement("SELECT address.street FROM address LEFT JOIN user ON user.Address_ID = address.ID WHERE user.ID = ?");
             statement.setInt(1, anId);
             resultSet = statement.executeQuery();
-            if (resultSet.next()) {
+            if (resultSet.next())
+            {
                 return resultSet.getString(1);
             }
-        } catch (SQLException throwables) {
+        }
+        catch (SQLException throwables)
+        {
             throwables.printStackTrace();
         }
 
@@ -293,15 +369,20 @@ public class DbBridge {
     }
 
     //Task
-    public int getCharityIdFromTask(int anId) {
-        try {
+    public int getCharityIdFromTask(int anId)
+    {
+        try
+        {
             statement = connection.prepareStatement("SELECT Charity_User_ID FROM task WHERE task.ID = ?");
             statement.setInt(1, anId);
             resultSet = statement.executeQuery();
-            if (resultSet.next()) {
+            if (resultSet.next())
+            {
                 return resultSet.getInt(1);
             }
-        } catch (SQLException throwables) {
+        }
+        catch (SQLException throwables)
+        {
             throwables.printStackTrace();
         }
 
@@ -331,178 +412,6 @@ public class DbBridge {
         }
 
         return null;
-    }
-
-    public void handOverTasksToCharity(int aDriverId, int aCharityId) {
-        try {
-            statement = connection.prepareStatement("UPDATE task SET status = 'arrivedToCharity' WHERE Driver_User_ID = ? AND " +
-                    "Charity_User_ID = ? AND status = 'pickedUp'");
-            statement.setInt(1, aDriverId);
-            statement.setInt(2, aCharityId);
-            statement.executeUpdate();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-    }
-
-    public ArrayList<Task> getDriverTasksUndone(int aDriverId) {
-        ArrayList<Task> tasks = new ArrayList<>();
-
-        String statusCheck = "(status IS NULL OR (NOT status = 'completed' AND NOT status = 'arrivedToCharity'))";
-
-        try {
-            if (aDriverId == -1) {
-                statement = connection.prepareStatement("SELECT ID FROM task WHERE Driver_User_ID IS NULL AND " + statusCheck);
-            } else {
-                statement = connection.prepareStatement("SELECT ID FROM task WHERE Driver_User_ID = ? AND " + statusCheck);
-                statement.setInt(1, aDriverId);
-            }
-
-            resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-                tasks.add(new Task(resultSet.getInt(1)));
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
-        return tasks;
-    }
-
-    public void changeTaskStatus(int anId, TaskStatus aStatus) {
-        try {
-            statement = connection.prepareStatement("UPDATE task SET status = ? WHERE ID = ?");
-
-            String status = switch (aStatus) {
-                case ArrivedToCharity -> "arrivedToCharity";
-                case Completed -> "completed";
-                case PickedUp -> "pickedUp";
-            };
-
-            statement.setString(1, status);
-            statement.setInt(2, anId);
-            statement.executeUpdate();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-    }
-
-    public void assignUnassignedTaskToDriver(int aTaskId, int aDriverId) {
-        try {
-            statement = connection.prepareStatement("UPDATE task SET Driver_User_ID = ? WHERE ID = ?");
-            statement.setInt(1, aDriverId);
-            statement.setInt(2, aTaskId);
-            statement.executeUpdate();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-    }
-
-    public void unassignTask(int aTaskId) {
-        try {
-            statement = connection.prepareStatement("DELETE FROM drivertasklist_index WHERE Task_ID = ?");
-            statement.setInt(1, aTaskId);
-            statement.executeUpdate();
-
-            statement = connection.prepareStatement("UPDATE task SET Driver_User_ID = NULL WHERE ID = ?");
-            statement.setInt(1, aTaskId);
-            statement.executeUpdate();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-    }
-
-    public void createDriverTaskList(int aDriverId) {
-        try {
-            statement = connection.prepareStatement("SELECT * FROM drivertasklist WHERE Driver_ID = ?");
-            statement.setInt(1, aDriverId);
-            resultSet = statement.executeQuery();
-
-            if (!resultSet.next()) {
-                statement = connection.prepareStatement("INSERT INTO drivertasklist (Driver_ID) VALUES (?)");
-                statement.setInt(1, aDriverId);
-                statement.executeUpdate();
-            }
-
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-    }
-
-    public void emptyDriverTaskList(int aDriverId) {
-        try {
-            statement = connection.prepareStatement("DELETE FROM drivertasklist_index WHERE Driver_ID = ?");
-            statement.setInt(1, aDriverId);
-            statement.executeUpdate();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-    }
-
-    public ArrayList<DriverTask> getDriverTaskList(int aDriverId) {
-        ArrayList<DriverTask> tasks = new ArrayList<>();
-
-        try {
-            statement = connection.prepareStatement("SELECT Task_ID, Charity_ID, index_nr FROM drivertasklist_index WHERE Driver_ID = ? ORDER BY index_nr");
-            statement.setInt(1, aDriverId);
-            resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-                int taskId = resultSet.getInt(1);
-                if (resultSet.wasNull())
-                    taskId = -1;
-                int charityId = resultSet.getInt(2);
-                if (resultSet.wasNull())
-                    charityId = -1;
-                int index = resultSet.getInt(3);
-
-                tasks.add(new DriverTask(taskId, charityId, index));
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
-        return tasks;
-    }
-
-    public void addTaskToDriverTaskList(int aDriverId, int aTaskId) {
-        try {
-            statement = connection.prepareStatement("SELECT MAX(index_nr)+1 FROM drivertasklist_index WHERE Driver_ID = ?");
-            statement.setInt(1, aDriverId);
-            resultSet = statement.executeQuery();
-
-            if (resultSet.next()) {
-                int index = resultSet.getInt(1);
-
-                statement = connection.prepareStatement("INSERT INTO drivertasklist_index (Driver_ID, Task_ID, index_nr) VALUES (?, ?, ?)");
-                statement.setInt(1, aDriverId);
-                statement.setInt(2, aTaskId);
-                statement.setInt(3, index);
-                statement.executeUpdate();
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-    }
-
-    public void addCharityToDriverTaskList(int aDriverId, int aCharityId) {
-        try {
-            statement = connection.prepareStatement("SELECT MAX(index_nr)+1 FROM drivertasklist_index WHERE Driver_ID = ?");
-            statement.setInt(1, aDriverId);
-            resultSet = statement.executeQuery();
-
-            if (resultSet.next()) {
-                int index = resultSet.getInt(1);
-                statement = connection.prepareStatement("INSERT INTO drivertasklist_index (Driver_ID, Charity_ID, index_nr) VALUES (?, ?, ?)");
-                statement.setInt(1, aDriverId);
-                statement.setInt(2, aCharityId);
-                statement.setInt(3, index);
-                statement.executeUpdate();
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
     }
 
     public ArrayList<ItemType> getItemTypes()
@@ -623,6 +532,226 @@ public class DbBridge {
         catch (SQLException throwable)
         {
             throwable.printStackTrace();
+        }
+    }
+
+    public void handOverTasksToCharity(int aDriverId, int aCharityId)
+    {
+        try
+        {
+            statement = connection.prepareStatement("UPDATE task SET status = 'arrivedToCharity' WHERE Driver_User_ID = ? AND " +
+                    "Charity_User_ID = ? AND status = 'pickedUp'");
+            statement.setInt(1, aDriverId);
+            statement.setInt(2, aCharityId);
+            statement.executeUpdate();
+        }
+        catch (SQLException throwables)
+        {
+            throwables.printStackTrace();
+        }
+    }
+
+    public ArrayList<Task> getDriverTasksUndone(int aDriverId)
+    {
+        ArrayList<Task> tasks = new ArrayList<>();
+
+        String statusCheck = "(status IS NULL OR (NOT status = 'completed' AND NOT status = 'arrivedToCharity'))";
+
+        try
+        {
+            if (aDriverId == -1)
+            {
+                statement = connection.prepareStatement("SELECT ID FROM task WHERE Driver_User_ID IS NULL AND " + statusCheck);
+            }
+            else
+            {
+                statement = connection.prepareStatement("SELECT ID FROM task WHERE Driver_User_ID = ? AND " + statusCheck);
+                statement.setInt(1, aDriverId);
+            }
+
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next())
+            {
+                tasks.add(new Task(resultSet.getInt(1)));
+            }
+        }
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return tasks;
+    }
+
+    public void changeTaskStatus(int anId, TaskStatus aStatus)
+    {
+        try
+        {
+            statement = connection.prepareStatement("UPDATE task SET status = ? WHERE ID = ?");
+
+            String status = switch (aStatus)
+                    {
+                        case ArrivedToCharity -> "arrivedToCharity";
+                        case Completed -> "completed";
+                        case PickedUp -> "pickedUp";
+                    };
+
+            statement.setString(1, status);
+            statement.setInt(2, anId);
+            statement.executeUpdate();
+        }
+        catch (SQLException throwables)
+        {
+            throwables.printStackTrace();
+        }
+    }
+
+    public void assignUnassignedTaskToDriver(int aTaskId, int aDriverId)
+    {
+        try
+        {
+            statement = connection.prepareStatement("UPDATE task SET Driver_User_ID = ? WHERE ID = ?");
+            statement.setInt(1, aDriverId);
+            statement.setInt(2, aTaskId);
+            statement.executeUpdate();
+        }
+        catch (SQLException throwables)
+        {
+            throwables.printStackTrace();
+        }
+    }
+
+    public void unassignTask(int aTaskId)
+    {
+        try
+        {
+            statement = connection.prepareStatement("DELETE FROM drivertasklist_index WHERE Task_ID = ?");
+            statement.setInt(1, aTaskId);
+            statement.executeUpdate();
+
+            statement = connection.prepareStatement("UPDATE task SET Driver_User_ID = NULL WHERE ID = ?");
+            statement.setInt(1, aTaskId);
+            statement.executeUpdate();
+        }
+        catch (SQLException throwables)
+        {
+            throwables.printStackTrace();
+        }
+    }
+
+    public void createDriverTaskList(int aDriverId)
+    {
+        try
+        {
+            statement = connection.prepareStatement("SELECT * FROM drivertasklist WHERE Driver_ID = ?");
+            statement.setInt(1, aDriverId);
+            resultSet = statement.executeQuery();
+
+            if (!resultSet.next())
+            {
+                statement = connection.prepareStatement("INSERT INTO drivertasklist (Driver_ID) VALUES (?)");
+                statement.setInt(1, aDriverId);
+                statement.executeUpdate();
+            }
+
+        }
+        catch (SQLException throwables)
+        {
+            throwables.printStackTrace();
+        }
+    }
+
+    public void emptyDriverTaskList(int aDriverId)
+    {
+        try
+        {
+            statement = connection.prepareStatement("DELETE FROM drivertasklist_index WHERE Driver_ID = ?");
+            statement.setInt(1, aDriverId);
+            statement.executeUpdate();
+        }
+        catch (SQLException throwables)
+        {
+            throwables.printStackTrace();
+        }
+    }
+
+    public ArrayList<DriverTask> getDriverTaskList(int aDriverId)
+    {
+        ArrayList<DriverTask> tasks = new ArrayList<>();
+
+        try
+        {
+            statement = connection.prepareStatement("SELECT Task_ID, Charity_ID, index_nr FROM drivertasklist_index WHERE Driver_ID = ? ORDER BY index_nr");
+            statement.setInt(1, aDriverId);
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next())
+            {
+                int taskId = resultSet.getInt(1);
+                if (resultSet.wasNull())
+                    taskId = -1;
+                int charityId = resultSet.getInt(2);
+                if (resultSet.wasNull())
+                    charityId = -1;
+                int index = resultSet.getInt(3);
+
+                tasks.add(new DriverTask(taskId, charityId, index));
+            }
+        }
+        catch (SQLException throwables)
+        {
+            throwables.printStackTrace();
+        }
+
+        return tasks;
+    }
+
+    public void addTaskToDriverTaskList(int aDriverId, int aTaskId)
+    {
+        try
+        {
+            statement = connection.prepareStatement("SELECT MAX(index_nr)+1 FROM drivertasklist_index WHERE Driver_ID = ?");
+            statement.setInt(1, aDriverId);
+            resultSet = statement.executeQuery();
+
+            if (resultSet.next())
+            {
+                int index = resultSet.getInt(1);
+
+                statement = connection.prepareStatement("INSERT INTO drivertasklist_index (Driver_ID, Task_ID, index_nr) VALUES (?, ?, ?)");
+                statement.setInt(1, aDriverId);
+                statement.setInt(2, aTaskId);
+                statement.setInt(3, index);
+                statement.executeUpdate();
+            }
+        }
+        catch (SQLException throwables)
+        {
+            throwables.printStackTrace();
+        }
+    }
+
+    public void addCharityToDriverTaskList(int aDriverId, int aCharityId)
+    {
+        try
+        {
+            statement = connection.prepareStatement("SELECT MAX(index_nr)+1 FROM drivertasklist_index WHERE Driver_ID = ?");
+            statement.setInt(1, aDriverId);
+            resultSet = statement.executeQuery();
+
+            if (resultSet.next())
+            {
+                int index = resultSet.getInt(1);
+                statement = connection.prepareStatement("INSERT INTO drivertasklist_index (Driver_ID, Charity_ID, index_nr) VALUES (?, ?, ?)");
+                statement.setInt(1, aDriverId);
+                statement.setInt(2, aCharityId);
+                statement.setInt(3, index);
+                statement.executeUpdate();
+            }
+        }
+        catch (SQLException throwables)
+        {
+            throwables.printStackTrace();
         }
     }
 }

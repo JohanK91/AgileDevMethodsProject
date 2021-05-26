@@ -26,9 +26,9 @@ class DbBridgeTest
         TestDisconnection();
     }
     @AfterAll
-    public static void afterAll(){
+    public static void afterAll() throws SQLException {
         myDBBridge.connect();
-        myDBBridge.removeUserAddress("test","address");
+        myDBBridge.removeUserAddress("test", "address","city");
         myDBBridge.disconnect();
 
     }
@@ -45,7 +45,7 @@ class DbBridgeTest
     @Test
     @DisplayName("Test createUser")
     public void TestReadWriteUser() throws SQLException {
-        assertFalse(myDBBridge.getAddressID("address") > 0);
+        assertFalse(myDBBridge.getAddressID("address","city") > 0);
         ArrayList<Object> values = new ArrayList<Object>();
         values.add("address");
         values.add("city");
@@ -53,7 +53,7 @@ class DbBridgeTest
         values.add(1);
         values.add(2);
         myDBBridge.createAddress(values);
-        assertTrue(myDBBridge.getAddressID("address") > 0);
+        assertTrue(myDBBridge.getAddressID("address","city") > 0);
 
         assertFalse(myDBBridge.getUID("test") > 0);
 
@@ -63,7 +63,7 @@ class DbBridgeTest
         values.add(0);
         values.add("phone");
         values.add("pass");
-        values.add(myDBBridge.getAddressID("address"));
+        values.add(myDBBridge.getAddressID("address","city"));
         myDBBridge.createUser(values);
 
         assertTrue(myDBBridge.getUID("test") > 0);

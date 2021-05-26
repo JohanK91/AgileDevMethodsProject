@@ -73,11 +73,7 @@ public class loginController implements Initializable {
     }
 
     private void switchView (String view, ActionEvent event) throws IOException {
-        Parent p = FXMLLoader.load(getClass().getClassLoader().getResource(view));
-        Scene newScene = new Scene(p);
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(newScene);
-        stage.show();
+        AppManager.getInstance().switchView(view, event.getSource());
     }
 
 }
