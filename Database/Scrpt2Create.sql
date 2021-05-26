@@ -3,8 +3,7 @@
 -- Host: localhost    Database: d3
 -- ------------------------------------------------------
 -- Server version	8.0.22
-create schema d3;
-use d3;
+
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
