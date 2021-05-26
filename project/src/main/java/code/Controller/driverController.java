@@ -1,18 +1,12 @@
 package code.Controller;
 
-import code.Model.AppManager;
-import code.Model.DbBridge;
-import code.Model.Task;
-import com.mysql.cj.protocol.a.NativePacketPayload;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import code.Model.*;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
 import java.net.URL;
@@ -40,18 +34,47 @@ public class driverController implements Initializable
     @FXML
     Button logoutButton;
 
+    DriverTaskList myTaskList;
+
     ArrayList<String> myUnassignedAddresses = new ArrayList<>();
     ArrayList<String> myAssignedAddresses = new ArrayList<>();
 
-    ArrayList<Task> myTasks;
     ArrayList<Task> myUnassignedTasks;
 
     private void setupTasks()
     {
         DbBridge dbBridge = AppManager.getInstance().getDb();
+
         try
         {
-            myTasks = dbBridge.getDriverTasksUndone(dbBridge.getUID(AppManager.getInstance().getUser()));
+            dbBridge.createDriverTaskList(dbBridge.getUID(AppManager.getInstance().getUser()));
+
+            ArrayList<Task> tasks = dbBridge.getDriverTasksUndone(dbBridge.getUID(AppManager.getInstance().getUser()));
+            myTaskList.refresh();
+
+            ArrayList<DriverTask> driverTasks = myTaskList.getDriverTasks();
+
+            for(DriverTask driverTask : driverTasks)
+            {
+                for (int i = tasks.size()-1; i >= 0; --i)
+                {
+                    if (tasks.get(i).getId() == driverTask.getTaskID())
+                    {
+                        tasks.remove(i);
+                        break;
+                    }
+                }
+            }
+
+            myTaskList.clearCharities();
+
+            for (Task task : tasks)
+            {
+                myTaskList.addTask(task.getId());
+            }
+
+            myTaskList.fixCharities();
+
             myUnassignedTasks = dbBridge.getDriverTasksUndone(-1);
         }
         catch (SQLException throwable)
@@ -59,9 +82,12 @@ public class driverController implements Initializable
             throwable.printStackTrace();
         }
 
-        for (Task task : myTasks)
+        for (DriverTask task : myTaskList.getDriverTasks())
         {
-            myAssignedAddresses.add(task.getAddress());
+            String address = task.getAddress();
+            if (task.isCharity())
+                address += " (Charity)";
+            myAssignedAddresses.add(address);
         }
         for (Task task : myUnassignedTasks)
         {
@@ -85,13 +111,21 @@ public class driverController implements Initializable
             beginDriveButton.setDisable(true);
         }
 
-        removeTaskButton.setDisable(taskView.getSelectionModel().getSelectedIndex() == -1);
-        addTaskButton.setDisable(unassignedTaskView.getSelectionModel().getSelectedIndex() == -1);
+        taskViewClicked();
+        unassignedTaskViewClicked();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
+        try
+        {
+            myTaskList = new DriverTaskList(AppManager.getInstance().getDb().getUID(AppManager.getInstance().getUser()));
+        }
+        catch (SQLException throwable)
+        {
+            throwable.printStackTrace();
+        }
         reload();
     }
 
@@ -102,18 +136,21 @@ public class driverController implements Initializable
     }
 
     @FXML
-    public void removeTaskPressed(ActionEvent actionEvent)
+    public void removeTaskPressed()
     {
         int idx = taskView.getSelectionModel().getSelectedIndex();
         if (idx != -1)
         {
-            AppManager.getInstance().getDb().unassignTask(myTasks.get(idx).getId());
+            DriverTask task = myTaskList.getDriverTasks().get(idx);
+            if (task.getTaskID() >= -1)
+                AppManager.getInstance().getDb().unassignTask(task.getTaskID());
+
             reload();
         }
     }
 
     @FXML
-    public void addTaskPressed(ActionEvent actionEvent) throws SQLException
+    public void addTaskPressed() throws SQLException
     {
         int idx = unassignedTaskView.getSelectionModel().getSelectedIndex();
         if (idx != -1)
@@ -131,12 +168,19 @@ public class driverController implements Initializable
         AppManager.getInstance().switchView("Views/login.fxml", actionEvent.getSource());
     }
 
-    public void taskViewClicked(MouseEvent mouseEvent)
+    public void taskViewClicked()
     {
-        removeTaskButton.setDisable(taskView.getSelectionModel().getSelectedIndex() == -1);
+        int selectedDriverTaskIndex = taskView.getSelectionModel().getSelectedIndex();
+        boolean removeTaskDisabled = true;
+        if (selectedDriverTaskIndex != -1)
+        {
+            if (myTaskList.getDriverTasks().get(selectedDriverTaskIndex).isTask())
+                removeTaskDisabled = false;
+        }
+        removeTaskButton.setDisable(removeTaskDisabled);
     }
 
-    public void unassignedTaskViewClicked(MouseEvent mouseEvent)
+    public void unassignedTaskViewClicked()
     {
         addTaskButton.setDisable(unassignedTaskView.getSelectionModel().getSelectedIndex() == -1);
     }

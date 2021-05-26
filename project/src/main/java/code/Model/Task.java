@@ -2,7 +2,7 @@ package code.Model;
 
 public class Task
 {
-    private int myId;
+    private final int myId;
 
     Task(int anId)
     {

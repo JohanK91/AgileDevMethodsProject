@@ -9,7 +9,9 @@
       <Label fx:id="taskAddressText" layoutX="115.0" layoutY="93.0" text="ERROR" />
       <Label layoutX="60.0" layoutY="93.0" text="Task is at: " />
       <Button fx:id="arrivedButton" alignment="CENTER" layoutX="126.0" layoutY="277.0" mnemonicParsing="false" onAction="#arrivedPressed" text="Arrived" />
-      <Button fx:id="taskCompleteButton" alignment="CENTER" layoutX="126.0" layoutY="277.0" mnemonicParsing="false" onAction="#taskCompletedPressed" text="Task Done" visible="false" />
+      <Button fx:id="taskPickedUpButton" alignment="CENTER" layoutX="126.0" layoutY="277.0" mnemonicParsing="false" onAction="#taskPickedUpPressed" text="Picked Up Items" visible="false" />
+      <Button fx:id="deliveredTasksButton" alignment="CENTER" layoutX="126.0" layoutY="277.0" mnemonicParsing="false" onAction="#deliveredTasksPressed" text="Delivered Items" visible="false" />
       <Button fx:id="continueDriveButton" alignment="CENTER" layoutX="128.0" layoutY="277.0" mnemonicParsing="false" onAction="#continueDrivePressed" text="Continue drive" textAlignment="CENTER" visible="false" />
+      <Button fx:id="taskIncompleteButton" layoutX="242.0" layoutY="277.0" mnemonicParsing="false" onAction="#taskIncompletePressed" text="Unable to pick up items" visible="false" />
    </children>
 </AnchorPane>
