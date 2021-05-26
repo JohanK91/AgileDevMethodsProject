@@ -51,7 +51,7 @@ public class settingsController implements Initializable {
     @FXML
     TextField webbPage;
     @FXML
-    TextField description;
+    TextArea description;
     @FXML
     TextArea itemDesc;
     @FXML

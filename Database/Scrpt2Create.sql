@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.22, for Win64 (x86_64)
 --
--- Host: localhost    Database: mydb2
+-- Host: localhost    Database: d3
 -- ------------------------------------------------------
 -- Server version	8.0.22
 
@@ -42,7 +42,7 @@ CREATE TABLE `address` (
 
 LOCK TABLES `address` WRITE;
 /*!40000 ALTER TABLE `address` DISABLE KEYS */;
-INSERT INTO `address` VALUES (1,'qaz','wsx','123',11,22),(2,'blabla','gdsgfdg','123',11,22),(3,'Hello','There','123',11,22),(7,'driving','driiiver','123123',1,1);
+INSERT INTO `address` VALUES (1,'Piratens Väg 2','Kristianstad','29145',1,4),(2,'Piratens Väg 3','Kristianstad','29145',1,5),(3,'Piratens Väg 4','Kristianstad','29145',1,6),(4,'Piratens Väg 5','Kristianstad','29145',1,7);
 /*!40000 ALTER TABLE `address` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -69,7 +69,7 @@ CREATE TABLE `charity` (
 
 LOCK TABLES `charity` WRITE;
 /*!40000 ALTER TABLE `charity` DISABLE KEYS */;
-INSERT INTO `charity` VALUES (3,'www.kzxl.se','klxzc');
+INSERT INTO `charity` VALUES (3,'www.hjälpenvän.se','Hjälpenvän är ett projekt där vi samlar in olika typer av resurser som sedan delas till hemlösa & behövande runt om i landet');
 /*!40000 ALTER TABLE `charity` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -97,6 +97,7 @@ CREATE TABLE `charity_has_itemtype` (
 
 LOCK TABLES `charity_has_itemtype` WRITE;
 /*!40000 ALTER TABLE `charity_has_itemtype` DISABLE KEYS */;
+INSERT INTO `charity_has_itemtype` VALUES(3,1),(3,2),(3,3);
 /*!40000 ALTER TABLE `charity_has_itemtype` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -122,7 +123,7 @@ CREATE TABLE `driver` (
 
 LOCK TABLES `driver` WRITE;
 /*!40000 ALTER TABLE `driver` DISABLE KEYS */;
-INSERT INTO `driver` VALUES (2,'test'),(7,NULL);
+INSERT INTO `driver` VALUES (2,NULL);
 /*!40000 ALTER TABLE `driver` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -147,7 +148,7 @@ CREATE TABLE `drivertasklist` (
 
 LOCK TABLES `drivertasklist` WRITE;
 /*!40000 ALTER TABLE `drivertasklist` DISABLE KEYS */;
-INSERT INTO `drivertasklist` VALUES (2,0),(7,0);
+INSERT INTO `drivertasklist` VALUES (2,0);
 /*!40000 ALTER TABLE `drivertasklist` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -177,11 +178,7 @@ CREATE TABLE `drivertasklist_index` (
 -- Dumping data for table `drivertasklist_index`
 --
 
-LOCK TABLES `drivertasklist_index` WRITE;
-/*!40000 ALTER TABLE `drivertasklist_index` DISABLE KEYS */;
-INSERT INTO `drivertasklist_index` VALUES (7,1,NULL,0),(7,NULL,3,1);
-/*!40000 ALTER TABLE `drivertasklist_index` ENABLE KEYS */;
-UNLOCK TABLES;
+
 
 --
 -- Table structure for table `itemtype`
@@ -204,7 +201,7 @@ CREATE TABLE `itemtype` (
 
 LOCK TABLES `itemtype` WRITE;
 /*!40000 ALTER TABLE `itemtype` DISABLE KEYS */;
-INSERT INTO `itemtype` VALUES (1,'Things you can wear in the summer','Summer clothes'),(2,'Things you can wear in the winter','Winter clothes'),(3,'Things you can wear on your head','Hats'),(4,'Things you can wear on your feet','Shoes'),(5,'Chairs and tables','Dining furniture'),(6,'Things you can sit or sleep in','Beds and couches'),(7,'Things you can put clothes or books in','Bookcases and closets'),(8,'General furniture','Other furniture items'),(9,'Things that run on electricity','Electrical items'),(10,'Computer kinds of items','Computer items'),(11,'Things that run on batteries','Battery powered items'),(12,'Crafting and work tools','Tools'),(13,'Hard toys for children','Hard toys'),(14,'Soft toys for children','Soft toys'),(15,'Battery powered toys for children','Battery toys'),(16,'Bed fabric items','Bed covers'),(17,'Kitchen and table fabrics','Tablecloths'),(18,'Fabrics on floor and windows','Carpets and curtains');
+INSERT INTO `itemtype` VALUES (1,'Any type of items worn on the body','Clothes'),(2,'Dining furniture, Bookcases, Beds etc','Furniture'),(3,'Computers & things that run on electricity','Computer & Electrical items'),(4,'Crafting and work tools','Tools'),(5,'All kind of toys for children','Toys'),(6,'All kinds of fabrics','Cloths'),(7,'Things to read','Books');
 /*!40000 ALTER TABLE `itemtype` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -238,14 +235,10 @@ CREATE TABLE `task` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `task`
+
 --
 
-LOCK TABLES `task` WRITE;
-/*!40000 ALTER TABLE `task` DISABLE KEYS */;
-INSERT INTO `task` VALUES (1,NULL,'description','start_date','end_date',1,1,7,3);
-/*!40000 ALTER TABLE `task` ENABLE KEYS */;
-UNLOCK TABLES;
+
 
 --
 -- Table structure for table `task_has_itemtype`
@@ -302,7 +295,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'Test0','TestDoner',0,'123','root',1),(2,'Test1','TestDriver',1,'123','root',2),(3,'Test2','TestCharity',2,'123','root',3),(7,'driver','driverrr',1,'12345','driver',7);
+INSERT INTO `user` VALUES (1,'test0','Ann Mori',0,'0703813272','root',1),(2,'test1','Zark',1,'0703813672','root',2),(3,'test3','Hjälp En Vän',2,'0704213212','root',3);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class DbBridge {
 
-    final String mysqlUrl = "jdbc:mysql://localhost:3306/mydb2?";
+    final String mysqlUrl = "jdbc:mysql://localhost:3306/d3?";
     private Connection connection;
     private PreparedStatement statement;
     private ResultSet resultSet;
