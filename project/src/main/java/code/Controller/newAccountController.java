@@ -163,7 +163,6 @@ public class newAccountController implements Initializable
     public void invalid(String input){
         okInput = false;
         text.setText(text.getText()+input+ "\n");
-
     }
 
     public static String capitalize(String input){

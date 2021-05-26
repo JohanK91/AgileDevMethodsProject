@@ -23,8 +23,7 @@ import java.util.ResourceBundle;
 
 public class donorItemsController implements Initializable {
 
-    @FXML
-    Label wish;
+
     @FXML
     Button addItem;
     @FXML
@@ -47,6 +46,14 @@ public class donorItemsController implements Initializable {
     Text textCharity;
     @FXML
     Text welcome;
+    @FXML
+    TextField listDay;
+    @FXML
+    TextField listTime;
+    @FXML
+    Text textDay;
+    @FXML
+    Text textTime;
 
 
     private void switchView(String view, ActionEvent event) throws IOException {
@@ -61,6 +68,13 @@ public class donorItemsController implements Initializable {
         String name = AppManager.getInstance().getUser();
         welcome.setText("");
         welcome.setText(welcome.getText() + name + ", what items do you wish to donate?");
+        textTime.setText("");
+        textDay.setText("");
+        textItem.setText("");
+        textAddress.setText("");
+        textCharity.setText("");
+
+
     }
 
     @Override
@@ -80,8 +94,6 @@ public class donorItemsController implements Initializable {
         textItem.setText(textItem.getText() + item + " added");
         DbBridge db = AppManager.getInstance().getDb();
 
-
-
     }
 
     @FXML
@@ -89,6 +101,7 @@ public class donorItemsController implements Initializable {
         textAddress.setText("");
         String address = listAddress.getText();
         textAddress.setText(textAddress.getText() + address + " added");
+
     }
 
     @FXML
@@ -98,4 +111,24 @@ public class donorItemsController implements Initializable {
         textCharity.setText(textCharity.getText() + charity + " added");
 
     }
+
+    @FXML
+    private void handleAddDayPressed(ActionEvent event) throws IOException {
+        textDay.setText("");
+        String day = listDay.getText();
+        textDay.setText(textDay.getText() + day + " added");
+        DbBridge db = AppManager.getInstance().getDb();
+
+    }
+
+    @FXML
+    private void handleAddTimePressed(ActionEvent event) throws IOException {
+        textTime.setText("");
+        String time = listTime.getText();
+        textTime.setText(textTime.getText() + time + " added");
+        DbBridge db = AppManager.getInstance().getDb();
+
+    }
+
+
 }

@@ -126,7 +126,6 @@ public class donorSettingsController implements Initializable {
         if (isCorrect()) {
             passText.setText(passText.getText() + "Password changed!");
             changePass();
-            sleepMode();
         } else {
             passText.setText(passText.getText() + "You must first confirm your old password!");
         }
@@ -158,11 +157,4 @@ public class donorSettingsController implements Initializable {
             //}
         // });
 
-
-
-
-    private void sleepMode() throws InterruptedException {
-        Thread.sleep(1000);
-
-    }
 }
