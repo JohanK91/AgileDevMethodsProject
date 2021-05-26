@@ -7,7 +7,10 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+<<<<<<< HEAD
 import javafx.scene.Scene;
+=======
+>>>>>>> 9506777ae358a58037b059a3a150405356e8699e
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -15,8 +18,11 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+<<<<<<< HEAD
 import javafx.stage.Stage;
 
+=======
+>>>>>>> 9506777ae358a58037b059a3a150405356e8699e
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -26,6 +32,7 @@ import java.util.ResourceBundle;
 
 public class donorItemsDefaultAddressController implements Initializable
 {
+<<<<<<< HEAD
     @FXML
     TextArea itemTypeDescriptionText;
     @FXML
@@ -33,6 +40,15 @@ public class donorItemsDefaultAddressController implements Initializable
     @FXML
     Button donateItemsButton;
     @FXML
+=======
+    @FXML
+    TextArea itemTypeDescriptionText;
+    @FXML
+    TextArea addedItemTypeDescriptionText;
+    @FXML
+    Button donateItemsButton;
+    @FXML
+>>>>>>> 9506777ae358a58037b059a3a150405356e8699e
     Button ButtonAddItem;
     @FXML
     Button ButtonRemoveItem;
@@ -70,7 +86,11 @@ public class donorItemsDefaultAddressController implements Initializable
     String selectedCharity = "None";
 
     private void handleWelcomeText() {
+<<<<<<< HEAD
         welcome.setText(welcome.getText() + " " + AppManager.getInstance().getUser() + ", what items do you wish to donate?");
+=======
+        welcome.setText(welcome.getText() + AppManager.getInstance().getUser() + ", what items do you wish to donate?");
+>>>>>>> 9506777ae358a58037b059a3a150405356e8699e
     }
 
     public void timeMenu() {
@@ -177,6 +197,7 @@ public class donorItemsDefaultAddressController implements Initializable
     @FXML
     private void handleBackPressed(ActionEvent event) throws IOException {
         AppManager.getInstance().switchView("Views/donorDecideAddress.fxml", event.getSource());
+<<<<<<< HEAD
     }
 
     public void handleSetCharityPressed()
@@ -216,10 +237,22 @@ public class donorItemsDefaultAddressController implements Initializable
         else
         {
             itemTypeDescriptionText.setText(null);
+=======
+    }
+
+    public void handleSetCharityPressed()
+    {
+        int selectedCharityIdx = CharityListView.getSelectionModel().getSelectedIndex();
+        if (selectedCharityIdx != -1)
+        {
+            selectedCharity = CharityListViewArray.get(selectedCharityIdx);
+            desiredCharityLabel.setText(selectedCharity);
+>>>>>>> 9506777ae358a58037b059a3a150405356e8699e
         }
     }
 
     @FXML
+<<<<<<< HEAD
     public void addedItemListViewClicked()
     {
         boolean itemSelected = addedItemListView.getSelectionModel().getSelectedIndex() != -1;
@@ -241,9 +274,38 @@ public class donorItemsDefaultAddressController implements Initializable
         {
             addedItemTypeDescriptionText.setText(null);
         }
+=======
+    public void charityListViewClicked()
+    {
+        setCharityButton.setDisable(CharityListView.getSelectionModel().getSelectedIndex() == -1);
+>>>>>>> 9506777ae358a58037b059a3a150405356e8699e
     }
 
+    @FXML
+    public void itemListViewClicked()
+    {
+        boolean itemSelected = itemListView.getSelectionModel().getSelectedIndex() != -1;
+        ButtonAddItem.setDisable(!itemSelected);
 
+        if (itemSelected)
+        {
+            int selectedIdx = itemListView.getSelectionModel().getSelectedIndex();
+            for (ItemType itemType : itemTypes)
+            {
+                if (itemType.getId() == itemTypesViewArrayIds.get(selectedIdx))
+                {
+                    itemTypeDescriptionText.setText(itemType.getDescription());
+                    break;
+                }
+            }
+        }
+        else
+        {
+            itemTypeDescriptionText.setText(null);
+        }
+    }
+
+<<<<<<< HEAD
     public static void showStage(){
             Stage newStage = new Stage();
             VBox comp = new VBox();
@@ -273,6 +335,31 @@ public class donorItemsDefaultAddressController implements Initializable
             newStage.setScene(stageScene);
             newStage.show();
         }
+=======
+    @FXML
+    public void addedItemListViewClicked()
+    {
+        boolean itemSelected = addedItemListView.getSelectionModel().getSelectedIndex() != -1;
+        ButtonRemoveItem.setDisable(!itemSelected);
+
+        if (itemSelected)
+        {
+            int selectedId = addedItemTypesViewArrayIds.get(addedItemListView.getSelectionModel().getSelectedIndex());
+            for (ItemType itemType : itemTypes)
+            {
+                if (itemType.getId() == selectedId)
+                {
+                    addedItemTypeDescriptionText.setText(itemType.getDescription());
+                    break;
+                }
+            }
+        }
+        else
+        {
+            addedItemTypeDescriptionText.setText(null);
+        }
+    }
+>>>>>>> 9506777ae358a58037b059a3a150405356e8699e
 
     @FXML
     public void donateItemsPressed(ActionEvent actionEvent) throws IOException, SQLException
@@ -283,9 +370,15 @@ public class donorItemsDefaultAddressController implements Initializable
         int addressId = dbBridge.getUserAddressId(userId);
 
         LocalDate day = datePicker.getValue();
+<<<<<<< HEAD
 
         String time = timeMenuChoice.getText();
 
+=======
+
+        String time = timeMenuChoice.getText();
+
+>>>>>>> 9506777ae358a58037b059a3a150405356e8699e
         String timeStart = time.substring(0, 2);
         String timeEnd = time.substring(3, 5);
 
@@ -302,7 +395,10 @@ public class donorItemsDefaultAddressController implements Initializable
                     userId, addressId, charityId, addedItemTypesViewArrayIds);
             dbBridge.createTask(taskData);
             handleBackPressed(actionEvent);
+<<<<<<< HEAD
             showStage();
+=======
+>>>>>>> 9506777ae358a58037b059a3a150405356e8699e
         }
     }
 }
