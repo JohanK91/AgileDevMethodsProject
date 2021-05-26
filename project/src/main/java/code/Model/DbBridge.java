@@ -158,6 +158,19 @@ public class DbBridge {
             }
         return -1;
     }
+    public String getUsersNameById(int anId) throws SQLException
+    {
+        statement = connection.prepareStatement("SELECT name FROM user WHERE ID = ?");
+        statement.setInt(1, anId);
+        resultSet = statement.executeQuery();
+
+        if (resultSet.next())
+        {
+            return resultSet.getString(1);
+        }
+
+        return null;
+    }
     public ArrayList<String> getUserInfo(String user)  {
         ArrayList<String> output = new ArrayList<>();
         user = user.toLowerCase();

@@ -5,22 +5,23 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class driverController implements Initializable
 {
     @FXML
-    ListView<String> taskView;
+    ListView<DriverTask> taskView;
 
     @FXML
-    ListView<String> unassignedTaskView;
+    ListView<Task> unassignedTaskView;
 
     @FXML
     Button beginDriveButton;
@@ -36,10 +37,8 @@ public class driverController implements Initializable
 
     DriverTaskList myTaskList;
 
-    ArrayList<String> myUnassignedAddresses = new ArrayList<>();
-    ArrayList<String> myAssignedAddresses = new ArrayList<>();
-
-    ArrayList<Task> myUnassignedTasks;
+    ArrayList<DriverTask> myAssignedTasks = new ArrayList<>();
+    ArrayList<Task> myUnassignedTasks = new ArrayList<>();
 
     private void setupTasks()
     {
@@ -54,9 +53,9 @@ public class driverController implements Initializable
 
             ArrayList<DriverTask> driverTasks = myTaskList.getDriverTasks();
 
-            for(DriverTask driverTask : driverTasks)
+            for (DriverTask driverTask : driverTasks)
             {
-                for (int i = tasks.size()-1; i >= 0; --i)
+                for (int i = tasks.size() - 1; i >= 0; --i)
                 {
                     if (tasks.get(i).getId() == driverTask.getTaskID())
                     {
@@ -75,38 +74,27 @@ public class driverController implements Initializable
 
             myTaskList.fixCharities();
 
-            myUnassignedTasks = dbBridge.getDriverTasksUndone(-1);
-        }
-        catch (SQLException throwable)
+            myUnassignedTasks.addAll(dbBridge.getDriverTasksUndone(-1));
+        } catch (SQLException throwable)
         {
             throwable.printStackTrace();
         }
 
-        for (DriverTask task : myTaskList.getDriverTasks())
-        {
-            String address = task.getAddress();
-            if (task.isCharity())
-                address += " (Charity)";
-            myAssignedAddresses.add(address);
-        }
-        for (Task task : myUnassignedTasks)
-        {
-            myUnassignedAddresses.add(task.getAddress());
-        }
+        myAssignedTasks.addAll(myTaskList.getDriverTasks());
 
-        taskView.setItems(FXCollections.observableArrayList(myAssignedAddresses));
-        unassignedTaskView.setItems(FXCollections.observableArrayList(myUnassignedAddresses));
+        taskView.setItems(FXCollections.observableArrayList(myAssignedTasks));
+        unassignedTaskView.setItems(FXCollections.observableArrayList(myUnassignedTasks));
     }
 
     public void reload()
     {
-        myUnassignedAddresses.clear();
-        myAssignedAddresses.clear();
+        myUnassignedTasks.clear();
+        myAssignedTasks.clear();
         setupTasks();
 
         beginDriveButton.setDisable(false);
 
-        if (myAssignedAddresses.size() == 0)
+        if (myAssignedTasks.size() == 0)
         {
             beginDriveButton.setDisable(true);
         }
@@ -126,6 +114,118 @@ public class driverController implements Initializable
         {
             throwable.printStackTrace();
         }
+
+        taskView.setCellFactory(cell -> new ListCell<>()
+        {
+            final Tooltip tooltip = new Tooltip();
+
+            @Override
+            protected void updateItem(DriverTask task, boolean empty)
+            {
+                super.updateItem(task, empty);
+
+                if (task == null || empty)
+                {
+                    setText(null);
+                    setTooltip(null);
+                }
+                else
+                {
+                    DbBridge dbBridge = AppManager.getInstance().getDb();
+
+                    String text = null;
+                    if (task.isTask())
+                    {
+                        text = "Pickup: ";
+                    }
+                    else
+                    {
+                        try
+                        {
+                            text = dbBridge.getUsersNameById(task.getCharityID()) + ": ";
+                        }
+                        catch (SQLException throwables)
+                        {
+                            throwables.printStackTrace();
+                        }
+                    }
+
+                    text += task.getAddress();
+
+                    setText(text);
+
+                    String informationText = "";
+                    if (task.isTask())
+                    {
+                        informationText += "Pickup\n";
+                    }
+                    else
+                    {
+                        informationText += "Charity delivery\n";
+                    }
+
+                    if (task.isCharity())
+                    {
+                        try
+                        {
+                            informationText += "Name: " + dbBridge.getUsersNameById(task.getCharityID()) + "\n";
+                        }
+                        catch (SQLException throwables)
+                        {
+                            throwables.printStackTrace();
+                        }
+                    }
+
+                    informationText += "Address: " + task.getAddress();
+
+                    if (task.isTask())
+                    {
+                        String charityName = null;
+                        try
+                        {
+                            int charityId = dbBridge.getCharityIdFromTask(task.getTaskID());
+                            charityName = dbBridge.getUsersNameById(charityId);
+                        }
+                        catch (SQLException throwables)
+                        {
+                            throwables.printStackTrace();
+                        }
+                        informationText += "\nCharity: " + charityName;
+                    }
+
+                    tooltip.setText(informationText);
+                    tooltip.setShowDelay(new Duration(20));
+                    setTooltip(tooltip);
+                }
+            }
+        });
+
+        unassignedTaskView.setCellFactory(cell -> new ListCell<>()
+        {
+            final Tooltip tooltip = new Tooltip();
+
+            @Override
+            protected void updateItem(Task task, boolean empty)
+            {
+                super.updateItem(task, empty);
+
+                if (task == null || empty)
+                {
+                    setText(null);
+                    setTooltip(null);
+                } else
+                {
+                    setText("Pickup: " + task.getAddress());
+
+                    String informationText = "Pickup\nAddress: " + task.getAddress();
+
+                    tooltip.setText(informationText);
+                    tooltip.setShowDelay(new Duration(20));
+                    setTooltip(tooltip);
+                }
+            }
+        });
+
         reload();
     }
 
@@ -141,47 +241,58 @@ public class driverController implements Initializable
         int idx = taskView.getSelectionModel().getSelectedIndex();
         if (idx != -1)
         {
-            DriverTask task = myTaskList.getDriverTasks().get(idx);
-            if (task.getTaskID() >= -1)
-                AppManager.getInstance().getDb().unassignTask(task.getTaskID());
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Remove task?");
+            alert.setContentText("Remove task?");
 
-            reload();
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent())
+            {
+                if (result.get() == ButtonType.OK)
+                {
+                    DriverTask task = myTaskList.getDriverTasks().get(idx);
+                    if (task.getTaskID() >= -1)
+                        AppManager.getInstance().getDb().unassignTask(task.getTaskID());
+
+                    reload();
+                }
+            }
         }
     }
 
-    @FXML
-    public void addTaskPressed() throws SQLException
-    {
-        int idx = unassignedTaskView.getSelectionModel().getSelectedIndex();
-        if (idx != -1)
+        @FXML
+        public void addTaskPressed () throws SQLException
         {
-            AppManager.getInstance().getDb().assignUnassignedTaskToDriver(myUnassignedTasks.get(idx).getId(), AppManager.getInstance().getDb().getUID(AppManager.getInstance().getUser()));
-            reload();
+            int idx = unassignedTaskView.getSelectionModel().getSelectedIndex();
+            if (idx != -1)
+            {
+                AppManager.getInstance().getDb().assignUnassignedTaskToDriver(myUnassignedTasks.get(idx).getId(), AppManager.getInstance().getDb().getUID(AppManager.getInstance().getUser()));
+                reload();
+            }
         }
-    }
 
-    @FXML
-    public void logoutPressed(ActionEvent actionEvent) throws IOException
-    {
-        DbBridge db = AppManager.getInstance().getDb();
-        db.disconnect();
-        AppManager.getInstance().switchView("Views/login.fxml", actionEvent.getSource());
-    }
-
-    public void taskViewClicked()
-    {
-        int selectedDriverTaskIndex = taskView.getSelectionModel().getSelectedIndex();
-        boolean removeTaskDisabled = true;
-        if (selectedDriverTaskIndex != -1)
+        @FXML
+        public void logoutPressed (ActionEvent actionEvent) throws IOException
         {
-            if (myTaskList.getDriverTasks().get(selectedDriverTaskIndex).isTask())
-                removeTaskDisabled = false;
+            DbBridge db = AppManager.getInstance().getDb();
+            db.disconnect();
+            AppManager.getInstance().switchView("Views/login.fxml", actionEvent.getSource());
         }
-        removeTaskButton.setDisable(removeTaskDisabled);
-    }
 
-    public void unassignedTaskViewClicked()
-    {
-        addTaskButton.setDisable(unassignedTaskView.getSelectionModel().getSelectedIndex() == -1);
+        public void taskViewClicked ()
+        {
+            int selectedDriverTaskIndex = taskView.getSelectionModel().getSelectedIndex();
+            boolean removeTaskDisabled = true;
+            if (selectedDriverTaskIndex != -1)
+            {
+                if (myTaskList.getDriverTasks().get(selectedDriverTaskIndex).isTask())
+                    removeTaskDisabled = false;
+            }
+            removeTaskButton.setDisable(removeTaskDisabled);
+        }
+
+        public void unassignedTaskViewClicked ()
+        {
+            addTaskButton.setDisable(unassignedTaskView.getSelectionModel().getSelectedIndex() == -1);
+        }
     }
-}
