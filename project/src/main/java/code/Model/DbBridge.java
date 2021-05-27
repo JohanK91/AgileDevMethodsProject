@@ -189,7 +189,10 @@ public class DbBridge {
             }
             resultSet.next();
             for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
-                output.add(resultSet.getObject(i).toString());
+                if(resultSet.getObject(i)==null)
+                    output.add("Unassigned");
+                else
+                    output.add(resultSet.getObject(i).toString());
             }
 
         } catch (SQLException throwables) {

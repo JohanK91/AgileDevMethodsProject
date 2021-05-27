@@ -35,7 +35,7 @@ public class donorController implements Initializable
     private void handleWelcomeText() {
         String name = AppManager.getInstance().getUser();
         welcome.setText("");
-        welcome.setText(welcome.getText() + name +  ", welcome to Uber Charity!\n" +
+        welcome.setText(welcome.getText() + name +  ", welcome to Donate - Don’t Dump!\n" +
                 "Thank you for generosity!");
     }
 
@@ -48,7 +48,7 @@ public class donorController implements Initializable
 
     @FXML
     private void handleDonatePressed(ActionEvent event) throws IOException {
-        switchView("Views/donorDecideAddress.fxml", event);
+        switchView("Views/donorItemsDefaultAddress.fxml", event);
     }
     @FXML
     private void handleSettingsPressed(ActionEvent event) throws IOException {
