@@ -31,6 +31,8 @@ public class donorItemsDefaultAddressController implements Initializable
     @FXML
     TextArea addedItemTypeDescriptionText;
     @FXML
+    TextArea taskDesc;
+    @FXML
     Button donateItemsButton;
     @FXML
     Button ButtonAddItem;
@@ -176,7 +178,7 @@ public class donorItemsDefaultAddressController implements Initializable
 
     @FXML
     private void handleBackPressed(ActionEvent event) throws IOException {
-        AppManager.getInstance().switchView("Views/donorDecideAddress.fxml", event.getSource());
+        AppManager.getInstance().switchView("Views/donor.fxml", event.getSource());
     }
 
     public void handleSetCharityPressed()
@@ -293,13 +295,14 @@ public class donorItemsDefaultAddressController implements Initializable
         okInput &= addressId != -1;
         okInput &= addedItemTypesViewArrayIds.size() > 0;
         okInput &= day != null;
+        okInput &= taskDesc.getText().length() > 0;
 
         if (okInput)
         {
             String startDate = day + ", " + timeStart;
             String endDate = day + ", " + timeEnd;
-            DbBridge.TaskData taskData = new DbBridge.TaskData("Desc", startDate, endDate,
-                    userId, addressId, charityId, addedItemTypesViewArrayIds);
+            DbBridge.TaskData taskData = new DbBridge.TaskData(taskDesc.getText(), startDate,
+                    endDate, userId, addressId, charityId, addedItemTypesViewArrayIds);
             dbBridge.createTask(taskData);
             handleBackPressed(actionEvent);
             showStage();

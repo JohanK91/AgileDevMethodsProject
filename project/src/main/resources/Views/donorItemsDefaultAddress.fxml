@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="text" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="542.0" prefWidth="688.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="code.Controller.donorItemsDefaultAddressController">
+<AnchorPane fx:id="text" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="542.0" prefWidth="688.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="code.Controller.donorItemsDefaultAddressController">
    <children>
       <Button fx:id="ButtonAddItem" layoutX="231.0" layoutY="131.0" mnemonicParsing="false" onAction="#handleAddItemPressed" prefHeight="25.0" prefWidth="103.0" text="Add item -&gt;">
          <cursor>
@@ -22,12 +22,12 @@
          </cursor></Button>
       <Text fx:id="textCharity" layoutX="14.0" layoutY="335.0" strokeType="OUTSIDE" strokeWidth="0.0" text="charity" wrappingWidth="200.0" />
       <Text fx:id="welcome" layoutX="291.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="welcome" />
-      <SplitMenuButton fx:id="timeMenuChoice" layoutX="354.0" layoutY="412.0" mnemonicParsing="false" text="Time for pickup">
+      <SplitMenuButton fx:id="timeMenuChoice" layoutX="221.0" layoutY="484.0" mnemonicParsing="false" text="Time for pickup">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </SplitMenuButton>
-      <DatePicker fx:id="datePicker" layoutX="354.0" layoutY="377.0" prefHeight="25.0" prefWidth="157.0" promptText="Pick a date for pickup" showWeekNumbers="true">
+      <DatePicker fx:id="datePicker" layoutX="222.0" layoutY="459.0" prefHeight="25.0" prefWidth="157.0" promptText="Pick a date for pickup" showWeekNumbers="true">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
@@ -38,14 +38,16 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <ListView fx:id="addedItemListView" layoutX="342.0" layoutY="44.0" onMouseClicked="#addedItemListViewClicked" prefHeight="200.0" prefWidth="200.0" />
-      <Text layoutX="354.0" layoutY="365.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Date and time" />
+      <ListView fx:id="addedItemListView" layoutX="409.0" layoutY="44.0" onMouseClicked="#addedItemListViewClicked" prefHeight="200.0" prefWidth="200.0" />
+      <Text layoutX="226.0" layoutY="446.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Date and time" />
       <ListView fx:id="CharityListView" layoutX="14.0" layoutY="339.0" onMouseClicked="#charityListViewClicked" prefHeight="170.0" prefWidth="200.0" />
       <Button fx:id="setCharityButton" layoutX="77.0" layoutY="510.0" mnemonicParsing="false" onAction="#handleSetCharityPressed" text="Set Charity" />
       <Label layoutX="221.0" layoutY="343.0" text="Desired Charity:" />
       <Label fx:id="desiredCharityLabel" layoutX="221.0" layoutY="360.0" text="None" />
       <Button fx:id="donateItemsButton" layoutX="590.0" layoutY="510.0" mnemonicParsing="false" onAction="#donateItemsPressed" text="Donate Items" />
       <TextArea fx:id="itemTypeDescriptionText" editable="false" layoutX="14.0" layoutY="251.0" prefHeight="61.0" prefWidth="200.0" promptText="Item Description" wrapText="true" />
-      <TextArea fx:id="addedItemTypeDescriptionText" editable="false" layoutX="342.0" layoutY="251.0" prefHeight="61.0" prefWidth="200.0" promptText="Item Description" />
+      <TextArea fx:id="addedItemTypeDescriptionText" editable="false" layoutX="409.0" layoutY="251.0" prefHeight="61.0" prefWidth="200.0" promptText="Item Description" />
+      <TextArea fx:id="taskDesc" layoutX="409.0" layoutY="360.0" prefHeight="102.0" prefWidth="200.0" wrapText="true" />
+      <Text layoutX="393.0" layoutY="344.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Describe what and how much you will donate" />
    </children>
 </AnchorPane>
