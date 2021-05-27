@@ -33,6 +33,9 @@ public class driverController implements Initializable
     Button removeTaskButton;
 
     @FXML
+    Button settings;
+
+    @FXML
     Button logoutButton;
 
     DriverTaskList myTaskList;
@@ -294,5 +297,10 @@ public class driverController implements Initializable
         public void unassignedTaskViewClicked ()
         {
             addTaskButton.setDisable(unassignedTaskView.getSelectionModel().getSelectedIndex() == -1);
+        }
+
+        public void settingsPressed(ActionEvent event) throws IOException
+        {
+        AppManager.getInstance().switchView("Views/settings.fxml", event.getSource());
         }
     }
