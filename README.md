@@ -9,7 +9,7 @@ An IDE with support for Maven, & JDK 16.
 
 ## Installation
 
-Create a database called "mydb2", and restore it from the Database/Scrpt2Create.sql file.
+Create a database called "d3", and restore it from the Database/Scrpt2Create.sql file.
 Open the project in your prefered IDE, and generate the Maven project.
 
 ## Running the app
