@@ -81,7 +81,7 @@ public class driverDrivingController implements Initializable
         }
     }
 
-    private void yoCheckIt(Object aSource)
+    private void processDrive(Object aSource)
     {
         try
         {
@@ -115,7 +115,7 @@ public class driverDrivingController implements Initializable
 
         myTaskList.completeTaskAndAdvance();
 
-        yoCheckIt(actionEvent.getSource());
+        processDrive(actionEvent.getSource());
     }
 
     public void taskIncompletePressed(ActionEvent actionEvent)
@@ -125,7 +125,7 @@ public class driverDrivingController implements Initializable
 
         myTaskList.advanceIterator();
 
-        yoCheckIt(actionEvent.getSource());
+        processDrive(actionEvent.getSource());
     }
 
     public void deliveredTasksPressed(ActionEvent actionEvent)
@@ -134,7 +134,7 @@ public class driverDrivingController implements Initializable
 
         myTaskList.completeTaskAndAdvance();
 
-        yoCheckIt(actionEvent.getSource());
+        processDrive(actionEvent.getSource());
     }
 
     public void continueDrivePressed()
